@@ -1,6 +1,6 @@
 # 中文个人资料
 
-返回首页 · [English](./README.en.md) · [联系方式](./contact.md)
+[返回首页](../README.md) · [English](./README.en.md) · [联系方式](./contact.md)
 
 ## 我是谁
 
@@ -28,19 +28,19 @@
 
 ## 代表项目
 
-### OpenWiki
+### [OpenWiki](https://github.com/dakjdakd/openwiki)
 
 面向陌生代码仓库理解的 AI 工作台。输入 GitHub 地址后生成项目摘要、源码证据、架构图、学习路线和可复用报告。
 
-### VentureMind AI
+### [VentureMind AI](https://github.com/dakjdakd/VentureMind-AI)
 
 多智能体创业分析工作台，将市场研究、产品判断、技术可行性、红队复查和决策备忘录串成一条可观察工作流。
 
-### OpenConstellation
+### [OpenConstellation](https://github.com/dakjdakd/OpenConstellation)
 
 面向 AI 生态研究的知识图谱星图，用关系和可视化方式探索公司、模型、论文、产品、技术与开源项目之间的联系。
 
-### PPT-Design-DNA
+### [PPT-Design-DNA](https://github.com/dakjdakd/PPT-Design-DNA)
 
 一个 Design-DNA 驱动的 AI Presentation Skill，可以从参考图中提取视觉系统，保存 Design Profile，并生成 HTML-first 演示文稿。
 
@@ -72,11 +72,11 @@ LLM 研究实习生 / AI 教育产品
 
 ## 继续了解
 
-- 完整经历、教育与科研
-- 完整项目档案
-- 奖项、竞赛与论文
-- AI Coding 与 Agent 工作流
-- 小红书与内容创作
+- [完整经历、教育与科研](./experience.md)
+- [完整项目档案](./projects.md)
+- [奖项、竞赛与论文](./awards.md)
+- [AI Coding 与 Agent 工作流](./workflow.md)
+- [小红书与内容创作](./content.md)
 
 ## 联系方式
 
