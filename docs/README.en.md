@@ -65,11 +65,11 @@ I also explore AI tools, visual design, project storytelling, and Xiaohongshu co
 
 ## Explore More
 
-- Experience, education, and research
-- Project archive
-- Awards, competitions, and paper
-- AI Coding and Agent workflow
-- Content creation and personal brand
+- [Experience, education, and research](./experience.md)
+- [Project archive](./projects.md)
+- [Awards, competitions, and paper](./awards.md)
+- [AI Coding and Agent workflow](./workflow.md)
+- [Content creation and personal brand](./content.md)
 
 ## Contact
 
