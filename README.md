@@ -4,9 +4,9 @@ AI Builder · LLM Applications · Agent Workflow · RAG
 
 Turning AI capabilities into useful, demonstrable products.
 
-🐙 GitHub · 🌐 Portfolio · ✉️ Email · 💬 WeChat
+[🐙 GitHub](https://github.com/dakjdakd) · [🌐 Portfolio](https://llq-ai-builder-portfolio.netlify.app/) · [✉️ Email](mailto:1428823446@qq.com) · [💬 WeChat](docs/contact.md)
 
-中文 · English
+[中文](docs/README.zh-CN.md) · [English](docs/README.en.md)
 
 ## About Me
 
@@ -32,25 +32,25 @@ I connect technology, product thinking, visual expression, and content creation 
 
 ## Selected Work
 
-### OpenWiki
+### [OpenWiki](https://github.com/dakjdakd/openwiki)
 
 An AI-powered GitHub repository analysis tool that turns unfamiliar codebases into technical wikis, architecture diagrams, learning paths, and project reports.
 
 React · Express · OpenAI SDK · GitHub API
 
-### VentureMind AI
+### [VentureMind AI](https://github.com/dakjdakd/VentureMind-AI)
 
 A multi-agent startup analysis workbench covering market research, product evaluation, technical feasibility, red-team review, and decision reports.
 
 LangGraph · FastAPI · SSE · Multi-Agent
 
-### OpenConstellation
+### [OpenConstellation](https://github.com/dakjdakd/OpenConstellation)
 
 A visual knowledge graph for exploring relationships between AI companies, models, papers, products, technologies, and open-source projects.
 
 React · D3 · Express · Knowledge Graph
 
-### PPT-Design-DNA
+### [PPT-Design-DNA](https://github.com/dakjdakd/PPT-Design-DNA)
 
 A Design-DNA-driven AI presentation skill that turns visual references into reusable design systems and HTML-first presentations.
 
@@ -88,17 +88,17 @@ Product: Context Engineering · Generative UI · Design Systems · Rapid Prototy
 
 ## Explore More
 
-- 中文完整介绍
-- English profile
-- Experience, education, and research
-- Project archive
-- Awards, competitions, and paper
-- AI Coding and Agent workflow
-- Content creation and personal brand
+- [中文完整介绍](docs/README.zh-CN.md)
+- [English profile](docs/README.en.md)
+- [Experience, education, and research](docs/experience.md)
+- [Project archive](docs/projects.md)
+- [Awards, competitions, and paper](docs/awards.md)
+- [AI Coding and Agent workflow](docs/workflow.md)
+- [Content creation and personal brand](docs/content.md)
 
 ## Contact
 
-- GitHub: @dakjdakd
-- Portfolio: llq-ai-builder-portfolio.netlify.app
-- Email: 1428823446@qq.com
-- WeChat
+- [GitHub: @dakjdakd](https://github.com/dakjdakd)
+- [Portfolio](https://llq-ai-builder-portfolio.netlify.app/)
+- [Email](mailto:1428823446@qq.com)
+- [WeChat](docs/contact.md)
