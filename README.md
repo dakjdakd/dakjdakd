@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>👋 Lucien / 张德澎</h1>
+<h1>👋 Lucien </h1>
 
 <p><strong>AI Builder</strong> · LLM Applications · Agent Workflow · RAG</p>
 
