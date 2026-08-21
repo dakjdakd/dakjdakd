@@ -91,7 +91,7 @@ A Design-DNA-driven AI presentation skill that turns visual references into reus
 
 ## Experience
 
-### LLM Research Intern · 无畏教育科技
+### LLM Research Intern · 无夕教育科技
 
 2025.06 - 2025.10
 
