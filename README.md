@@ -1,19 +1,23 @@
 <div align="center">
 
-# Hi, I'm dakjdakd 👋
+# Lucien / 张德澎
 
-### AI Builder · LLM Applications · Agents · RAG
+### AI Builder · LLM Applications · Agent Workflow · RAG
 
 <p>
-  <a href="https://github.com/dakjdakd">
-    <img src="https://img.shields.io/badge/GitHub-dakjdakd-181717?style=flat-square&logo=github" alt="GitHub">
-  </a>
-  <a href="https://你的个人网站链接">
-    <img src="https://img.shields.io/badge/Portfolio-个人主页-1677ff?style=flat-square&logo=googlechrome&logoColor=white" alt="Portfolio">
-  </a>
-  <a href="mailto:你的邮箱">
-    <img src="https://img.shields.io/badge/Email-联系我-ea4335?style=flat-square&logo=gmail&logoColor=white" alt="Email">
-  </a>
+  Turning AI capabilities into useful, demonstrable products.
+</p>
+
+<p>
+  <a href="https://github.com/dakjdakd">GitHub</a>
+  · <a href="https://llq-ai-builder-portfolio.netlify.app/">Portfolio</a>
+  · <a href="mailto:1428823446@qq.com">Email</a>
+  · WeChat: fantexi111222
+</p>
+
+<p>
+  <a href="./docs/README.zh-CN.md">中文</a>
+  · <a href="./docs/README.en.md">English</a>
 </p>
 
 </div>
@@ -22,43 +26,43 @@
 
 ## About Me
 
-I am a third-year student exploring AI applications, LLM systems, Agent workflows, and RAG.
+I am an Artificial Intelligence undergraduate and AI Builder focused on turning LLM capabilities into useful, demonstrable products.
 
-I enjoy turning emerging AI capabilities into practical products, developer tools, and experiments.
+I work across the full path from idea definition, context design, and agent orchestration to frontend implementation, evaluation, and deployment.
 
-- Building AI applications with LLMs, Agents, and RAG
-- Exploring tool calling, memory, evaluation, and observability
-- Interested in AI products, developer experience, and human-AI collaboration
-- Sharing notes and experiments about AI tools, products, and engineering
+- LLM applications and AI-native products
+- Agent workflow and multi-agent collaboration
+- RAG, knowledge systems, and context engineering
+- Multimodal AI and AI-powered content tools
 
-## Current Focus
+## Current Signals
 
-- Agentic Workflow and Multi-Agent Collaboration
-- Hybrid Retrieval and Knowledge Layer
-- LLM Evaluation and Observability
-- AI SaaS and developer tools
-- AI product design and rapid prototyping
+- GPA: 3.8 / 4.0
+- Top 15% in Artificial Intelligence
+- 2 AI-related internships
+- 10+ AI application projects
+- 10k+ content likes and saves
 
-## Featured Projects
+## Selected Work
 
 <table>
 <tr>
 <td width="50%" valign="top">
 
-### [PPT-Design-DNA](https://github.com/dakjdakd/PPT-Design-DNA)
+### [OpenWiki](https://github.com/dakjdakd/openwiki)
 
-A design-system-driven AI presentation skill that turns visual references into reusable design systems and high-quality presentations.
+An AI-powered GitHub repository analysis tool that turns unfamiliar codebases into technical wikis, architecture diagrams, learning paths, and project reports.
 
-`JavaScript` `AI` `Design System`
+<strong>React · Express · OpenAI SDK · GitHub API</strong>
 
 </td>
 <td width="50%" valign="top">
 
-### [OpenWiki](https://github.com/dakjdakd/openwiki)
+### [VentureMind AI](https://github.com/dakjdakd/VentureMind-AI)
 
-An AI-powered repository analysis tool that transforms GitHub repositories into interactive technical wikis, architecture diagrams, and learning paths.
+A multi-agent startup analysis workbench covering market research, product evaluation, technical feasibility, red-team review, and decision reports.
 
-`TypeScript` `LLM` `Knowledge`
+<strong>LangGraph · FastAPI · SSE · Multi-Agent</strong>
 
 </td>
 </tr>
@@ -68,18 +72,18 @@ An AI-powered repository analysis tool that transforms GitHub repositories into 
 
 ### [OpenConstellation](https://github.com/dakjdakd/OpenConstellation)
 
-A knowledge graph platform for exploring connections between AI companies, models, papers, projects, and the developer ecosystem.
+A visual knowledge graph for exploring relationships between AI companies, models, papers, products, technologies, and open-source projects.
 
-`TypeScript` `Knowledge Graph` `AI Ecosystem`
+<strong>React · D3 · Express · Knowledge Graph</strong>
 
 </td>
 <td width="50%" valign="top">
 
-### [VentureMind-AI](https://github.com/dakjdakd/VentureMind-AI)
+### [PPT-Design-DNA](https://github.com/dakjdakd/PPT-Design-DNA)
 
-An AI multi-agent workflow workbench for startup idea evaluation, market analysis, technical feasibility, and product strategy.
+A Design-DNA-driven AI presentation skill that turns visual references into reusable design systems and HTML-first presentations.
 
-`TypeScript` `Multi-Agent` `Product`
+<strong>AI Skill · Design System · HTML · Generative UI</strong>
 
 </td>
 </tr>
@@ -87,42 +91,39 @@ An AI multi-agent workflow workbench for startup idea evaluation, market analysi
 
 ## Experience
 
-### AI Application and LLM Course Development
+### LLM Research Intern · 无畏教育科技
 
-Participated in AI application development and large language model course design at an education technology startup.
+2025.06 - 2025.10
 
-### Computer Vision Project
+Worked on LLM application courses, Agent, RAG, Workflow, prompt engineering, and project-based AI learning materials.
 
-Participated in a YOLO-related project at Peking University Shenzhen Graduate School.
+### AI Intern · 北京大学深圳研究生院
 
-## Tech Stack
+2024.07 - 2024.08
 
-<p>
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white">
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white">
-  <img src="https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB">
-  <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=next.js&logoColor=white">
-  <img src="https://img.shields.io/badge/LLM%20Applications-1677FF?style=flat-square">
-  <img src="https://img.shields.io/badge/RAG-00A67E?style=flat-square">
-  <img src="https://img.shields.io/badge/Agents-F97316?style=flat-square">
-</p>
+Worked on mangrove species recognition data processing, model training, parameter tuning, and dataset quality improvement.
 
-## Beyond Code
+## Explore More
 
-I am also exploring AI content creation, product thinking, visual design, smart home scenarios, travel planning, and long-term personal growth.
+- [中文完整介绍](./docs/README.zh-CN.md)
+- [English profile](./docs/README.en.md)
+- [Experience, education, and research](./docs/experience.md)
+- [Project archive](./docs/projects.md)
+- [Awards, competitions, and paper](./docs/awards.md)
+- [AI Coding and Agent workflow](./docs/workflow.md)
+- [Content creation and Xiaohongshu experiments](./docs/content.md)
 
 ## Contact
 
 - GitHub: [@dakjdakd](https://github.com/dakjdakd)
-- Portfolio: [你的个人网站链接](https://你的个人网站链接)
-- Email: `你的邮箱`
-- Xiaohongshu: `你的账号链接`
+- Portfolio: [llq-ai-builder-portfolio.netlify.app](https://llq-ai-builder-portfolio.netlify.app/)
+- Email: [1428823446@qq.com](mailto:1428823446@qq.com)
+- WeChat: fantexi111222
 
 ---
 
 <div align="center">
 
-### Build useful things with AI.
+Building useful AI products from idea to deployment.
 
 </div>
