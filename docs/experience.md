@@ -16,7 +16,7 @@ B.A. / B.Sc. in Artificial Intelligence
 
 ## Internships
 
-### Wuwei Education Technology (Shenzhen) Co., Ltd.
+### Wuxi Education Technology (Shenzhen) Co., Ltd.
 
 **LLM Research Intern / AI Education Product**
 
