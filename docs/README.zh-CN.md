@@ -4,7 +4,7 @@
 
 ## 我是谁
 
-我是张德澎（Lucien），岭南师范学院人工智能专业本科生，也是一名 AI Builder。
+我是张德澎（Lucien），也是一名 AI Builder。
 
 我关注 LLM 应用、Agent Workflow、RAG、Context Engineering 和 AI Native Product，喜欢把一个想法推进到可以运行、展示和交付的产品原型。
 
