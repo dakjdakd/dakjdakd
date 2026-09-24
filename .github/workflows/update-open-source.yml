@@ -17,6 +17,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m pip install Pillow==11.3.0
+      - run: python scripts/test_update_open_source.py
       - run: python scripts/update_open_source.py
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

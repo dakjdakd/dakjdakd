@@ -18,6 +18,9 @@ OUT = ROOT / "assets" / "open-source-terminal.gif"
 FONT = ROOT / "assets" / "fonts" / "JetBrainsMono-Regular.ttf"
 BOLD = ROOT / "assets" / "fonts" / "JetBrainsMono-Bold.ttf"
 TZ = timezone(timedelta(hours=8))
+# These merged PRs credit dakjdakd as a co-author, but GitHub Search's
+# author: filter cannot find them because the PR author is ai-sdk-factory[bot].
+COAUTHORED_PRS = (("vercel/ai", 21228), ("vercel/ai", 21229))
 
 
 def api(path, **params):
@@ -42,6 +45,17 @@ def merged_prs():
         )
         if page * 100 >= data["total_count"]:
             break
+    seen = {item["html_url"] for item in results}
+    for repo, number in COAUTHORED_PRS:
+        pr = api(f"repos/{repo}/pulls/{number}")
+        if pr["merged_at"] and pr["html_url"] not in seen:
+            results.append({
+                "title": pr["title"],
+                "html_url": pr["html_url"],
+                "repository_url": f"https://api.github.com/repos/{repo}",
+                "pull_request": {"merged_at": pr["merged_at"]},
+            })
+            seen.add(pr["html_url"])
     return sorted(results, key=lambda item: item["pull_request"]["merged_at"], reverse=True)
 
 
