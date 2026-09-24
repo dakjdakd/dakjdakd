@@ -131,3 +131,11 @@
 <p align="center">
   <a href="docs/contact.md">Contact me for collaboration, project discussion, and AI product ideas →</a>
 </p>
+
+<h2 align="center">⌁ Open Source Contributions</h2>
+
+<p align="center">
+  <a href="https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Adakjdakd">
+    <img src="assets/open-source-terminal.gif" alt="Animated open-source contributions dashboard showing merged pull requests and repository stars" width="100%">
+  </a>
+</p>
