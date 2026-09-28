@@ -1,5 +1,6 @@
 """Refresh the animated open-source panel in the profile README."""
 
+import hashlib
 import json
 import math
 import os
@@ -56,7 +57,7 @@ def merged_prs():
                 "pull_request": {"merged_at": pr["merged_at"]},
             })
             seen.add(pr["html_url"])
-    return sorted(results, key=lambda item: item["pull_request"]["merged_at"], reverse=True)
+    return sorted(results, key=lambda item: (item["pull_request"]["merged_at"], item["html_url"]), reverse=True)
 
 
 def shorten(value, font, max_width, draw):
@@ -71,7 +72,30 @@ def stars(value):
     return f"{value / 1000:.1f}k" if value >= 1000 else str(value)
 
 
-def draw_panel(prs):
+def content_signature(prs, repo_stars):
+    # Ignore the clock: a check with unchanged visible data must not create a commit.
+    data = {
+        "prs": [(p["html_url"], p["title"], p["repository_url"], p["pull_request"]["merged_at"]) for p in prs],
+        "stars": {repo: stars(count) for repo, count in repo_stars.items()},
+    }
+    digest = hashlib.sha256(json.dumps(data, sort_keys=True).encode())
+    digest.update(Path(__file__).read_bytes().replace(b"\r\n", b"\n"))
+    for path in (FONT, BOLD):
+        digest.update(path.read_bytes())
+    return digest.hexdigest().encode()
+
+
+def needs_update(signature):
+    if not OUT.exists():
+        return True
+    try:
+        with Image.open(OUT) as image:
+            return image.info.get("comment") != signature
+    except OSError:
+        return True
+
+
+def draw_panel(prs, repo_stars):
     recent = prs[:10]
     count = max(1, len(recent))
     width, height = 1000, 46 + 209 + 85 + 37 + count * 43 + 44
@@ -109,11 +133,6 @@ def draw_panel(prs):
     d.text((20, 354), f"> VERIFIED MERGED CONTRIBUTIONS [{len(recent):02}/{len(prs):02}]", font=f11, fill=green)
     d.text((width - 20, 354), "REPO STARS", font=f11, fill=green, anchor="ra")
 
-    repo_stars = {}
-    for pr in recent:
-        repo = pr["repository_url"].split("/repos/", 1)[1]
-        if repo not in repo_stars:
-            repo_stars[repo] = api(f"repos/{repo}")["stargazers_count"]
     for i, pr in enumerate(recent):
         y = 377 + i * 43
         d.line((0, y, width, y), fill="#1a422a")
@@ -138,12 +157,12 @@ def draw_panel(prs):
     foot_y = 377 + count * 43
     d.rectangle((1, foot_y + 1, width - 2, height - 2), fill="#0d2718")
     now = datetime.now(TZ).strftime("%Y.%m.%d / %H:%M CST")
-    d.text((20, foot_y + 17), f"> LAST_SYNC: {now}", font=f11, fill=green)
+    d.text((20, foot_y + 17), f"> PANEL_UPDATED: {now}", font=f11, fill=green)
     d.text((width - 20, foot_y + 17), "EXPLORE ALL MERGED PRs >", font=f11, fill=green, anchor="ra")
     return image, f40
 
 
-def animated_gif(base, title_font):
+def animated_gif(base, title_font, signature):
     title1, title2 = "OPEN SOURCE", "ONLINE"
     draw = ImageDraw.Draw(base)
     x1 = (base.width - draw.textlength(title1, font=title_font)) / 2
@@ -173,13 +192,19 @@ def animated_gif(base, title_font):
     frames.extend([frame(title1, title2, True), frame(title1, title2), frame(title1, title2, True)])
     durations.extend([400, 250, 2400])
     buffer = BytesIO()
-    frames[0].save(buffer, format="GIF", save_all=True, append_images=frames[1:], duration=durations, loop=0, optimize=True, disposal=2)
+    frames[0].save(buffer, format="GIF", save_all=True, append_images=frames[1:], duration=durations, loop=0, optimize=True, disposal=2, comment=signature)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_bytes(buffer.getvalue())
 
 
 if __name__ == "__main__":
     prs = merged_prs()
-    base, title_font = draw_panel(prs)
-    animated_gif(base, title_font)
-    print(f"Rendered {len(prs)} merged PRs ({min(len(prs), 10)} visible) to {OUT}")
+    repos = {p["repository_url"].split("/repos/", 1)[1] for p in prs[:10]}
+    repo_stars = {repo: api(f"repos/{repo}")["stargazers_count"] for repo in repos}
+    signature = content_signature(prs, repo_stars)
+    if needs_update(signature):
+        base, title_font = draw_panel(prs, repo_stars)
+        animated_gif(base, title_font, signature)
+        print(f"Rendered {len(prs)} merged PRs ({min(len(prs), 10)} visible) to {OUT}")
+    else:
+        print(f"No visible changes in {len(prs)} merged PRs; kept {OUT}")

@@ -1,6 +1,10 @@
 """Check that scheduled refreshes retain co-authored merged PRs."""
 
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest.mock import patch
+
+from PIL import Image
 
 import update_open_source
 
@@ -33,3 +37,14 @@ assert {pr["html_url"] for pr in prs} == {
     "https://github.com/vercel/ai/pull/21228",
     "https://github.com/vercel/ai/pull/21229",
 }
+
+signature = update_open_source.content_signature(prs, {"vercel/ai": 26901})
+assert signature == update_open_source.content_signature(prs, {"vercel/ai": 26902})
+assert signature != update_open_source.content_signature(prs, {"vercel/ai": 27000})
+with TemporaryDirectory() as directory:
+    output = Path(directory) / "panel.gif"
+    with patch.object(update_open_source, "OUT", output):
+        assert update_open_source.needs_update(signature)
+        Image.new("RGB", (1, 1)).save(output, format="GIF", comment=signature)
+        assert not update_open_source.needs_update(signature)
+        assert update_open_source.needs_update(b"changed content")
