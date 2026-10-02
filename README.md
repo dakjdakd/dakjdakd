@@ -6,18 +6,6 @@
 
 <p>Turning AI capabilities into useful, demonstrable products.</p>
 
-<p>
-  <a href="https://github.com/dakjdakd">🐙 GitHub</a>
-  &nbsp;·&nbsp;
-  <a href="https://llq-ai-builder-portfolio.netlify.app/">🌐 Portfolio</a>
-  &nbsp;·&nbsp;
-  <a href="mailto:1428823446@qq.com">✉️ Email</a>
-  &nbsp;·&nbsp;
-  <a href="docs/contact.md">💬 WeChat</a>
-</p>
-
-<p><a href="docs/README.zh-CN.md">中文</a> &nbsp;·&nbsp; <a href="docs/README.en.md">English</a></p>
-
 </div>
 
 ---
