@@ -29,7 +29,11 @@
 <h2 align="center">⌁ Open Source Contributions</h2>
 
 <p align="center">
-  <a href="https://github.com/pulls?q=is%3Apr+is%3Amerged+author%3Adakjdakd">
-    <img src="assets/open-source-terminal.gif" alt="Animated open-source contributions dashboard showing merged pull requests and repository stars" width="100%">
+  <a href="https://dakjdakd.github.io/dakjdakd/">
+    <img src="assets/open-source-terminal.gif" alt="Open source project directory with merged PR counts, repository stars, recognition badges and contribution details. Click to browse all projects." width="100%">
   </a>
+</p>
+
+<p align="center">
+  <a href="https://dakjdakd.github.io/dakjdakd/"><strong>Browse all projects · Filter · Search · Previous / Next →</strong></a>
 </p>

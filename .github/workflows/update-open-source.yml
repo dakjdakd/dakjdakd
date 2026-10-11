@@ -4,13 +4,29 @@ on:
   schedule:
     - cron: "7,17,27,37,47,57 * * * *"
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/**"
+      - "assets/fonts/**"
+      - ".github/workflows/update-open-source.yml"
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: open-source-panel
+  cancel-in-progress: false
 
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -18,13 +34,29 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install Pillow==11.3.0
       - run: python scripts/test_update_open_source.py
-      - run: python scripts/update_open_source.py
+      - id: collect
+        run: python scripts/update_open_source.py
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: |
-          git add assets/open-source-terminal.gif
+      - if: steps.collect.outputs.changed == 'true'
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+          python scripts/update_open_source.py --render
+      - if: steps.collect.outputs.changed == 'true'
+        run: |
+          git add assets/open-source-terminal.gif docs
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Update open source contributions panel"
           git push
+      - if: steps.collect.outputs.changed == 'true' || github.event_name != 'schedule'
+        uses: actions/configure-pages@v5
+      - if: steps.collect.outputs.changed == 'true' || github.event_name != 'schedule'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - id: deploy
+        if: steps.collect.outputs.changed == 'true' || github.event_name != 'schedule'
+        uses: actions/deploy-pages@v4

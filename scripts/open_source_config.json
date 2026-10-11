@@ -1,0 +1,14 @@
+{
+  "included_prs": [
+    {"repo": "vercel/ai", "number": 21228},
+    {"repo": "vercel/ai", "number": 21229}
+  ],
+  "project_names": {
+    "morluto/rea": "Rea", "TanStack/ai": "TanStack AI", "CherryHQ/cherry-studio": "Cherry Studio",
+    "Mintplex-Labs/anything-llm": "AnythingLLM", "aaif-goose/goose": "Goose", "langgenius/dify": "Dify",
+    "strands-agents/harness-sdk": "Harness SDK", "microsoft/agent-framework": "Microsoft Agent Framework",
+    "langchain-ai/deepagents": "Deep Agents", "i-am-bee/beeai-framework": "BeeAI Framework",
+    "dream-num/univer": "Univer", "vectorize-io/hindsight": "Hindsight", "NandhaKishorM/laya": "Laya",
+    "deepset-ai/haystack": "Haystack", "vercel/ai": "AI SDK"
+  }
+}

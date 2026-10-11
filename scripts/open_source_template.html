@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lucien · Open Source Contributions</title>
+<link rel="icon" href="data:,">
+<style>
+@font-face{font-family:JetBrains;src:url('fonts/JetBrainsMono-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:JetBrains;src:url('fonts/JetBrainsMono-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+:root{--bg:#081a10;--bar:#0d2718;--text:#a4ffaf;--green:#81e990;--muted:#78b785;--faint:#558662;--line:#28583a;--hover:#102b1b;--mono:JetBrains,monospace}
+*{box-sizing:border-box}body{margin:0;background:#f5f7f8;color:#24312b;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select{font:inherit}button,a,input,select{touch-action:manipulation}button{cursor:pointer}a{color:inherit;text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:4px}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #a4ffaf;outline-offset:4px}button:disabled{opacity:.35;cursor:default}
+.dashboard{max-width:1240px;margin:38px auto 20px;padding:0 24px}.dashboard-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}.eyebrow{font:11px var(--mono);letter-spacing:1.5px;color:#698174}.dashboard h1{font-size:22px;font-weight:600;letter-spacing:-.7px;margin:10px 0}.dashboard p{font-size:13px;line-height:1.8;color:#6d7972;margin:0}.isolation{font:11px var(--mono);border:1px solid #d6ded9;padding:9px 12px;white-space:nowrap;color:#577561}.design-options{display:flex;gap:8px;margin:24px 0 15px}.design-options button{background:transparent;color:#596d60;border:1px solid #d5ded8;padding:10px 17px;font-size:12px}.design-options button[aria-pressed=true]{background:var(--bg);color:var(--text);border-color:var(--bg)}.mode-note{min-height:22px;margin-bottom:17px!important}.dashboard-caption{font-size:12px!important;margin:17px 0 30px!important}
+.monitor{position:relative;isolation:isolate;font-family:var(--mono);color:var(--text);background:var(--bg);border:1px solid var(--line)}.monitor:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;opacity:.3;background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,#0c2115 3px,#0c2115 4px)}.topbar{display:flex;justify-content:space-between;gap:16px;padding:18px 24px;background:var(--bar);border-bottom:1px dashed var(--line);font-size:11px;letter-spacing:.6px;color:var(--green)}.status{display:flex;align-items:center;gap:9px}.status-dot{width:5px;height:5px;background:var(--text)}.hero{text-align:center;padding:31px 24px 24px}.hero-kicker{font-size:11px;color:var(--muted);letter-spacing:1.5px}.hero h2{font-size:48px;line-height:1.17;letter-spacing:-1.7px;margin:18px 0 15px;font-weight:700;text-shadow:0 0 18px #70f18b20}.cursor{animation:blink 1.4s step-end infinite}@keyframes blink{0%,65%,100%{opacity:1}66%,99%{opacity:0}}.hero-summary{font-size:10px;letter-spacing:.6px;color:var(--muted)}.metrics{display:grid;grid-template-columns:repeat(3,1fr);border-block:1px dashed var(--line)}.metric{padding:22px 24px}.metric+.metric{border-left:1px dashed var(--line)}.metric strong{font-size:30px;font-weight:700;line-height:1}.metric label{display:block;font-size:10px;letter-spacing:.8px;margin-top:13px;color:var(--muted)}
+.tools{padding:20px 24px 17px;display:flex;align-items:center;justify-content:space-between;gap:20px}.section-tag{font-size:10px;color:var(--green);letter-spacing:.65px}.inputs{display:flex;gap:8px}.inputs select,.inputs input{border:1px solid var(--line);border-radius:0;background:var(--bg);color:var(--text);height:34px;font:10px var(--mono);padding:0 11px;max-width:220px}.inputs input{width:200px}.inputs input::placeholder{color:var(--faint)}.columns{display:grid;grid-template-columns:45px 270px minmax(0,1fr) 75px;padding:11px 24px;border-block:1px solid var(--line);font-size:9px;letter-spacing:1px;color:var(--muted);gap:18px}.columns span:last-child{text-align:right}.list{min-height:420px}.entry{display:grid;grid-template-columns:45px 270px minmax(0,1fr) 75px;gap:18px;padding:22px 24px;border-bottom:1px solid #1c3e28;align-items:start}.entry:hover{background:#102b1b88}.index{font-size:11px;color:var(--faint);padding-top:3px}.project-name{font-size:14px;font-weight:700;display:inline-block;line-height:1.45}.repo{font-size:10px;line-height:1.5;color:var(--muted);margin-top:5px;overflow-wrap:anywhere}.badge-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}.badge{border:1px solid #346747;display:inline-flex;gap:5px;align-items:center;padding:4px 6px;color:#91d99d;font-size:8px;line-height:1.35;background:#0d2517}.badge:hover{border-color:var(--green);background:#193723;text-decoration:none}.badge-token{font-size:8px;font-weight:700;color:var(--text);border-right:1px solid #346747;padding-right:5px}.badge.ph{border-style:dashed}.contribution-title{font-size:13px;line-height:1.65;color:var(--text);display:block;overflow-wrap:anywhere}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px;font-size:9px;line-height:1.4;color:var(--muted)}.meta .kind{border:1px solid var(--line);font-size:8px;padding:1px 4px;margin-top:-1px}.meta .separator{color:#365b41}.meta .merged{color:#85c592}.stars{font-size:11px;text-align:right;white-space:nowrap;color:var(--green);padding-top:3px}.original{margin-top:11px;font-size:9px;line-height:1.6;color:var(--muted)}.original summary{cursor:pointer;color:var(--faint);width:max-content}.original p{font-size:10px;margin:7px 0 0;overflow-wrap:anywhere;color:var(--green)}
+.pagination{padding:18px 24px;border-top:1px dashed var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px}.range{font-size:9px;color:var(--muted);letter-spacing:.5px}.page-controls{display:flex;gap:5px;align-items:center}.page-controls button{border:1px solid var(--line);background:transparent;color:var(--green);font:10px var(--mono);height:31px;min-width:31px;padding:0 10px}.page-controls button:hover:not(:disabled){background:var(--hover);border-color:var(--green)}.page-controls button[aria-current=page]{background:var(--text);color:var(--bg);border-color:var(--text)}.page-controls .direction{padding:0 13px}.footer{background:var(--bar);padding:15px 24px;display:flex;justify-content:space-between;gap:15px;border-top:1px dashed var(--line);font-size:9px;color:var(--muted)}.footer a{color:var(--green)}
+.project-block{padding:24px;border-bottom:1px solid var(--line)}.project-header{display:grid;grid-template-columns:45px 1fr auto;gap:18px;align-items:start}.project-header .project-name{font-size:19px}.project-header .stars{font-size:12px}.project-description{max-width:75ch;font-size:11px;line-height:1.7;color:var(--muted);margin:12px 0 0}.project-badges{display:flex;flex-wrap:wrap;gap:8px;margin:17px 0 2px}.project-badges .badge{padding:9px 11px;gap:9px;min-width:155px}.project-badges .badge-token{font-size:15px;padding-right:11px}.badge-copy{display:flex;flex-direction:column;gap:4px}.badge-copy small{font-size:7px;letter-spacing:.8px;color:var(--muted)}.badge-copy strong{font-size:11px;white-space:nowrap}.project-contributions{margin:21px 0 0 63px;border-left:1px solid var(--line);padding-left:17px}.project-pr{display:grid;grid-template-columns:46px 1fr;gap:13px;padding:9px 0;font-size:11px;line-height:1.65}.project-pr time{font-size:9px;color:var(--muted);padding-top:3px}.project-actions{display:flex;gap:18px;align-items:center;margin:15px 0 0 63px}.project-actions button{background:transparent;border:0;padding:0;color:var(--green);font:9px var(--mono)}.project-actions a{font-size:9px;color:var(--muted)}
+.compact .columns,.compact .entry{grid-template-columns:40px 225px minmax(0,1fr) 65px;gap:15px}.compact .entry{padding-block:15px}.compact .project-name{font-size:12px}.compact .contribution-title{font-size:11px;line-height:1.55}.compact .repo{font-size:9px;margin-top:3px}.compact .meta{margin-top:7px;font-size:8px;gap:6px}.compact .badge-row{margin-top:7px;gap:4px}.compact .badge{font-size:7px;padding:2px 4px}.compact .badge-token{font-size:7px}.compact .original{display:none}.empty{text-align:center;padding:65px 24px;color:var(--muted);font-size:12px}.empty button{display:block;margin:20px auto 0;padding:8px 12px;background:transparent;border:1px solid var(--line);color:var(--green);font:10px var(--mono)}
+@media(min-width:1450px){.dashboard{margin-top:44px}}
+@media(max-width:1000px){.columns,.entry{grid-template-columns:30px 215px minmax(0,1fr) 65px;gap:13px}.compact .columns,.compact .entry{grid-template-columns:30px 185px minmax(0,1fr) 60px;gap:13px}.tools{align-items:flex-start;flex-direction:column;gap:13px}.inputs{width:100%}.inputs input{flex:1;max-width:none}.inputs select{width:220px;max-width:none}.project-name{font-size:13px}}
+@media(max-width:680px){.dashboard{padding:0 12px;margin:20px auto}.dashboard-heading{gap:12px;flex-direction:column}.isolation{display:none}.dashboard h1{font-size:19px}.design-options{gap:5px;margin:18px 0 12px}.design-options button{flex:1;padding:9px 4px;font-size:10px}.mode-note{font-size:11px!important}.topbar{padding:15px 15px;font-size:8px;gap:8px}.status{gap:5px}.hero{padding:25px 16px}.hero-kicker{font-size:9px}.hero h2{font-size:35px;letter-spacing:-1px}.hero-summary{font-size:8px;line-height:1.8}.metric{padding:20px 14px}.metric strong{font-size:25px}.metric label{font-size:7px;line-height:1.8;letter-spacing:0}.tools{padding:17px 15px}.inputs{flex-direction:column}.inputs input,.inputs select{width:100%;height:37px}.columns{display:none}.entry,.compact .entry{grid-template-columns:22px minmax(0,1fr) 55px;gap:10px;padding:19px 15px}.project-info{grid-column:2;grid-row:1}.stars{grid-column:3;grid-row:1;font-size:10px}.contribution{grid-column:2 / 4;grid-row:2;margin-top:2px}.entry .project-name{font-size:13px}.entry .contribution-title{font-size:12px}.repo{font-size:9px}.badge-row{margin-top:8px}.meta{gap:6px;font-size:8px}.list{min-height:370px}.pagination{padding:17px 15px;flex-direction:column;align-items:flex-start;gap:14px}.page-controls{width:100%;justify-content:space-between;gap:4px}.page-controls button{padding:0 7px;min-width:28px;font-size:9px}.page-controls .direction{padding:0 9px}.footer{padding:15px;font-size:8px;flex-direction:column;gap:9px}.project-block{padding:22px 15px}.project-header{grid-template-columns:22px 1fr auto;gap:10px}.project-header .stars{grid-column:3}.project-header .project-name{font-size:15px}.project-description{font-size:10px}.project-badges{gap:5px}.project-badges .badge{min-width:140px;padding:8px}.project-contributions{margin-left:32px;padding-left:12px}.project-pr{grid-template-columns:35px 1fr;gap:8px;font-size:10px}.project-actions{margin-left:32px;flex-wrap:wrap;gap:12px}.compact .entry{padding-block:13px}.compact .entry .contribution-title{font-size:11px}.compact .badge-row{display:flex}}
+@media(prefers-reduced-motion:reduce){.cursor{animation:none}}
+
+/* Project directory v2: larger type, original terminal palette and header. */
+.tools .section-tag{font-size:13px;line-height:1.6}
+.inputs select,.inputs input{height:44px;font-size:13px;max-width:260px}
+.inputs input{width:245px}
+.topbar{font-size:12px}.hero-summary{font-size:13px;line-height:1.7}
+.metric label{font-size:12px;line-height:1.6}.range{font-size:12px;line-height:1.7}
+.page-controls button{height:44px;min-width:44px;font-size:13px}
+.footer{font-size:12px;line-height:1.6}.design-options button{font-size:14px}
+.project-block{padding:30px 28px}
+.project-header{grid-template-columns:30px minmax(0,1fr) auto;gap:18px}
+.project-header .index{font-size:13px;padding-top:8px}
+.project-header .project-name{font-size:26px;line-height:1.4;overflow-wrap:anywhere}
+.project-header .repo{font-size:13px;line-height:1.7;margin-top:7px}
+.dashboard .project-description{font-size:15px;line-height:1.8;color:#96cda2;max-width:76ch;margin:14px 0 0}
+.project-stats{display:flex;flex-direction:column;align-items:flex-end;gap:15px;padding-top:6px}
+.contribution-count{font-size:16px;color:var(--text);white-space:nowrap;padding:10px 13px;border:1px solid var(--line);background:var(--bar)}
+.contribution-count strong{font-size:24px}
+.project-stats .stars{display:flex;align-items:center;gap:9px;font-size:18px;padding:0}
+.project-stats .stars small{font-size:12px;color:var(--muted)}
+.project-badges{margin-top:20px;gap:12px;align-items:center}
+.official-badge{display:flex;align-items:center;max-width:100%;min-height:60px;transition:opacity .15s}
+.official-badge:hover{opacity:.85;text-decoration:none}
+.official-badge img{display:block;height:60px;width:auto;max-width:100%;object-fit:contain;object-position:left center}
+.official-badge img[hidden]{display:none}
+.official-badge.award img{height:68px}
+.badge-fallback{display:none;font-size:13px;border:1px solid var(--line);padding:12px;color:var(--green)}
+.official-badge.unavailable .badge-fallback{display:block}
+.project-contributions{margin:23px 0 0 48px;padding-left:20px}
+.project-pr{display:block;padding:15px 0;border-bottom:1px solid #1c3e28}
+.project-pr:last-child{border-bottom:0}
+.project-pr .contribution-title{font-size:16px;line-height:1.75}
+.project-pr .meta{font-size:13px;line-height:1.6;gap:9px;margin-top:9px}
+.project-pr .kind{font-size:12px;padding:1px 5px}
+.project-pr time{font-size:13px;line-height:1.6;padding:0}
+.more-contributions{display:flex;flex-direction:column}
+.more-contributions summary{order:1;list-style:none;cursor:pointer;font-size:14px;color:var(--green);width:fit-content;min-height:44px;display:flex;align-items:center;margin-top:10px;gap:8px}
+.more-contributions summary::-webkit-details-marker{display:none}
+.more-contributions summary:hover{text-decoration:underline;text-underline-offset:4px}
+.more-contributions .collapse-label{display:none}
+.more-contributions[open] .expand-label{display:none}
+.more-contributions[open] .collapse-label{display:inline}
+.more-contributions:not([open]) .more-prs{display:none}
+.project-actions{margin:13px 0 0 48px}
+.project-actions a{font-size:13px;min-height:44px;display:inline-flex;align-items:center}
+@media(max-width:1000px){.inputs input{max-width:none}.inputs select{max-width:none}.project-header .project-name{font-size:24px}}
+@media(max-width:680px){
+ .dashboard{padding:0 10px}.topbar{font-size:9px}.hero-summary{font-size:11px}.metric label{font-size:9px}
+ .design-options button{font-size:12px}.section-tag{overflow-wrap:anywhere}.inputs input,.inputs select{height:46px;font-size:14px;max-width:none;width:100%}
+ .project-block{padding:25px 16px}.project-header{grid-template-columns:22px minmax(0,1fr);gap:10px}
+ .project-header .project-name{font-size:24px}.project-header .repo{font-size:13px}
+ .project-stats{grid-column:2;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;padding-top:4px;flex-wrap:wrap}
+ .contribution-count{font-size:14px;padding:9px 11px}.contribution-count strong{font-size:20px}
+ .project-stats .stars{font-size:16px}.project-stats .stars small{font-size:11px}
+ .dashboard .project-description{font-size:15px;line-height:1.8}
+ .project-badges{gap:12px;margin-top:18px}.official-badge{min-height:55px}
+ .official-badge img{height:auto;width:250px;max-width:100%}.official-badge.award img{height:auto;width:285px}
+ .project-contributions{margin-left:32px;padding-left:12px;margin-top:18px}
+ .project-pr .contribution-title{font-size:15px;line-height:1.8}.project-pr .meta,.project-pr time{font-size:12px}
+ .project-pr .kind{font-size:11px}.project-pr .meta{gap:7px}
+ .project-actions{margin-left:44px}.project-actions a,.more-contributions summary{font-size:13px;min-height:46px}
+ .page-controls button{min-width:36px;padding:0 6px;font-size:12px}.page-controls .direction{padding:0 7px}.range{font-size:11px}
+ .footer{font-size:11px}
+}
+
+
+body{background:#06150d;color:var(--text)}.dashboard{margin:24px auto;max-width:1240px}
+.page-controls{flex-wrap:wrap}.page-gap{font-size:13px;color:var(--muted);padding:0 4px}
+@media(max-width:680px){.dashboard{margin:12px auto}}
+</style>
+</head>
+<body>
+<main class="dashboard">
+  <section class="monitor" aria-label="开源贡献面板">
+    <div class="topbar"><span>///// OSS_SIGNAL_MONITOR /////</span><span class="status"><span class="status-dot"></span>[ AUTO SYNC: ON ]</span></div>
+    <div class="hero"><div class="hero-kicker">DAKJDAKD / PUBLIC ACTIVITY</div><h2>OPEN SOURCE<br>ONLINE<span class="cursor">_</span></h2><div class="hero-summary" id="hero-summary"></div></div>
+    <div class="metrics"><div class="metric"><strong id="pr-count"></strong><label>MERGED PULL REQUESTS</label></div><div class="metric"><strong id="project-count"></strong><label>PUBLIC REPOSITORIES</label></div><div class="metric"><strong id="latest"></strong><label>LATEST MERGE</label></div></div>
+    <div class="tools"><div class="section-tag" id="section-tag"></div><div class="inputs"><select id="project-filter" aria-label="按项目筛选"></select><input id="search" type="search" placeholder="SEARCH CONTRIBUTIONS_" aria-label="搜索项目或贡献"></div></div>
+    <div id="list" class="list"></div>
+    <div class="pagination"><span id="range" class="range" role="status" aria-live="polite"></span><nav id="page-controls" class="page-controls" aria-label="分页"></nav></div>
+    <div class="footer"><span id="footer-updated"></span><a href="https://github.com/dakjdakd" target="_blank" rel="noopener">DAKJDAKD / GITHUB ↗</a></div>
+  </section>
+</main>
+<script>
+const DATA = __DATA__;
+const projects = new Map(DATA.projects.map(p=>[p.repo,p]));
+const initial = new URLSearchParams(location.search);
+const state = {page:Math.max(1,Math.floor(Number(initial.get('page')))||1), repo:initial.get('project')||'', query:(initial.get('search')||'').trim().toLowerCase()};
+const $ = id=>document.getElementById(id);
+const esc = value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtStars = value=>value>=1000?(value/1000).toFixed(1)+'k':String(value);
+const date = value=>{const parts=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit'}).formatToParts(new Date(value));return parts.find(p=>p.type==='month').value+'.'+parts.find(p=>p.type==='day').value};
+const outgoing = (url,label,cls='',title='')=>`<a href="${esc(url)}" target="_blank" rel="noopener" class="${cls}"${title?` title="${esc(title)}"`:''}>${label}</a>`;
+function parsedTitle(title){const match=title.match(/^(?:(Python|\.NET):\s*)?(fix|test|feat|docs|chore|refactor)(?:\(([^)]+)\))?:\s*(.*)$/i);return match?{title:match[4],kind:match[2].toUpperCase(),scope:[match[1],match[3]].filter(Boolean).join(' / ')}:{title,kind:'PR',scope:''}}
+function badges(p){return p.badges.map(b=>outgoing(b.url,`<img src="${esc(b.image)}" alt="${esc(b.name)} · 完整官方徽章" referrerpolicy="no-referrer" onerror="this.hidden=true;this.parentElement.classList.add('unavailable')"><span class="badge-fallback">${esc(b.label)}<br>${esc(b.name)} ↗</span>`,`official-badge ${b.kind}`,`${b.name} · 项目 README 中的官方徽章，点击查看来源`)).join('')}
+const expanded = new Set();
+function projectPr(pr){const t=parsedTitle(pr.title);return `<div class="project-pr">${outgoing(pr.html_url,esc(t.title),'contribution-title')}<div class="meta">${outgoing(pr.html_url,'#'+pr.number)}<span class="separator">/</span><span class="kind">${esc(t.kind)}</span>${t.scope?`<span>${esc(t.scope)}</span><span class="separator">/</span>`:''}<time datetime="${esc(pr.merged_at)}">${new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(pr.merged_at))}</time><span class="merged">MERGED</span></div></div>`}
+
+function block(p,index,prs){const count=DATA.prs.filter(pr=>pr.repo===p.repo).length;return `<article class="project-block"><div class="project-header"><span class="index">${String(index+1).padStart(2,'0')}</span><div>${outgoing(p.url,esc(p.name),'project-name')}<div class="repo">${esc(p.repo)}</div><p class="project-description">${esc(p.description)}</p>${p.badges.length?`<div class="project-badges">${badges(p)}</div>`:''}</div><div class="project-stats"><span class="contribution-count"><strong>${count}</strong> MERGED PR${count===1?'':'s'}</span><span class="stars">★ ${fmtStars(p.stars)} <small>STARS</small></span></div></div><div class="project-contributions">${prs.slice(0,2).map(projectPr).join('')}${prs.length>2?`<details class="more-contributions" data-expand="${esc(p.repo)}" ${expanded.has(p.repo)?'open':''}><summary><span class="expand-label">+ SHOW ${prs.length-2} MORE CONTRIBUTION${prs.length-2===1?'':'S'}</span><span class="collapse-label">− COLLAPSE CONTRIBUTIONS</span></summary><div class="more-prs">${prs.slice(2).map(projectPr).join('')}</div></details>`:''}</div><div class="project-actions">${outgoing(p.url,'PROJECT REPOSITORY ↗')}</div></article>`}
+
+function filtered(){return DATA.prs.filter(p=>(!state.repo||p.repo===state.repo)&&(!state.query||(p.repo+' '+p.title+' '+p.number+' '+projects.get(p.repo).name).toLowerCase().includes(state.query)))}
+function render(){
+  const prs=filtered(),items=[...new Set(prs.map(p=>p.repo))].map(repo=>projects.get(repo)),size=6,total=items.length,pages=Math.max(1,Math.ceil(total/size));
+  state.page=Math.min(state.page,pages);const start=(state.page-1)*size,visible=items.slice(start,start+size);
+  $('section-tag').textContent=`> PROJECT DIRECTORY [${String(total).padStart(2,'0')}]`;
+  $('list').innerHTML=total?visible.map((p,i)=>block(p,start+i,prs.filter(pr=>pr.repo===p.repo))).join(''):'<div class="empty">NO MATCHING CONTRIBUTIONS_<button id="clear">CLEAR FILTERS</button></div>';
+  $('range').textContent=total?`${String(start+1).padStart(2,'0')}–${String(start+visible.length).padStart(2,'0')} OF ${String(total).padStart(2,'0')} PROJECTS / PAGE ${state.page} OF ${pages}`:'0 MATCHES';
+  const numbers=Array.from({length:pages},(_,i)=>i+1).filter(n=>n===1||n===pages||Math.abs(n-state.page)<=1);
+  $('page-controls').innerHTML=`<button class="direction" data-page="${state.page-1}" ${state.page===1?'disabled':''} aria-label="上一页">← PREV</button>${numbers.map((n,i)=>(i&&n>numbers[i-1]+1?'<span class="page-gap" aria-hidden="true">…</span>':'')+`<button data-page="${n}" ${state.page===n?'aria-current="page"':''} aria-label="第 ${n} 页">${n}</button>`).join('')}<button class="direction" data-page="${state.page+1}" ${state.page===pages?'disabled':''} aria-label="下一页">NEXT →</button>`;
+  document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{state.page=Number(b.dataset.page);render();document.querySelector(`[data-page="${state.page}"]`).focus({preventScroll:true})}));
+  document.querySelectorAll('[data-expand]').forEach(d=>d.addEventListener('toggle',()=>{d.open?expanded.add(d.dataset.expand):expanded.delete(d.dataset.expand)}));
+  if($('clear'))$('clear').addEventListener('click',()=>{state.repo='';state.query='';state.page=1;$('project-filter').value='';$('search').value='';render();$('search').focus({preventScroll:true})});
+  const params=new URLSearchParams();if(state.page>1)params.set('page',state.page);if(state.repo)params.set('project',state.repo);if(state.query)params.set('search',state.query);
+  history.replaceState(null,'',location.pathname+(params.size?'?'+params.toString():''));
+}
+$('pr-count').textContent=String(DATA.prs.length).padStart(2,'0');$('project-count').textContent=String(DATA.projects.length).padStart(2,'0');$('latest').textContent=DATA.prs.length?date(DATA.prs[0].merged_at):'--';
+$('hero-summary').textContent=`COMMUNITY CONTRIBUTIONS SYNCED / ${DATA.prs.length} MERGED PRs`;
+$('footer-updated').textContent='> LAST SYNC: '+new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai',dateStyle:'short',timeStyle:'short'}).format(new Date(DATA.updated_at))+' CST';
+$('project-filter').innerHTML='<option value="">PROJECT: ALL</option>'+DATA.projects.map(p=>`<option value="${esc(p.repo)}">${esc(p.name)}</option>`).join('');
+$('project-filter').value=state.repo;$('search').value=state.query;
+$('project-filter').addEventListener('change',e=>{state.repo=e.target.value;state.page=1;render()});
+$('search').addEventListener('input',e=>{state.query=e.target.value.trim().toLowerCase();state.page=1;render()});render();
+
+</script>
+</body>
+</html>

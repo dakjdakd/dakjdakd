@@ -1,210 +1,273 @@
-"""Refresh the animated open-source panel in the profile README."""
+"""Collect verified merged contributions, build Pages, and render the README panel."""
 
+import argparse
+import base64
 import hashlib
+import html
 import json
-import math
 import os
+import re
+import subprocess
+import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from io import BytesIO
 from pathlib import Path
-from urllib.parse import urlencode
-from urllib.request import Request, urlopen
+from threading import Thread
+from urllib.error import HTTPError
 
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
-
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 USER = "dakjdakd"
+SITE = ROOT / "docs"
+DATA_FILE = SITE / "open-source-data.json"
 OUT = ROOT / "assets" / "open-source-terminal.gif"
-FONT = ROOT / "assets" / "fonts" / "JetBrainsMono-Regular.ttf"
-BOLD = ROOT / "assets" / "fonts" / "JetBrainsMono-Bold.ttf"
+CONFIG_FILE = ROOT / "scripts" / "open_source_config.json"
+TEMPLATE = ROOT / "scripts" / "open_source_template.html"
 TZ = timezone(timedelta(hours=8))
-# These merged PRs credit dakjdakd as a co-author, but GitHub Search's
-# author: filter cannot find them because the PR author is ai-sdk-factory[bot].
-COAUTHORED_PRS = (("vercel/ai", 21228), ("vercel/ai", 21229))
 
 
 def api(path, **params):
-    url = "https://api.github.com/" + path
-    if params:
-        url += "?" + urlencode(params)
-    headers = {"Accept": "application/vnd.github+json", "User-Agent": "dakjdakd-profile"}
-    if token := os.environ.get("GH_TOKEN"):
-        headers["Authorization"] = f"Bearer {token}"
-    with urlopen(Request(url, headers=headers), timeout=30) as response:
-        return json.load(response)
+    # gh is available locally and on GitHub's Ubuntu runners. Argument arrays
+    # preserve search phrases without shell quoting or exposing the token.
+    command = ["gh", "api", path, "-X", "GET", "-H", "Accept: application/vnd.github+json"]
+    for key, value in params.items():
+        command.extend(["-f", f"{key}={value}"])
+    for attempt in range(3):
+        result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", timeout=90)
+        if result.returncode == 0:
+            return json.loads(result.stdout)
+        status = re.search(r"HTTP (\d+)", result.stderr)
+        code = int(status[1]) if status else 0
+        if code not in (403, 429, 502, 503) or attempt == 2:
+            raise HTTPError(path, code, result.stderr.strip(), {}, None)
+        time.sleep(20)
 
 
-def merged_prs():
+def search(kind, query):
     results = []
-    for page in range(1, 11):  # GitHub Search exposes at most 1,000 results.
-        data = api("search/issues", q=f"is:pr is:merged author:{USER}", per_page=100, page=page)
-        results.extend(
-            item for item in data["items"]
-            if item["pull_request"]["merged_at"]
-            and item["repository_url"].split("/repos/", 1)[1].split("/", 1)[0].lower() != USER.lower()
-        )
-        if page * 100 >= data["total_count"]:
+    for page in range(1, 11):
+        response = api(f"search/{kind}", q=query, per_page=100, page=page)
+        if response.get("incomplete_results") or response["total_count"] > 1000:
+            raise RuntimeError(f"GitHub {kind} search is incomplete; keeping the previous panel")
+        results.extend(response["items"])
+        if page * 100 >= response["total_count"]:
             break
-    seen = {item["html_url"] for item in results}
-    for repo, number in COAUTHORED_PRS:
-        pr = api(f"repos/{repo}/pulls/{number}")
-        if pr["merged_at"] and pr["html_url"] not in seen:
-            results.append({
-                "title": pr["title"],
-                "html_url": pr["html_url"],
-                "repository_url": f"https://api.github.com/repos/{repo}",
-                "pull_request": {"merged_at": pr["merged_at"]},
-            })
-            seen.add(pr["html_url"])
-    return sorted(results, key=lambda item: (item["pull_request"]["merged_at"], item["html_url"]), reverse=True)
+    return results
 
 
-def shorten(value, font, max_width, draw):
-    if draw.textlength(value, font=font) <= max_width:
-        return value
-    while value and draw.textlength(value + "…", font=font) > max_width:
-        value = value[:-1]
-    return value + "…"
+def external(repo):
+    return repo.split("/", 1)[0].lower() != USER.lower()
+
+
+def normalize(pr, repo=None):
+    repo = repo or pr["repository_url"].split("/repos/", 1)[1]
+    merged = pr.get("merged_at") or (pr.get("pull_request") or {}).get("merged_at")
+    if not merged or not external(repo) or pr.get("base", {}).get("repo", {}).get("private"):
+        return None
+    return {"repo": repo, "number": pr.get("number") or int(pr["html_url"].rsplit("/", 1)[1]),
+            "html_url": pr["html_url"], "title": pr["title"], "merged_at": merged}
+
+
+def credited(message, emails):
+    # Names alone can match a different person; only verified account emails count.
+    return any(email.lower() in emails for email in re.findall(
+        r"^Co-authored-by:\s*[^\n<>]+<([^\s<>]+)>\s*$", message, re.I | re.M))
+
+
+def merged_prs(previous, config):
+    # Keep verified history even when GitHub Search temporarily misses a result.
+    prs = {p["html_url"]: p for p in previous if external(p["repo"])}
+    print("Collecting authored and pinned merged PRs...", flush=True)
+    for item in search("issues", f"is:pr is:merged author:{USER}"):
+        pr = normalize(item)
+        if pr:
+            prs[pr["html_url"]] = pr
+
+    for entry in config["included_prs"]:
+        pr = normalize(api(f"repos/{entry['repo']}/pulls/{entry['number']}"), entry["repo"])
+        if pr:
+            prs[pr["html_url"]] = pr
+
+    user = api(f"users/{USER}")
+    emails = {f"{USER}@users.noreply.github.com", f"{user['id']}+{USER}@users.noreply.github.com"}
+    if user.get("email"):
+        emails.add(user["email"].lower())
+    authored_commits = search("commits", f"author:{USER} -user:{USER}")
+    commits = {}
+    for commit in authored_commits:
+        if (commit.get("author") or {}).get("login", "").lower() == USER.lower():
+            emails.add(commit["commit"]["author"]["email"].lower())
+            repo = commit["repository"]["full_name"]
+            if external(repo) and not commit["repository"].get("private") and not commit["repository"].get("fork"):
+                commits[(repo, commit["sha"])] = commit
+
+    print("Discovering verified co-author commit credits...", flush=True)
+    queries = [f'"Co-authored-by: {USER}" -user:{USER}'] + [
+        f'"Co-authored-by" "{email}" -user:{USER}' for email in sorted(emails)]
+    for query in queries:
+        for commit in search("commits", query):
+            repo = commit["repository"]["full_name"]
+            if external(repo) and not commit["repository"].get("private") and not commit["repository"].get("fork"):
+                if credited(commit["commit"]["message"], emails):
+                    commits[(repo, commit["sha"])] = commit
+
+    groups = {}
+    for (repo, sha), commit in commits.items():
+        groups.setdefault(sha, []).append((repo, commit))
+    known_repos = {p["repo"] for p in prs.values()}
+    print(f"Checking PR associations for {len(groups)} distinct credited commits...", flush=True)
+    for sha, candidates in groups.items():
+        # Repository copies contain identical upstream commits. Prefer the verified
+        # source so a copied history does not masquerade as another contribution.
+        known_sources = [(repo, c) for repo, c in candidates if repo in known_repos]
+        for repo, commit in known_sources or candidates:
+            number = re.search(r"\(#(\d+)\)\s*$", commit["commit"]["message"].splitlines()[0])
+            if number and f"https://github.com/{repo}/pull/{number[1]}" in prs:
+                break
+            found = False
+            for item in api(f"repos/{repo}/commits/{sha}/pulls", per_page=100):
+                base_repo = item["base"]["repo"]
+                if base_repo["private"] or base_repo["full_name"].lower() != repo.lower():
+                    continue
+                pr = normalize(item, repo)
+                if pr:
+                    prs[pr["html_url"]] = pr
+                    found = True
+            if found:
+                break
+    return sorted(prs.values(), key=lambda p: (p["merged_at"], p["html_url"]), reverse=True)
+
+
+def recognition_badges(readme, source):
+    urls = list(dict.fromkeys(html.unescape(value.rstrip(".,;")) for value in
+                             re.findall(r'https://[^\s<>"\')]+', readme)))
+    rules = [
+        ("hg", "HelloGitHub", "RECOMMENDED BY", r"https://hellogithub\.com/repository/[\w-]+", "https://api.hellogithub.com/v1/widgets/recommend.svg?"),
+        ("ts", "GitHub Trending", "TRENDING RECORD", r"https://trendshift\.io/repositories/\d+", "https://trendshift.io/api/badge/repositories/"),
+        ("ph", "Product Hunt", "FIND US ON", r"https://(?:www\.)?producthunt\.com/(?:posts|products)/[\w-]+", "https://api.producthunt.com/widgets/embed-image/"),
+        ("award", "JavaScript Open Source Award 2026 — AI Project of the Year", "WINNER", r"https://tanstack\.com/blog/tanstack-open-source-awards-2026", "https://raw.githubusercontent.com/TanStack/ai/"),
+    ]
+    badges = []
+    for kind, name, label, link_pattern, image_prefix in rules:
+        link = next((url for url in urls if re.fullmatch(link_pattern + r"(?:\?[^#]*)?(?:#[^\s]*)?", url)), None)
+        image = next((url for url in urls if url.startswith(image_prefix) and
+                      (kind != "award" or "js-open-source-award-2026-ai-project-of-the-year.svg" in url)), None)
+        if link and image:
+            badges.append({"kind": kind, "name": name, "label": label, "url": link, "image": image, "source": source})
+    return badges
+
+
+def project_info(repo, config, old):
+    info = api(f"repos/{repo}")
+    if info["private"]:
+        raise RuntimeError(f"Refusing to publish private repository {repo}")
+    try:
+        readme = api(f"repos/{repo}/readme")
+        content = base64.b64decode(readme["content"]).decode("utf-8", errors="replace")
+        badges = recognition_badges(content, readme["html_url"])
+    except HTTPError as error:
+        if error.code != 404:
+            raise
+        badges = old.get("badges", [])
+    return {"repo": repo, "name": config["project_names"].get(repo, info["name"]),
+            "stars": info["stargazers_count"], "description": info.get("description") or "",
+            "url": info["html_url"], "badges": badges}
 
 
 def stars(value):
     return f"{value / 1000:.1f}k" if value >= 1000 else str(value)
 
 
-def content_signature(prs, repo_stars):
-    # Ignore the clock: a check with unchanged visible data must not create a commit.
-    data = {
-        "prs": [(p["html_url"], p["title"], p["repository_url"], p["pull_request"]["merged_at"]) for p in prs],
-        "stars": {repo: stars(count) for repo, count in repo_stars.items()},
-    }
-    digest = hashlib.sha256(json.dumps(data, sort_keys=True).encode())
-    digest.update(Path(__file__).read_bytes().replace(b"\r\n", b"\n"))
-    for path in (FONT, BOLD):
-        digest.update(path.read_bytes())
-    return digest.hexdigest().encode()
+def content_signature(data):
+    visible = {"prs": data["prs"], "projects": [dict(p, stars=stars(p["stars"])) for p in data["projects"]]}
+    digest = hashlib.sha256(json.dumps(visible, sort_keys=True, ensure_ascii=False).encode())
+    for path in (Path(__file__), TEMPLATE, CONFIG_FILE, ROOT / "assets/fonts/JetBrainsMono-Regular.ttf", ROOT / "assets/fonts/JetBrainsMono-Bold.ttf"):
+        digest.update(path.read_bytes().replace(b"\r\n", b"\n") if path.suffix != ".ttf" else path.read_bytes())
+    return digest.hexdigest()
 
 
-def needs_update(signature):
-    if not OUT.exists():
-        return True
+def panel_signature():
     try:
         with Image.open(OUT) as image:
-            return image.info.get("comment") != signature
-    except OSError:
-        return True
+            return image.info.get("comment", b"").decode()
+    except (OSError, UnicodeDecodeError):
+        return ""
 
 
-def draw_panel(prs, repo_stars):
-    recent = prs[:10]
-    count = max(1, len(recent))
-    width, height = 1000, 46 + 209 + 85 + 37 + count * 43 + 44
-    image = Image.new("RGB", (width, height), "#081a10")
-    d = ImageDraw.Draw(image)
-    reg = lambda n: ImageFont.truetype(FONT, n)
-    bold = lambda n: ImageFont.truetype(BOLD, n)
-    f11, f12, f13, f25, f40 = reg(11), reg(12), reg(13), bold(25), bold(40)
-    green, bright, dim, line = "#81e990", "#a4ffaf", "#5fae6d", "#28643a"
-
-    # A quiet scanline texture keeps the reference's terminal feel.
-    for y in range(0, height, 4):
-        d.line((1, y, width - 2, y), fill="#0a1d12")
-    d.rectangle((0, 0, width - 1, height - 1), outline="#28583a")
-    d.rectangle((1, 1, width - 2, 45), fill="#0d2718")
-    d.text((20, 16), "///// OSS_SIGNAL_MONITOR /////", font=f11, fill=green)
-    d.text((width - 20, 16), "[ AUTO SYNC: ON ]", font=f11, fill=green, anchor="ra")
-    for y in (46, 255, 340, 377 + count * 43):
-        for x in range(0, width, 8):
-            d.line((x, y, min(x + 4, width), y), fill=line)
-
-    d.text((width / 2, 88), "DAKJDAKD / PUBLIC ACTIVITY", font=f12, fill=green, anchor="mm")
-    d.text((width / 2, 226), f"COMMUNITY CONTRIBUTIONS SYNCED  /  {len(prs)} MERGED PRs", font=f12, fill=green, anchor="mm")
-    metric_labels = ["MERGED PULL REQUESTS", "PUBLIC REPOSITORIES", "LATEST MERGE"]
-    repos = {p["repository_url"].split("/repos/", 1)[1] for p in prs}
-    latest = datetime.fromisoformat(prs[0]["pull_request"]["merged_at"].replace("Z", "+00:00")).astimezone(TZ).strftime("%m.%d") if prs else "--"
-    metric_values = [f"{len(prs):02}", f"{len(repos):02}", latest]
-    for i, (value, label) in enumerate(zip(metric_values, metric_labels)):
-        x = 20 + i * (width // 3)
-        d.text((x, 273), value, font=f25, fill=bright)
-        d.text((x, 315), label, font=f11, fill=dim)
-        if i < 2:
-            for y in range(256, 340, 8):
-                d.line((width // 3 * (i + 1), y, width // 3 * (i + 1), y + 4), fill=line)
-    d.text((20, 354), f"> VERIFIED MERGED CONTRIBUTIONS [{len(recent):02}/{len(prs):02}]", font=f11, fill=green)
-    d.text((width - 20, 354), "REPO STARS", font=f11, fill=green, anchor="ra")
-
-    for i, pr in enumerate(recent):
-        y = 377 + i * 43
-        d.line((0, y, width, y), fill="#1a422a")
-        repo = pr["repository_url"].split("/repos/", 1)[1]
-        merged = datetime.fromisoformat(pr["pull_request"]["merged_at"].replace("Z", "+00:00")).astimezone(TZ)
-        d.text((20, y + 14), f"{i+1:02}", font=f12, fill=dim)
-        d.text((65, y + 14), merged.strftime("%m.%d"), font=f12, fill=bright)
-        title = shorten(f"{repo} / {pr['title']}", f13, 680, d)
-        d.text((160, y + 13), title, font=f13, fill=bright)
-        star_text = stars(repo_stars[repo])
-        d.text((width - 20, y + 13), star_text, font=f13, fill=bright, anchor="ra")
-        star_x = width - 31 - d.textlength(star_text, font=f13)
-        star_y = y + 20
-        points = [
-            (star_x + (6 if n % 2 == 0 else 2.6) * math.sin(n * math.pi / 5),
-             star_y - (6 if n % 2 == 0 else 2.6) * math.cos(n * math.pi / 5))
-            for n in range(10)
-        ]
-        d.polygon(points, fill=bright)
-    if not recent:
-        d.text((width / 2, 399), "NO MERGED PULL REQUESTS YET", font=f12, fill=green, anchor="mm")
-    foot_y = 377 + count * 43
-    d.rectangle((1, foot_y + 1, width - 2, height - 2), fill="#0d2718")
-    now = datetime.now(TZ).strftime("%Y.%m.%d / %H:%M CST")
-    d.text((20, foot_y + 17), f"> PANEL_UPDATED: {now}", font=f11, fill=green)
-    d.text((width - 20, foot_y + 17), "EXPLORE ALL MERGED PRs >", font=f11, fill=green, anchor="ra")
-    return image, f40
+def build_site(data):
+    SITE.mkdir(exist_ok=True)
+    (SITE / "fonts").mkdir(exist_ok=True)
+    for name in ("JetBrainsMono-Regular.ttf", "JetBrainsMono-Bold.ttf"):
+        (SITE / "fonts" / name).write_bytes((ROOT / "assets/fonts" / name).read_bytes())
+    (SITE / ".nojekyll").touch()
+    DATA_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    page = TEMPLATE.read_text(encoding="utf-8").replace("__DATA__", json.dumps(data, ensure_ascii=False).replace("</", "<\\/"))
+    (SITE / "index.html").write_text(page, encoding="utf-8")
 
 
-def animated_gif(base, title_font, signature):
-    title1, title2 = "OPEN SOURCE", "ONLINE"
-    draw = ImageDraw.Draw(base)
-    x1 = (base.width - draw.textlength(title1, font=title_font)) / 2
-    x2 = (base.width - draw.textlength(title2 + "_", font=title_font)) / 2
+def collect():
+    old = json.loads(DATA_FILE.read_text(encoding="utf-8")) if DATA_FILE.exists() else {"prs": [], "projects": []}
+    config = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
+    prs = merged_prs(old["prs"], config)
+    repos = list(dict.fromkeys(p["repo"] for p in prs))
+    existing = {p["repo"]: p for p in old["projects"]}
+    print(f"Checking recognition badges in {len(repos)} project READMEs...", flush=True)
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        projects = list(pool.map(lambda repo: project_info(repo, config, existing.get(repo, {})), repos))
+    data = {"prs": prs, "projects": projects}
+    signature = content_signature(data)
+    changed = signature != panel_signature() or not (SITE / "index.html").exists()
+    if changed:
+        data.update(updated_at=datetime.now(TZ).isoformat(timespec="seconds"), signature=signature)
+        build_site(data)
+    if output := os.environ.get("GITHUB_OUTPUT"):
+        with open(output, "a", encoding="utf-8") as stream:
+            stream.write(f"changed={str(changed).lower()}\n")
+    print(f"{'Changed' if changed else 'No visible changes'}: {len(prs)} merged PRs across {len(projects)} projects")
 
-    def frame(first, second, cursor=False):
-        image = base.convert("RGBA")
-        glow = Image.new("RGBA", image.size)
-        g = ImageDraw.Draw(glow)
-        g.text((x1, 111), first, font=title_font, fill=(80, 255, 110, 180))
-        g.text((x2, 157), second + ("_" if cursor else ""), font=title_font, fill=(80, 255, 110, 180))
-        image = Image.alpha_composite(image, glow.filter(ImageFilter.GaussianBlur(7)))
-        d = ImageDraw.Draw(image)
-        d.text((x1, 111), first, font=title_font, fill="#a4ffaf")
-        d.text((x2, 157), second + ("_" if cursor else ""), font=title_font, fill="#a4ffaf")
-        return image.convert("RGB").quantize(colors=48, method=Image.Quantize.MEDIANCUT)
 
-    frames, durations = [frame("", "")], [200]
-    for i in range(1, len(title1) + 1):
-        frames.append(frame(title1[:i], ""))
-        durations.append(100)
-    frames.append(frame(title1, ""))
-    durations.append(150)
-    for i in range(1, len(title2) + 1):
-        frames.append(frame(title1, title2[:i]))
-        durations.append(100)
-    frames.extend([frame(title1, title2, True), frame(title1, title2), frame(title1, title2, True)])
-    durations.extend([400, 250, 2400])
-    buffer = BytesIO()
-    frames[0].save(buffer, format="GIF", save_all=True, append_images=frames[1:], duration=durations, loop=0, optimize=True, disposal=2, comment=signature)
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_bytes(buffer.getvalue())
+def render_panel():
+    from playwright.sync_api import sync_playwright, TimeoutError as BrowserTimeout
+    from functools import partial
+
+    data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
+    server = ThreadingHTTPServer(("127.0.0.1", 0), partial(SimpleHTTPRequestHandler, directory=str(SITE)))
+    Thread(target=server.serve_forever, daemon=True).start()
+    try:
+        with sync_playwright() as playwright:
+            options = {"headless": True}
+            if executable := os.environ.get("CHROMIUM_EXECUTABLE_PATH"):
+                options["executable_path"] = executable
+            browser = playwright.chromium.launch(**options)
+            page = browser.new_page(viewport={"width": 1288, "height": 1100}, device_scale_factor=1)
+            page.goto(f"http://127.0.0.1:{server.server_port}/", wait_until="domcontentloaded")
+            page.evaluate("document.fonts.ready")
+            try:
+                page.wait_for_function("[...document.images].every(image => image.complete)", timeout=15000)
+            except BrowserTimeout:
+                pass
+            page.evaluate("[...document.images].filter(i => !i.naturalWidth).forEach(i => { i.hidden=true; i.parentElement.classList.add('unavailable') })")
+            page.add_style_tag(content=".cursor{animation:none!important;opacity:1!important}a{text-decoration:none!important}")
+            panel = page.locator(".monitor")
+            image = Image.open(BytesIO(panel.screenshot())).convert("RGB")
+            frame = image.quantize(colors=128, method=Image.Quantize.MEDIANCUT)
+            page.add_style_tag(content=".cursor{opacity:0!important}")
+            other = Image.open(BytesIO(panel.screenshot())).convert("RGB").quantize(palette=frame)
+            OUT.parent.mkdir(exist_ok=True)
+            frame.save(OUT, format="GIF", save_all=True, append_images=[other], duration=[2400, 700],
+                       loop=0, optimize=True, disposal=1, comment=data["signature"].encode())
+            browser.close()
+    finally:
+        server.shutdown()
+        server.server_close()
+    print(f"Rendered the first 6 projects to {OUT}; all projects available on Pages")
 
 
 if __name__ == "__main__":
-    prs = merged_prs()
-    repos = {p["repository_url"].split("/repos/", 1)[1] for p in prs[:10]}
-    repo_stars = {repo: api(f"repos/{repo}")["stargazers_count"] for repo in repos}
-    signature = content_signature(prs, repo_stars)
-    if needs_update(signature):
-        base, title_font = draw_panel(prs, repo_stars)
-        animated_gif(base, title_font, signature)
-        print(f"Rendered {len(prs)} merged PRs ({min(len(prs), 10)} visible) to {OUT}")
-    else:
-        print(f"No visible changes in {len(prs)} merged PRs; kept {OUT}")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--render", action="store_true")
+    args = parser.parse_args()
+    render_panel() if args.render else collect()
