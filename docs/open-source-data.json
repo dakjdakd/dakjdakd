@@ -271,7 +271,7 @@
     {
       "repo": "morluto/rea",
       "name": "Rea",
-      "stars": 99730,
+      "stars": 104040,
       "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
       "url": "https://github.com/morluto/rea",
       "badges": [
@@ -305,7 +305,7 @@
     {
       "repo": "CherryHQ/cherry-studio",
       "name": "Cherry Studio",
-      "stars": 52539,
+      "stars": 52543,
       "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "badges": [
@@ -346,7 +346,7 @@
     {
       "repo": "langgenius/dify",
       "name": "Dify",
-      "stars": 158160,
+      "stars": 158168,
       "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
       "url": "https://github.com/langgenius/dify",
       "badges": []
@@ -354,7 +354,7 @@
     {
       "repo": "Mintplex-Labs/anything-llm",
       "name": "AnythingLLM",
-      "stars": 66944,
+      "stars": 66948,
       "description": "Stop renting your intelligence. Own it with AnythingLLM. Everything you need for a powerful local-first agent experience ",
       "url": "https://github.com/Mintplex-Labs/anything-llm",
       "badges": [
@@ -371,7 +371,7 @@
     {
       "repo": "aaif-goose/goose",
       "name": "Goose",
-      "stars": 55165,
+      "stars": 55167,
       "description": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
       "url": "https://github.com/aaif-goose/goose",
       "badges": [
@@ -388,7 +388,7 @@
     {
       "repo": "n8n-io/n8n",
       "name": "n8n",
-      "stars": 207013,
+      "stars": 207022,
       "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
       "url": "https://github.com/n8n-io/n8n",
       "badges": []
@@ -412,7 +412,7 @@
     {
       "repo": "langchain-ai/deepagents",
       "name": "Deep Agents",
-      "stars": 30134,
+      "stars": 30135,
       "description": "The batteries-included agent harness.",
       "url": "https://github.com/langchain-ai/deepagents",
       "badges": []
@@ -428,7 +428,7 @@
     {
       "repo": "dream-num/univer",
       "name": "Univer",
-      "stars": 22547,
+      "stars": 22549,
       "description": "The Office Harness for AI Agents — Spreadsheets, Docs, Slides, Canvas, Relational Tables, and PDF in one runtime.",
       "url": "https://github.com/dream-num/univer",
       "badges": [
@@ -445,7 +445,7 @@
     {
       "repo": "open-jarvis/OpenJarvis",
       "name": "OpenJarvis",
-      "stars": 10977,
+      "stars": 10983,
       "description": "Personal AI, On Personal Devices",
       "url": "https://github.com/open-jarvis/OpenJarvis",
       "badges": []
@@ -453,7 +453,7 @@
     {
       "repo": "vectorize-io/hindsight",
       "name": "Hindsight",
-      "stars": 48385,
+      "stars": 48426,
       "description": "Hindsight: Agent Memory That Learns",
       "url": "https://github.com/vectorize-io/hindsight",
       "badges": []
@@ -461,7 +461,7 @@
     {
       "repo": "NandhaKishorM/laya",
       "name": "Laya",
-      "stars": 32325,
+      "stars": 32347,
       "description": "Non-autoregressive System 1 decision engine. Typed choice, score and yes/no decisions over any text in a single forward pass, in 100+ languages, with a router that picks the right checkpoint per request.",
       "url": "https://github.com/NandhaKishorM/laya",
       "badges": []
@@ -477,12 +477,12 @@
     {
       "repo": "vercel/ai",
       "name": "AI SDK",
-      "stars": 27246,
+      "stars": 27248,
       "description": "The AI Toolkit for TypeScript. From the creators of Next.js, the AI SDK is a free open-source library for building AI-powered applications and agents ",
       "url": "https://github.com/vercel/ai",
       "badges": []
     }
   ],
-  "updated_at": "2026-10-12T05:06:21+08:00",
-  "signature": "1636dc45fd23e65fff3803ecf0d24cc91d6a6dd8ec4297670c25b901d59fc577"
+  "updated_at": "2026-10-12T08:29:19+08:00",
+  "signature": "6d9c26a2d3ae6ae3a3eccedcd065b24cfd752198e1ca21abd36b350f1641a864"
 }
