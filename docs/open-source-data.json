@@ -1,6 +1,20 @@
 {
   "prs": [
     {
+      "repo": "cline/cline",
+      "number": 14986,
+      "html_url": "https://github.com/cline/cline/pull/14986",
+      "title": "fix(vscode): preserve attachments in pending question responses",
+      "merged_at": "2026-10-13T13:09:06Z",
+      "commit_shas": [
+        "01bde459f9899e65881e46205cd40e6f7139e3c5",
+        "045368da6d68b879329a674b9c965bfd9890e8b0",
+        "84db1438d4c2f59a3e121f5a16858ed28651d54a",
+        "e6dd0b4579ce9148e99370193aeeb48bce0e5dd9",
+        "f8997dac23aa4b190a14847ed567f65c3c0d2998"
+      ]
+    },
+    {
       "repo": "bytedance/deer-flow",
       "number": 6700,
       "html_url": "https://github.com/bytedance/deer-flow/pull/6700",
@@ -667,9 +681,17 @@
   ],
   "projects": [
     {
+      "repo": "cline/cline",
+      "name": "cline",
+      "stars": 70269,
+      "description": "Autonomous coding agent as an SDK, IDE extension, or CLI assistant.",
+      "url": "https://github.com/cline/cline",
+      "badges": []
+    },
+    {
       "repo": "bytedance/deer-flow",
       "name": "deer-flow",
-      "stars": 83792,
+      "stars": 83794,
       "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
       "url": "https://github.com/bytedance/deer-flow",
       "badges": [
@@ -703,7 +725,7 @@
     {
       "repo": "infiniflow/ragflow",
       "name": "ragflow",
-      "stars": 92144,
+      "stars": 92145,
       "description": "RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) engine that fuses cutting-edge RAG with Agent capabilities to create a superior context layer for LLMs",
       "url": "https://github.com/infiniflow/ragflow",
       "badges": [
@@ -737,7 +759,7 @@
     {
       "repo": "morluto/rea",
       "name": "Rea",
-      "stars": 188843,
+      "stars": 189451,
       "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
       "url": "https://github.com/morluto/rea",
       "badges": [
@@ -771,7 +793,7 @@
     {
       "repo": "CherryHQ/cherry-studio",
       "name": "Cherry Studio",
-      "stars": 52591,
+      "stars": 52592,
       "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "badges": [
@@ -812,7 +834,7 @@
     {
       "repo": "langgenius/dify",
       "name": "Dify",
-      "stars": 158354,
+      "stars": 158356,
       "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
       "url": "https://github.com/langgenius/dify",
       "badges": []
@@ -828,7 +850,7 @@
     {
       "repo": "aaif-goose/goose",
       "name": "Goose",
-      "stars": 55235,
+      "stars": 55236,
       "description": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
       "url": "https://github.com/aaif-goose/goose",
       "badges": [
@@ -845,7 +867,7 @@
     {
       "repo": "n8n-io/n8n",
       "name": "n8n",
-      "stars": 207203,
+      "stars": 207207,
       "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
       "url": "https://github.com/n8n-io/n8n",
       "badges": []
@@ -861,7 +883,7 @@
     {
       "repo": "microsoft/agent-framework",
       "name": "Microsoft Agent Framework",
-      "stars": 14111,
+      "stars": 14112,
       "description": "A framework for building, orchestrating and deploying AI agents and multi-agent workflows with support for Python and .NET.",
       "url": "https://github.com/microsoft/agent-framework",
       "badges": []
@@ -869,7 +891,7 @@
     {
       "repo": "langchain-ai/deepagents",
       "name": "Deep Agents",
-      "stars": 30206,
+      "stars": 30208,
       "description": "The batteries-included agent harness.",
       "url": "https://github.com/langchain-ai/deepagents",
       "badges": []
@@ -893,7 +915,7 @@
     {
       "repo": "vectorize-io/hindsight",
       "name": "Hindsight",
-      "stars": 49056,
+      "stars": 49060,
       "description": "Hindsight: Agent Memory That Learns",
       "url": "https://github.com/vectorize-io/hindsight",
       "badges": []
@@ -901,7 +923,7 @@
     {
       "repo": "NandhaKishorM/laya",
       "name": "Laya",
-      "stars": 32685,
+      "stars": 32689,
       "description": "Non-autoregressive System 1 decision engine. Typed choice, score and yes/no decisions over any text in a single forward pass, in 100+ languages, with a router that picks the right checkpoint per request.",
       "url": "https://github.com/NandhaKishorM/laya",
       "badges": []
@@ -923,6 +945,6 @@
       "badges": []
     }
   ],
-  "updated_at": "2026-10-13T21:10:03+08:00",
-  "signature": "3b3372dd3bed21455e4fa59d1329b39c40d894b540668e892fcbae090358f2fb"
+  "updated_at": "2026-10-13T21:16:40+08:00",
+  "signature": "00de51378e38105aaff3b4da5e792162b1437c38d61683d927515cd0cd311abd"
 }
