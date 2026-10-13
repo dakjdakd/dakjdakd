@@ -30,7 +30,7 @@
 
 <p align="center">
   <a href="https://dakjdakd.github.io/dakjdakd/">
-    <img src="assets/open-source-terminal.gif" alt="Open source project directory with merged PR counts, repository stars, recognition badges and contribution details. Click to browse all projects." width="100%">
+    <img src="assets/open-source-terminal.gif" alt="Open source contributions including merged PRs and main-branch commits, repository stars, recognition badges and contribution details. Click to browse all projects." width="100%">
   </a>
 </p>
 

@@ -37,6 +37,7 @@
 .project-stats{display:flex;flex-direction:column;align-items:flex-end;gap:15px;padding-top:6px}
 .contribution-count{font-size:16px;color:var(--text);white-space:nowrap;padding:10px 13px;border:1px solid var(--line);background:var(--bar)}
 .contribution-count strong{font-size:24px}
+.contribution-breakdown{font-size:12px;line-height:1.5;color:var(--muted)}
 .project-stats .stars{display:flex;align-items:center;gap:9px;font-size:18px;padding:0}
 .project-stats .stars small{font-size:12px;color:var(--muted)}
 .project-badges{margin-top:20px;gap:12px;align-items:center}
@@ -95,7 +96,7 @@ body{background:#06150d;color:var(--text)}.dashboard{margin:24px auto;max-width:
   <section class="monitor" aria-label="开源贡献面板">
     <div class="topbar"><span>///// OSS_SIGNAL_MONITOR /////</span><span class="status"><span class="status-dot"></span>[ AUTO SYNC: ON ]</span></div>
     <div class="hero"><div class="hero-kicker">DAKJDAKD / PUBLIC ACTIVITY</div><h2>OPEN SOURCE<br>ONLINE<span class="cursor">_</span></h2><div class="hero-summary" id="hero-summary"></div></div>
-    <div class="metrics"><div class="metric"><strong id="pr-count"></strong><label>MERGED PULL REQUESTS</label></div><div class="metric"><strong id="project-count"></strong><label>PUBLIC REPOSITORIES</label></div><div class="metric"><strong id="latest"></strong><label>LATEST MERGE</label></div></div>
+    <div class="metrics"><div class="metric"><strong id="pr-count"></strong><label>CONTRIBUTIONS</label></div><div class="metric"><strong id="project-count"></strong><label>PUBLIC REPOSITORIES</label></div><div class="metric"><strong id="latest"></strong><label>LATEST CONTRIBUTION</label></div></div>
     <div class="tools"><div class="section-tag" id="section-tag"></div><div class="inputs"><select id="project-filter" aria-label="按项目筛选"></select><input id="search" type="search" placeholder="SEARCH CONTRIBUTIONS_" aria-label="搜索项目或贡献"></div></div>
     <div id="list" class="list"></div>
     <div class="pagination"><span id="range" class="range" role="status" aria-live="polite"></span><nav id="page-controls" class="page-controls" aria-label="分页"></nav></div>
@@ -104,6 +105,7 @@ body{background:#06150d;color:var(--text)}.dashboard{margin:24px auto;max-width:
 </main>
 <script>
 const DATA = __DATA__;
+const contributions = [...DATA.prs.map(p=>({...p,type:'pr',date:p.merged_at})),...(DATA.commits||[]).map(c=>({...c,type:'commit',date:c.committed_at}))].sort((a,b)=>b.date.localeCompare(a.date)||b.html_url.localeCompare(a.html_url));
 const projects = new Map(DATA.projects.map(p=>[p.repo,p]));
 const initial = new URLSearchParams(location.search);
 const state = {page:Math.max(1,Math.floor(Number(initial.get('page')))||1), repo:initial.get('project')||'', query:(initial.get('search')||'').trim().toLowerCase()};
@@ -115,11 +117,11 @@ const outgoing = (url,label,cls='',title='')=>`<a href="${esc(url)}" target="_bl
 function parsedTitle(title){const match=title.match(/^(?:(Python|\.NET):\s*)?(fix|test|feat|docs|chore|refactor)(?:\(([^)]+)\))?:\s*(.*)$/i);return match?{title:match[4],kind:match[2].toUpperCase(),scope:[match[1],match[3]].filter(Boolean).join(' / ')}:{title,kind:'PR',scope:''}}
 function badges(p){return p.badges.map(b=>outgoing(b.url,`<img src="${esc(b.image)}" alt="${esc(b.name)} · 完整官方徽章" referrerpolicy="no-referrer" onerror="this.hidden=true;this.parentElement.classList.add('unavailable')"><span class="badge-fallback">${esc(b.label)}<br>${esc(b.name)} ↗</span>`,`official-badge ${b.kind}`,`${b.name} · 项目 README 中的官方徽章，点击查看来源`)).join('')}
 const expanded = new Set();
-function projectPr(pr){const t=parsedTitle(pr.title);return `<div class="project-pr">${outgoing(pr.html_url,esc(t.title),'contribution-title')}<div class="meta">${outgoing(pr.html_url,'#'+pr.number)}<span class="separator">/</span><span class="kind">${esc(t.kind)}</span>${t.scope?`<span>${esc(t.scope)}</span><span class="separator">/</span>`:''}<time datetime="${esc(pr.merged_at)}">${new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(pr.merged_at))}</time><span class="merged">MERGED</span></div></div>`}
+function projectPr(pr){const t=parsedTitle(pr.title),isCommit=pr.type==='commit';return `<div class="project-pr">${outgoing(pr.html_url,esc(t.title),'contribution-title')}<div class="meta">${outgoing(pr.html_url,isCommit?esc(pr.sha.slice(0,7)):'#'+pr.number,'',isCommit?`Commit ${pr.sha} · ${pr.branch}`:'')}<span class="separator">/</span><span class="kind">${esc(t.kind==='PR'&&isCommit?'COMMIT':t.kind)}</span>${t.scope?`<span>${esc(t.scope)}</span><span class="separator">/</span>`:''}<time datetime="${esc(pr.date)}">${new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(pr.date))}</time><span class="merged"${isCommit?` title="${esc(pr.branch)}"`:''}>${isCommit?'MAIN BRANCH':'MERGED'}</span></div></div>`}
 
-function block(p,index,prs){const count=DATA.prs.filter(pr=>pr.repo===p.repo).length;return `<article class="project-block"><div class="project-header"><span class="index">${String(index+1).padStart(2,'0')}</span><div>${outgoing(p.url,esc(p.name),'project-name')}<div class="repo">${esc(p.repo)}</div><p class="project-description">${esc(p.description)}</p>${p.badges.length?`<div class="project-badges">${badges(p)}</div>`:''}</div><div class="project-stats"><span class="contribution-count"><strong>${count}</strong> MERGED PR${count===1?'':'s'}</span><span class="stars">★ ${fmtStars(p.stars)} <small>STARS</small></span></div></div><div class="project-contributions">${prs.slice(0,2).map(projectPr).join('')}${prs.length>2?`<details class="more-contributions" data-expand="${esc(p.repo)}" ${expanded.has(p.repo)?'open':''}><summary><span class="expand-label">+ SHOW ${prs.length-2} MORE CONTRIBUTION${prs.length-2===1?'':'S'}</span><span class="collapse-label">− COLLAPSE CONTRIBUTIONS</span></summary><div class="more-prs">${prs.slice(2).map(projectPr).join('')}</div></details>`:''}</div><div class="project-actions">${outgoing(p.url,'PROJECT REPOSITORY ↗')}</div></article>`}
+function block(p,index,prs){const all=contributions.filter(pr=>pr.repo===p.repo),count=all.length,prCount=all.filter(pr=>pr.type==='pr').length,commitCount=count-prCount;return `<article class="project-block"><div class="project-header"><span class="index">${String(index+1).padStart(2,'0')}</span><div>${outgoing(p.url,esc(p.name),'project-name')}<div class="repo">${esc(p.repo)}</div><p class="project-description">${esc(p.description)}</p>${p.badges.length?`<div class="project-badges">${badges(p)}</div>`:''}</div><div class="project-stats"><span class="contribution-count"><strong>${count}</strong> CONTRIBUTION${count===1?'':'S'}</span><span class="contribution-breakdown">${prCount} PR${prCount===1?'':'s'} · ${commitCount} commit${commitCount===1?'':'s'}</span><span class="stars">★ ${fmtStars(p.stars)} <small>STARS</small></span></div></div><div class="project-contributions">${prs.slice(0,2).map(projectPr).join('')}${prs.length>2?`<details class="more-contributions" data-expand="${esc(p.repo)}" ${expanded.has(p.repo)?'open':''}><summary><span class="expand-label">+ SHOW ${prs.length-2} MORE CONTRIBUTION${prs.length-2===1?'':'S'}</span><span class="collapse-label">− COLLAPSE CONTRIBUTIONS</span></summary><div class="more-prs">${prs.slice(2).map(projectPr).join('')}</div></details>`:''}</div><div class="project-actions">${outgoing(p.url,'PROJECT REPOSITORY ↗')}</div></article>`}
 
-function filtered(){return DATA.prs.filter(p=>(!state.repo||p.repo===state.repo)&&(!state.query||(p.repo+' '+p.title+' '+p.number+' '+projects.get(p.repo).name).toLowerCase().includes(state.query)))}
+function filtered(){return contributions.filter(p=>(!state.repo||p.repo===state.repo)&&(!state.query||(p.repo+' '+p.title+' '+(p.number||p.sha)+' '+projects.get(p.repo).name).toLowerCase().includes(state.query)))}
 function render(){
   const prs=filtered(),items=[...new Set(prs.map(p=>p.repo))].map(repo=>projects.get(repo)),size=6,total=items.length,pages=Math.max(1,Math.ceil(total/size));
   state.page=Math.min(state.page,pages);const start=(state.page-1)*size,visible=items.slice(start,start+size);
@@ -134,8 +136,8 @@ function render(){
   const params=new URLSearchParams();if(state.page>1)params.set('page',state.page);if(state.repo)params.set('project',state.repo);if(state.query)params.set('search',state.query);
   history.replaceState(null,'',location.pathname+(params.size?'?'+params.toString():''));
 }
-$('pr-count').textContent=String(DATA.prs.length).padStart(2,'0');$('project-count').textContent=String(DATA.projects.length).padStart(2,'0');$('latest').textContent=DATA.prs.length?date(DATA.prs[0].merged_at):'--';
-$('hero-summary').textContent=`COMMUNITY CONTRIBUTIONS SYNCED / ${DATA.prs.length} MERGED PRs`;
+$('pr-count').textContent=String(contributions.length).padStart(2,'0');$('project-count').textContent=String(DATA.projects.length).padStart(2,'0');$('latest').textContent=contributions.length?date(contributions[0].date):'--';
+$('hero-summary').textContent=`COMMUNITY CONTRIBUTIONS SYNCED / ${DATA.prs.length} MERGED PRs + ${(DATA.commits||[]).length} MAIN-BRANCH COMMITS`;
 $('footer-updated').textContent='> LAST SYNC: '+new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai',dateStyle:'short',timeStyle:'short'}).format(new Date(DATA.updated_at))+' CST';
 $('project-filter').innerHTML='<option value="">PROJECT: ALL</option>'+DATA.projects.map(p=>`<option value="${esc(p.repo)}">${esc(p.name)}</option>`).join('');
 $('project-filter').value=state.repo;$('search').value=state.query;

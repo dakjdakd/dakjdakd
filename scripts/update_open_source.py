@@ -1,4 +1,4 @@
-"""Collect verified merged contributions, build Pages, and render the README panel."""
+"""Collect merged PRs and main-branch commits, build Pages and the README panel."""
 
 import argparse
 import base64
@@ -16,6 +16,7 @@ from io import BytesIO
 from pathlib import Path
 from threading import Thread
 from urllib.error import HTTPError
+from urllib.parse import quote
 
 from PIL import Image
 
@@ -49,7 +50,12 @@ def api(path, **params):
 def search(kind, query):
     results = []
     for page in range(1, 11):
-        response = api(f"search/{kind}", q=query, per_page=100, page=page)
+        for attempt in range(3):
+            response = api(f"search/{kind}", q=query, per_page=100, page=page)
+            if not response.get("incomplete_results"):
+                break
+            if attempt < 2:
+                time.sleep(2)
         if response.get("incomplete_results") or response["total_count"] > 1000:
             raise RuntimeError(f"GitHub {kind} search is incomplete; keeping the previous panel")
         results.extend(response["items"])
@@ -77,19 +83,19 @@ def credited(message, emails):
         r"^Co-authored-by:\s*[^\n<>]+<([^\s<>]+)>\s*$", message, re.I | re.M))
 
 
-def merged_prs(previous, config):
+def merged_prs(previous, config, previous_commits=()):
     # Keep verified history even when GitHub Search temporarily misses a result.
     prs = {p["html_url"]: p for p in previous if external(p["repo"])}
     print("Collecting authored and pinned merged PRs...", flush=True)
     for item in search("issues", f"is:pr is:merged author:{USER}"):
         pr = normalize(item)
         if pr:
-            prs[pr["html_url"]] = pr
+            prs[pr["html_url"]] = {**prs.get(pr["html_url"], {}), **pr}
 
     for entry in config["included_prs"]:
         pr = normalize(api(f"repos/{entry['repo']}/pulls/{entry['number']}"), entry["repo"])
         if pr:
-            prs[pr["html_url"]] = pr
+            prs[pr["html_url"]] = {**prs.get(pr["html_url"], {}), **pr}
 
     user = api(f"users/{USER}")
     emails = {f"{USER}@users.noreply.github.com", f"{user['id']}+{USER}@users.noreply.github.com"}
@@ -114,18 +120,71 @@ def merged_prs(previous, config):
                 if credited(commit["commit"]["message"], emails):
                     commits[(repo, commit["sha"])] = commit
 
+    standalone = {(c["repo"], c["sha"]): c for c in previous_commits if external(c["repo"])}
+    # Recheck archived commits: a later PR association should replace the commit
+    # entry, and temporary Search omissions must not erase verified contributions.
+    for key, c in standalone.items():
+        commits.setdefault(key, {"sha": c["sha"], "commit": {"message": c["title"],
+                            "committer": {"date": c["committed_at"]}}})
     groups = {}
     for (repo, sha), commit in commits.items():
         groups.setdefault(sha, []).append((repo, commit))
-    known_repos = {p["repo"] for p in prs.values()}
+    known_repos = {p["repo"] for p in prs.values()} | {c["repo"] for c in standalone.values()}
+    repo_info, covered = {}, {}
+
+    def pr_commit_shas(repo):
+        if repo not in covered:
+            covered[repo] = set()
+            for p in prs.values():
+                if p["repo"] != repo:
+                    continue
+                if "commit_shas" not in p:
+                    info = api(f"repos/{repo}/pulls/{p['number']}")
+                    shas = {info["merge_commit_sha"]} if info.get("merge_commit_sha") else set()
+                    for page in range(1, 4):  # This endpoint exposes at most 250 PR commits.
+                        items = api(f"repos/{repo}/pulls/{p['number']}/commits", per_page=100, page=page)
+                        shas.update(c["sha"] for c in items)
+                        if len(items) < 100:
+                            break
+                    p["commit_shas"] = sorted(shas)
+                covered[repo].update(p["commit_shas"])
+        return covered[repo]
     print(f"Checking PR associations for {len(groups)} distinct credited commits...", flush=True)
     for sha, candidates in groups.items():
+        if any(sha in p.get("commit_shas", []) for p in prs.values()):
+            for repo, _ in candidates:
+                standalone.pop((repo, sha), None)
+            continue
         # Repository copies contain identical upstream commits. Prefer the verified
         # source so a copied history does not masquerade as another contribution.
         known_sources = [(repo, c) for repo, c in candidates if repo in known_repos]
         for repo, commit in known_sources or candidates:
             number = re.search(r"\(#(\d+)\)\s*$", commit["commit"]["message"].splitlines()[0])
             if number and f"https://github.com/{repo}/pull/{number[1]}" in prs:
+                standalone.pop((repo, sha), None)
+                break
+            # Some copied repositories rewrite parent SHAs. Verify their squash
+            # commits against the original PR using message and author metadata.
+            copied_pr = False
+            if number and commit["commit"].get("author"):
+                for p in prs.values():
+                    if p["repo"] == repo or p["number"] != int(number[1]):
+                        continue
+                    if "merge_commit_fingerprint" not in p:
+                        info = api(f"repos/{p['repo']}/pulls/{p['number']}")
+                        merged = api(f"repos/{p['repo']}/commits/{info['merge_commit_sha']}")["commit"]
+                        p["merge_commit_fingerprint"] = {"message": merged["message"], "author": merged["author"]}
+                    fingerprint = p["merge_commit_fingerprint"]
+                    original_author, copy_author = fingerprint["author"], commit["commit"]["author"]
+                    if (fingerprint["message"] == commit["commit"]["message"]
+                            and original_author["name"] == copy_author["name"]
+                            and original_author["email"].lower() == copy_author["email"].lower()
+                            and datetime.fromisoformat(original_author["date"].replace("Z", "+00:00"))
+                            == datetime.fromisoformat(copy_author["date"].replace("Z", "+00:00"))):
+                        standalone.pop((repo, sha), None)
+                        copied_pr = True
+                        break
+            if copied_pr:
                 break
             found = False
             for item in api(f"repos/{repo}/commits/{sha}/pulls", per_page=100):
@@ -134,11 +193,43 @@ def merged_prs(previous, config):
                     continue
                 pr = normalize(item, repo)
                 if pr:
-                    prs[pr["html_url"]] = pr
+                    prs[pr["html_url"]] = {**prs.get(pr["html_url"], {}), **pr}
                     found = True
             if found:
+                standalone.pop((repo, sha), None)
+                covered.pop(repo, None)
                 break
-    return sorted(prs.values(), key=lambda p: (p["merged_at"], p["html_url"]), reverse=True)
+            if sha in pr_commit_shas(repo):
+                standalone.pop((repo, sha), None)
+                break
+            if repo not in repo_info:
+                repo_info[repo] = api(f"repos/{repo}")
+            info = repo_info[repo]
+            if info["private"] or info["fork"]:
+                continue
+            branch = info["default_branch"]
+            try:
+                # Status remains on every page; page 2 omits large file diffs.
+                comparison = api(f"repos/{repo}/compare/{sha}...{quote(branch, safe='')}", per_page=1, page=2)
+            except HTTPError as error:
+                if error.code == 404:
+                    continue
+                raise
+            if comparison["status"] not in ("ahead", "identical"):
+                standalone.pop((repo, sha), None)
+                continue
+            standalone[(repo, sha)] = {"repo": repo, "sha": sha, "branch": branch,
+                "html_url": f"https://github.com/{repo}/commit/{sha}",
+                "title": commit["commit"]["message"].splitlines()[0],
+                "committed_at": commit["commit"]["committer"]["date"]}
+            break
+    # Reconcile every project: copied histories can contain commits from a PR in
+    # another repository, and a later discovered PR can cover earlier candidates.
+    if standalone:
+        all_pr_shas = set().union(*(pr_commit_shas(repo) for repo in {p["repo"] for p in prs.values()}))
+        standalone = {key: c for key, c in standalone.items() if c["sha"] not in all_pr_shas}
+    return (sorted(prs.values(), key=lambda p: (p["merged_at"], p["html_url"]), reverse=True),
+            sorted(standalone.values(), key=lambda c: (c["committed_at"], c["html_url"]), reverse=True))
 
 
 def recognition_badges(readme, source):
@@ -182,7 +273,9 @@ def stars(value):
 
 
 def content_signature(data):
-    visible = {"prs": data["prs"], "projects": [dict(p, stars=stars(p["stars"])) for p in data["projects"]]}
+    visible = {"prs": [{k:v for k,v in p.items() if k not in ("commit_shas", "merge_commit_fingerprint")} for p in data["prs"]],
+               "commits": data.get("commits", []),
+               "projects": [dict(p, stars=stars(p["stars"])) for p in data["projects"]]}
     digest = hashlib.sha256(json.dumps(visible, sort_keys=True, ensure_ascii=False).encode())
     for path in (Path(__file__), TEMPLATE, CONFIG_FILE, ROOT / "assets/fonts/JetBrainsMono-Regular.ttf", ROOT / "assets/fonts/JetBrainsMono-Bold.ttf"):
         digest.update(path.read_bytes().replace(b"\r\n", b"\n") if path.suffix != ".ttf" else path.read_bytes())
@@ -211,13 +304,14 @@ def build_site(data):
 def collect():
     old = json.loads(DATA_FILE.read_text(encoding="utf-8")) if DATA_FILE.exists() else {"prs": [], "projects": []}
     config = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
-    prs = merged_prs(old["prs"], config)
-    repos = list(dict.fromkeys(p["repo"] for p in prs))
+    prs, commits = merged_prs(old["prs"], config, old.get("commits", []))
+    activity = sorted(prs + commits, key=lambda p: p.get("merged_at") or p["committed_at"], reverse=True)
+    repos = list(dict.fromkeys(p["repo"] for p in activity))
     existing = {p["repo"]: p for p in old["projects"]}
     print(f"Checking recognition badges in {len(repos)} project READMEs...", flush=True)
     with ThreadPoolExecutor(max_workers=6) as pool:
         projects = list(pool.map(lambda repo: project_info(repo, config, existing.get(repo, {})), repos))
-    data = {"prs": prs, "projects": projects}
+    data = {"prs": prs, "commits": commits, "projects": projects}
     signature = content_signature(data)
     changed = signature != panel_signature() or not (SITE / "index.html").exists()
     if changed:
@@ -226,7 +320,7 @@ def collect():
     if output := os.environ.get("GITHUB_OUTPUT"):
         with open(output, "a", encoding="utf-8") as stream:
             stream.write(f"changed={str(changed).lower()}\n")
-    print(f"{'Changed' if changed else 'No visible changes'}: {len(prs)} merged PRs across {len(projects)} projects")
+    print(f"{'Changed' if changed else 'No visible changes'}: {len(prs)} merged PRs + {len(commits)} main-branch commits across {len(projects)} projects")
 
 
 def render_panel():
