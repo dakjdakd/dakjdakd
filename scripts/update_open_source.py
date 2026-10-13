@@ -64,14 +64,17 @@ def search(kind, query):
     return results
 
 
-def external(repo):
-    return repo.split("/", 1)[0].lower() != USER.lower()
+def external(repo, config=None):
+    config = config or {}
+    excluded_owners = {USER.lower(), *(owner.lower() for owner in config.get("excluded_owners", []))}
+    excluded_repos = {name.lower() for name in config.get("excluded_repositories", [])}
+    return repo.split("/", 1)[0].lower() not in excluded_owners and repo.lower() not in excluded_repos
 
 
-def normalize(pr, repo=None):
+def normalize(pr, repo=None, config=None):
     repo = repo or pr["repository_url"].split("/repos/", 1)[1]
     merged = pr.get("merged_at") or (pr.get("pull_request") or {}).get("merged_at")
-    if not merged or not external(repo) or pr.get("base", {}).get("repo", {}).get("private"):
+    if not merged or not external(repo, config) or pr.get("base", {}).get("repo", {}).get("private"):
         return None
     return {"repo": repo, "number": pr.get("number") or int(pr["html_url"].rsplit("/", 1)[1]),
             "html_url": pr["html_url"], "title": pr["title"], "merged_at": merged}
@@ -85,15 +88,17 @@ def credited(message, emails):
 
 def merged_prs(previous, config, previous_commits=()):
     # Keep verified history even when GitHub Search temporarily misses a result.
-    prs = {p["html_url"]: p for p in previous if external(p["repo"])}
+    prs = {p["html_url"]: p for p in previous if external(p["repo"], config)}
     print("Collecting authored and pinned merged PRs...", flush=True)
     for item in search("issues", f"is:pr is:merged author:{USER}"):
-        pr = normalize(item)
+        pr = normalize(item, config=config)
         if pr:
             prs[pr["html_url"]] = {**prs.get(pr["html_url"], {}), **pr}
 
     for entry in config["included_prs"]:
-        pr = normalize(api(f"repos/{entry['repo']}/pulls/{entry['number']}"), entry["repo"])
+        if not external(entry["repo"], config):
+            continue
+        pr = normalize(api(f"repos/{entry['repo']}/pulls/{entry['number']}"), entry["repo"], config)
         if pr:
             prs[pr["html_url"]] = {**prs.get(pr["html_url"], {}), **pr}
 
@@ -107,7 +112,7 @@ def merged_prs(previous, config, previous_commits=()):
         if (commit.get("author") or {}).get("login", "").lower() == USER.lower():
             emails.add(commit["commit"]["author"]["email"].lower())
             repo = commit["repository"]["full_name"]
-            if external(repo) and not commit["repository"].get("private") and not commit["repository"].get("fork"):
+            if external(repo, config) and not commit["repository"].get("private") and not commit["repository"].get("fork"):
                 commits[(repo, commit["sha"])] = commit
 
     print("Discovering verified co-author commit credits...", flush=True)
@@ -116,11 +121,11 @@ def merged_prs(previous, config, previous_commits=()):
     for query in queries:
         for commit in search("commits", query):
             repo = commit["repository"]["full_name"]
-            if external(repo) and not commit["repository"].get("private") and not commit["repository"].get("fork"):
+            if external(repo, config) and not commit["repository"].get("private") and not commit["repository"].get("fork"):
                 if credited(commit["commit"]["message"], emails):
                     commits[(repo, commit["sha"])] = commit
 
-    standalone = {(c["repo"], c["sha"]): c for c in previous_commits if external(c["repo"])}
+    standalone = {(c["repo"], c["sha"]): c for c in previous_commits if external(c["repo"], config)}
     # Recheck archived commits: a later PR association should replace the commit
     # entry, and temporary Search omissions must not erase verified contributions.
     for key, c in standalone.items():
@@ -191,7 +196,7 @@ def merged_prs(previous, config, previous_commits=()):
                 base_repo = item["base"]["repo"]
                 if base_repo["private"] or base_repo["full_name"].lower() != repo.lower():
                     continue
-                pr = normalize(item, repo)
+                pr = normalize(item, repo, config)
                 if pr:
                     prs[pr["html_url"]] = {**prs.get(pr["html_url"], {}), **pr}
                     found = True

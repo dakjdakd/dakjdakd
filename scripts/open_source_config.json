@@ -1,4 +1,6 @@
 {
+  "excluded_owners": ["dafyy321-pixel"],
+  "excluded_repositories": ["IbrahimKomba/skill-simmer"],
   "included_prs": [
     {"repo": "vercel/ai", "number": 21228},
     {"repo": "vercel/ai", "number": 21229}

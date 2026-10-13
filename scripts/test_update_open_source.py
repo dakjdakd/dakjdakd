@@ -56,6 +56,30 @@ assert {p["html_url"] for p in prs} == {
 }
 assert not panel.credited(f"mentions {email} without an author trailer", {email})
 
+# Personal accounts and known personal-project copies must be removed from
+# archived history as well as fresh PR, author and co-author search results.
+ownership_config = {"excluded_owners": ["dafyy321-pixel"],
+                    "excluded_repositories": ["IbrahimKomba/skill-simmer"],
+                    "included_prs": [{"repo": "DAFYY321-PIXEL/SnapCal", "number": 1}]}
+personal_repos = ["dakjdakd/own", "dafyy321-pixel/SnapCal", "IbrahimKomba/skill-simmer"]
+personal_commits = [dict(commit(repo, "personal", f"fix\n\nCo-authored-by: Lucien <{email}>"),
+                         author={"login": panel.USER}) for repo in personal_repos]
+for c in personal_commits:
+    c["commit"]["author"] = {"email": email}
+personal_history = [dict(repo=repo, sha="personal", title="fix",
+                        committed_at="2026-10-01T00:00:00Z", html_url=f"https://github.com/{repo}/commit/personal")
+                    for repo in personal_repos]
+with patch.object(panel, "search", side_effect=lambda kind, query:
+                  [pr(repo, 1) for repo in personal_repos] if kind == "issues" else personal_commits), \
+        patch.object(panel, "api", side_effect=fake_api):
+    owned_prs, owned_commits = panel.merged_prs([archived]+[
+        {"repo": repo, "html_url": f"https://github.com/{repo}/pull/1"} for repo in personal_repos],
+        ownership_config, personal_history)
+assert owned_prs == [archived] and owned_commits == []
+assert not panel.external("IBRAHIMKOMBA/SKILL-SIMMER", ownership_config)
+assert not panel.external("DAFYY321-PIXEL/NEW-PERSONAL-PROJECT", ownership_config)
+assert panel.external("another-team/skill-simmer", ownership_config)
+
 # Default-branch ancestry, PR/commit deduplication and later PR discovery.
 candidate_shas = ["main", "feature", "diverged", "squash", "in-pr", "later-covered", "discovery"]
 def branch_search(kind, query):
