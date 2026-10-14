@@ -2,6 +2,141 @@
   "prs": [
     {
       "repo": "morluto/rea",
+      "number": 2767,
+      "html_url": "https://github.com/morluto/rea/pull/2767",
+      "title": "fix(capture): end special-scheme URL authorities at a backslash",
+      "merged_at": "2026-10-14T04:46:15Z",
+      "commit_shas": [
+        "0266e6552bea655084da03a9ca87286fe84f80ed",
+        "0aff997b31d7125b6aa86f33475e29dd57be2d55",
+        "110151e52362bec9ef9f9d288f490c216398a00b",
+        "281c4b8ec55c6833a194e3e25d6ade8062ab61c3",
+        "29c871e51b28e780acf7836342844c3104efef47",
+        "2c6e074cac3d06f1415f168d7c6022c8b79db910",
+        "34eccef7632e013bc87b8fe40fbc4fce072a5d2f",
+        "4d5d1f5daa332cbffc9e3bcdc6a159d2ac8d0ec2",
+        "4e8475e9658495fa9fc37cb0d0c7870067d11261",
+        "553cd6e358bdb30c1edfa6b54e453e9bae6fcb0b",
+        "557148ed3fe2c3f084aea5c4cc79529ed3eaf77f",
+        "64fb36d98d0ab6e486488c9026e310ed66e40afe",
+        "72e931f3a3d01bd8ee91813b511d9575fe3fcab7",
+        "77be0f6666df67de48ad737fe5b5d204aa34ae85",
+        "7d972a7e8593f0bb4c58f0d4a4acbb4b5612e5e2",
+        "929aa6733635e837714dc4058f0beccfa6219021",
+        "a0da18d7fa9a5867279a9695e6d14aec0040625c",
+        "ad16d250e366ba7f13f80a56e75c6b8c3f2edaf1",
+        "af2f55cda9b8b8904f0f29f4367df09a60c6067f",
+        "b93e585d687ac03367ebd0e06321c35582dda6ee",
+        "c0018ca40313df75867be4b0c2a384a072b14f2e",
+        "c7f563e1193ef11a50d529ae20ae0aeaf45a5d7e",
+        "d3d6eb13288dc55fa4b0c9312d380d33b53c534d",
+        "e1fb40460d2bf8223cd5fdfd7417dc6635a8396b",
+        "e8361b77157f5ad31627f9e45ed05c013e60e109",
+        "f83904677603d36e63bcf2b87a1be4f146ce808b"
+      ]
+    },
+    {
+      "repo": "morluto/rea",
+      "number": 2783,
+      "html_url": "https://github.com/morluto/rea/pull/2783",
+      "title": "fix(uninstall): remove the REA-owned ZCode fallback registration",
+      "merged_at": "2026-10-14T00:33:26Z",
+      "commit_shas": [
+        "00a334a08ff1bdc0ab37458c6a92d43c281bbd3a",
+        "014e5bf8228d477f162ebc8619146850e4f89681",
+        "235d611feb74569bcc6de853c708456e877e1379",
+        "47422fd0dddb7ca741820268c35669d187cf8ef3",
+        "6305f8309bd67814b80c3c5cd31185c0f931069d",
+        "6ae4887cb09623882e4de48796d2b84a20774287",
+        "7c716b4185356c06c1ae3fce8b9ed02c0c8c7194",
+        "a3320f24e744467c40a22a7927d8bd076dbbe8f8",
+        "b2578baccba6b1a03f8c7e0627ce1ed8689bbad0",
+        "cf953681bdbaf3e6eae521ba2a86e96fdb8b2314",
+        "ff56f785946c609b09c1c60232b28d7c34ac89a9",
+        "ffd98662fc5f86bb12fc667828e748c6eebf1523"
+      ]
+    },
+    {
+      "repo": "morluto/rea",
+      "number": 2705,
+      "html_url": "https://github.com/morluto/rea/pull/2705",
+      "title": "fix(electron): reject non-executable paths and contain launch rejections",
+      "merged_at": "2026-10-13T23:30:15Z",
+      "commit_shas": [
+        "021594e026b5c2b9cfd325b1479b85b3c2db6b4c",
+        "0ee5cad5ab4b4742eefd42492f4526574835bc9e",
+        "16245599ad7c34b995dd4c0852ea4a11d551be71",
+        "2b8b0f1869d77d6251539625cdc61386a36a6089",
+        "2f0e9f377eee7be60277ee3df8e33cf826e3fe9c",
+        "31f27616a033846a3a1cab52860518fd75a83b47",
+        "3ca723786754115d0fc5339de7a7c41cff689e06",
+        "44b5ac5a6414d43c75d5612d57aea79044e0cb0b",
+        "51d73af979f3635501971e53b0782bb2cfa7fe29",
+        "6ab231cc765910bfe2cb557c5bc8547f00b113a1",
+        "8396893b0e5bd1e2aa15e7f010070454e1e09162",
+        "8950d504048fbe691d2b12a19adfb301458443a6",
+        "97aff282018907e7e48dc67fc12043e1237e2c99",
+        "a69f3ca19109fbddbd2e300d416153607c0097d0",
+        "a959eabfff15a2286ee21e21ce535bcd729b13a9",
+        "aa4d47d40a723a583b82046fd6a214cf4ae5cac7",
+        "ab090f3de3869b3406d9996aa0d0647cf111ae78",
+        "b72b9495c77826f79c8e2668478d65471cfa7fc0",
+        "c296182b8018c69a5e20197ff4ce96c416458233",
+        "d17eb899176385208668d312f9966c9b20bb602d",
+        "e1579ec31b15883d739aed5bcd910e60f70561d8",
+        "ea1fbd292ab4ea4de5eb2de2daa2eea1991a491b"
+      ]
+    },
+    {
+      "repo": "morluto/rea",
+      "number": 2742,
+      "html_url": "https://github.com/morluto/rea/pull/2742",
+      "title": "fix(javascript): preserve Electron runtime entrypoint paths",
+      "merged_at": "2026-10-13T22:39:17Z",
+      "commit_shas": [
+        "04086e1430112acd3c2d8066358d6e91c63e3ec4",
+        "0f2acf1bbf9c2d4293e3e806b761ebb04843b474",
+        "2591a0c29fd9673e84b92445909bfad3d4466010",
+        "274f58a6e1d1657b6efd655e1d562a3b9aadf709",
+        "3324b79580fd5128038de748c4d5765df7546bcf",
+        "337a5e16e0e8df22f9c9ace50af7e972ad62edb2",
+        "33bb32a6f5a048884843c6efe8af8e4a987f2576",
+        "3a4d49406a4f3c0b566b6a16f3655c08b1354e19",
+        "78e5724aea82041aa81fa5ae3b57c99cad7028ef",
+        "812543e2a5592d67d82f290a97012ea3a8a0a021",
+        "8ca6b29bae5febb1a780553020eb981b6f075848",
+        "92ba739c7a0cc379743d3d506f14863755b64010",
+        "9b5f1e5db9d5521e8bd1fb2e4d8960a672114e2d",
+        "a80bda348c84ffd3c4b359605dddc244f781c9b0",
+        "b21105ee605653ea5920506c369677cfdbf3c69d",
+        "b6cf62b1fd24e7624e6b53f637fba671a8d040f0",
+        "d32e72a3c9f522f435de7112fe0fc757af288d6d",
+        "d4bb0f08270017aa5430ae76cac68fe81ca1a9cb",
+        "e5bad8b51be87f7b0bb0f4c708dd8bc2bfffa617",
+        "e929eda9ced35d4dae0b67cc88655e43edb483ef"
+      ]
+    },
+    {
+      "repo": "morluto/rea",
+      "number": 2110,
+      "html_url": "https://github.com/morluto/rea/pull/2110",
+      "title": "fix(artifacts): preserve Mach-O load-command string identity",
+      "merged_at": "2026-10-13T22:38:32Z",
+      "commit_shas": [
+        "30da428cb5024fd095b3a2a434146e250a01e7f4",
+        "4c3c2f4e1fae54d715cdb15aac34f2ffdfb5ba2a",
+        "7072f87baf096eb944f15bc52e3925653d459cba",
+        "7dd981f7e5776834d1bbba8c716116e370a265a6",
+        "9d3b876428acdd9e923ced0244b8d0c10dea116f",
+        "b7de9437338d14051419b8b71a422fc7324692bd",
+        "bd4eed2740f5b82b3e7ec17eaad2a6d4c6b9a177",
+        "c94818bdf9867619b2b749434d0e13750c870df0",
+        "f2af17a3b3ecda72b4307fd88f48bf3445d0a362",
+        "f7a159a39dc015aeaa49de2e66493776766f922b"
+      ]
+    },
+    {
+      "repo": "morluto/rea",
       "number": 2818,
       "html_url": "https://github.com/morluto/rea/pull/2818",
       "title": "test(signals): verify native decoder discovery coverage",
@@ -820,7 +955,15 @@
         "88423e23b95177f825353341a7f656ea6b1f97d4",
         "c321c3e766090bc9767bd21c8f2c062eb4c01f26",
         "eb7024e7a05e53c2244e8e77c017b8ac3227a3b9"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix: preserve loading and cancellation state when restarting completion requests (#21228)\n\n## Background\n\nRestarting useCompletion immediately after stop() allowed the\nreplacement stream to continue while loading became false and subsequent\nstop() calls could no longer cancel it.\n\n## Root Cause\n\ncallCompletionApi unconditionally cleared shared loading, error,\ncompletion, and abort-controller state when an older request settled.\nDeterministic overlapping-request tests confirmed that aborted,\nsuccessful, and failed requests could overwrite state owned by a newer\nrequest.\n\n## Summary\n\nAdded request-ownership checks to callCompletionApi and updated React,\nVue, Svelte, and Angular completion integrations to retain the active\ncontroller until its owning request settles. React now stores the\ncontroller in a ref for synchronous cancellation.\n\n## Testing\n\nAdded core regression coverage for text and data protocols across abort,\nsuccess, and error outcomes, plus a React hook test for stopping and\nimmediately restarting a request.\n\n## End-to-end Validation\n\n- `replay_original_reproduction`: the immutable reproduction completed\nsuccessfully across all protocols and outcomes; status was\n`no-longer-reproduces`.\n\n## Related Issues\n\nFixes #21224\n\nCloses #21226\n\n---------\n\nCo-authored-by: ai-sdk-factory <308175966+ai-sdk-factory@users.noreply.github.com>\nCo-authored-by: dakjdakd <164857476+dakjdakd@users.noreply.github.com>",
+        "author": {
+          "name": "ai-sdk-factory[bot]",
+          "email": "305873210+ai-sdk-factory[bot]@users.noreply.github.com",
+          "date": "2026-09-21T20:04:01Z"
+        }
+      }
     },
     {
       "repo": "vercel/ai",
@@ -833,7 +976,15 @@
         "51d15e69a4d31be06455eb44abb7dbd93c4a6d9c",
         "abcd1d520df5ef00851a7b50f6cd3038d1402f14",
         "cd445e95bc5d9c88d2042f94063ff8033f88268f"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix: TUI Backspace submits partial Unicode graphemes (#21229)\n\n## Background\n\nBackspace in published @ai-sdk/tui prompts could submit corrupted or\npartial Unicode graphemes, including unpaired emoji surrogates and\nincomplete combining or joined sequences.\n\n## Root Cause\n\nThe Backspace handler used slice(0, -1), which removes one UTF-16 code\nunit rather than one displayed grapheme. The reproduction confirmed\npartial submissions for emoji, combining characters, and joined emoji\nthrough both DEL and BS encodings.\n\n## Summary\n\nChanged prompt deletion to remove the final Intl.Segmenter grapheme\ncluster, enabled the required Intl TypeScript library, removed\nreproduction-only artifacts, and added a patch changeset.\n\n## Testing\n\nAdded prompt submission regressions covering DEL and BS emoji deletion,\ncombining-character sequences, and joined emoji sequences.\n\n## End-to-end Validation\n\n- `pnpm -C examples/ai-functions exec tsx\nsrc/reproduction/issue-21225-tui-backspace-grapheme.ts` via immutable\nreplay exited successfully and reported that the issue was not present.\n\n## Related Issues\n\nFixes #21225\n\nCloses #21227\n\n---------\n\nCo-authored-by: ai-sdk-factory <308175966+ai-sdk-factory@users.noreply.github.com>\nCo-authored-by: dakjdakd <164857476+dakjdakd@users.noreply.github.com>",
+        "author": {
+          "name": "ai-sdk-factory[bot]",
+          "email": "305873210+ai-sdk-factory[bot]@users.noreply.github.com",
+          "date": "2026-09-21T18:56:19Z"
+        }
+      }
     }
   ],
   "commits": [
@@ -874,7 +1025,7 @@
     {
       "repo": "morluto/rea",
       "name": "Rea",
-      "stars": 204398,
+      "stars": 216930,
       "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
       "url": "https://github.com/morluto/rea",
       "badges": [
@@ -891,7 +1042,7 @@
     {
       "repo": "cline/cline",
       "name": "cline",
-      "stars": 70277,
+      "stars": 70288,
       "description": "Autonomous coding agent as an SDK, IDE extension, or CLI assistant.",
       "url": "https://github.com/cline/cline",
       "badges": []
@@ -899,7 +1050,7 @@
     {
       "repo": "bytedance/deer-flow",
       "name": "deer-flow",
-      "stars": 83815,
+      "stars": 83836,
       "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
       "url": "https://github.com/bytedance/deer-flow",
       "badges": [
@@ -916,7 +1067,7 @@
     {
       "repo": "dream-num/univer",
       "name": "Univer",
-      "stars": 22584,
+      "stars": 22589,
       "description": "The Office Harness for AI Agents — Spreadsheets, Docs, Slides, Canvas, Relational Tables, and PDF in one runtime.",
       "url": "https://github.com/dream-num/univer",
       "badges": [
@@ -933,7 +1084,7 @@
     {
       "repo": "infiniflow/ragflow",
       "name": "ragflow",
-      "stars": 92155,
+      "stars": 92169,
       "description": "RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) engine that fuses cutting-edge RAG with Agent capabilities to create a superior context layer for LLMs",
       "url": "https://github.com/infiniflow/ragflow",
       "badges": [
@@ -950,7 +1101,7 @@
     {
       "repo": "Mintplex-Labs/anything-llm",
       "name": "AnythingLLM",
-      "stars": 67032,
+      "stars": 67038,
       "description": "Stop renting your intelligence. Own it with AnythingLLM. Everything you need for a powerful local-first agent experience ",
       "url": "https://github.com/Mintplex-Labs/anything-llm",
       "badges": [
@@ -967,7 +1118,7 @@
     {
       "repo": "TanStack/ai",
       "name": "TanStack AI",
-      "stars": 3189,
+      "stars": 3191,
       "description": "🤖 Type-safe, provider-agnostic TypeScript AI SDK for streaming chat, tool calling, agents, and multimodal apps across OpenAI, Anthropic, Gemini, React, Vue, Svelte, and Solid.",
       "url": "https://github.com/TanStack/ai",
       "badges": [
@@ -984,7 +1135,7 @@
     {
       "repo": "CherryHQ/cherry-studio",
       "name": "Cherry Studio",
-      "stars": 52598,
+      "stars": 52608,
       "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "badges": [
@@ -1017,7 +1168,7 @@
     {
       "repo": "mcp-use/mcp-use",
       "name": "mcp-use",
-      "stars": 10753,
+      "stars": 10756,
       "description": "The fullstack MCP framework to develop MCP Apps for ChatGPT / Claude & MCP Servers for AI Agents.",
       "url": "https://github.com/mcp-use/mcp-use",
       "badges": []
@@ -1025,7 +1176,7 @@
     {
       "repo": "langgenius/dify",
       "name": "Dify",
-      "stars": 158382,
+      "stars": 158406,
       "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
       "url": "https://github.com/langgenius/dify",
       "badges": []
@@ -1033,7 +1184,7 @@
     {
       "repo": "aoci-spec/aoci-code",
       "name": "aoci-code",
-      "stars": 1522,
+      "stars": 1531,
       "description": "A persistent, Git-versioned map of your whole codebase and database schema that coding agents read before they touch anything. Local-first MCP server + CLI in Go: a governed repository index of code knowledge that gives Claude Code, Codex, Cursor, and opencode long-term context, memory, and code intelligence.",
       "url": "https://github.com/aoci-spec/aoci-code",
       "badges": []
@@ -1041,7 +1192,7 @@
     {
       "repo": "aaif-goose/goose",
       "name": "Goose",
-      "stars": 55250,
+      "stars": 55262,
       "description": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
       "url": "https://github.com/aaif-goose/goose",
       "badges": [
@@ -1058,7 +1209,7 @@
     {
       "repo": "n8n-io/n8n",
       "name": "n8n",
-      "stars": 207263,
+      "stars": 207304,
       "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
       "url": "https://github.com/n8n-io/n8n",
       "badges": []
@@ -1066,7 +1217,7 @@
     {
       "repo": "strands-agents/harness-sdk",
       "name": "Harness SDK",
-      "stars": 8793,
+      "stars": 8797,
       "description": "Build an agent harness and control it end-to-end. Open-source SDK for production AI agents in Python & TypeScript - any model, any cloud.",
       "url": "https://github.com/strands-agents/harness-sdk",
       "badges": []
@@ -1074,7 +1225,7 @@
     {
       "repo": "microsoft/agent-framework",
       "name": "Microsoft Agent Framework",
-      "stars": 14115,
+      "stars": 14120,
       "description": "A framework for building, orchestrating and deploying AI agents and multi-agent workflows with support for Python and .NET.",
       "url": "https://github.com/microsoft/agent-framework",
       "badges": []
@@ -1082,7 +1233,7 @@
     {
       "repo": "langchain-ai/deepagents",
       "name": "Deep Agents",
-      "stars": 30222,
+      "stars": 30234,
       "description": "The batteries-included agent harness.",
       "url": "https://github.com/langchain-ai/deepagents",
       "badges": []
@@ -1090,7 +1241,7 @@
     {
       "repo": "i-am-bee/beeai-framework",
       "name": "BeeAI Framework",
-      "stars": 3432,
+      "stars": 3433,
       "description": "Build production-ready AI agents in both Python and Typescript.",
       "url": "https://github.com/i-am-bee/beeai-framework",
       "badges": []
@@ -1098,7 +1249,7 @@
     {
       "repo": "open-jarvis/OpenJarvis",
       "name": "OpenJarvis",
-      "stars": 11116,
+      "stars": 11135,
       "description": "Personal AI, On Personal Devices",
       "url": "https://github.com/open-jarvis/OpenJarvis",
       "badges": []
@@ -1106,7 +1257,7 @@
     {
       "repo": "vectorize-io/hindsight",
       "name": "Hindsight",
-      "stars": 49228,
+      "stars": 49369,
       "description": "Hindsight: Agent Memory That Learns",
       "url": "https://github.com/vectorize-io/hindsight",
       "badges": []
@@ -1114,7 +1265,7 @@
     {
       "repo": "NandhaKishorM/laya",
       "name": "Laya",
-      "stars": 32760,
+      "stars": 32802,
       "description": "Non-autoregressive System 1 decision engine. Typed choice, score and yes/no decisions over any text in a single forward pass, in 100+ languages, with a router that picks the right checkpoint per request.",
       "url": "https://github.com/NandhaKishorM/laya",
       "badges": []
@@ -1130,12 +1281,12 @@
     {
       "repo": "vercel/ai",
       "name": "AI SDK",
-      "stars": 27301,
+      "stars": 27304,
       "description": "The AI Toolkit for TypeScript. From the creators of Next.js, the AI SDK is a free open-source library for building AI-powered applications and agents ",
       "url": "https://github.com/vercel/ai",
       "badges": []
     }
   ],
-  "updated_at": "2026-10-14T05:59:38+08:00",
-  "signature": "28bd49e7a527f656f9a0024223639506319684fc9870a306a6125f164645d3b7"
+  "updated_at": "2026-10-14T14:06:47+08:00",
+  "signature": "3f5fcd03254bb276dd1efb98edc9e68d63aab98fd14fdc1001879a920958fa51"
 }
