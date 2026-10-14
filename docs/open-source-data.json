@@ -1144,7 +1144,7 @@
     {
       "repo": "morluto/rea",
       "name": "Rea",
-      "stars": 233445,
+      "stars": 233656,
       "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
       "url": "https://github.com/morluto/rea",
       "badges": [
@@ -1203,7 +1203,7 @@
     {
       "repo": "infiniflow/ragflow",
       "name": "ragflow",
-      "stars": 92211,
+      "stars": 92212,
       "description": "RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) engine that fuses cutting-edge RAG with Agent capabilities to create a superior context layer for LLMs",
       "url": "https://github.com/infiniflow/ragflow",
       "badges": [
@@ -1311,7 +1311,7 @@
     {
       "repo": "aaif-goose/goose",
       "name": "Goose",
-      "stars": 55282,
+      "stars": 55281,
       "description": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
       "url": "https://github.com/aaif-goose/goose",
       "badges": [
@@ -1328,7 +1328,7 @@
     {
       "repo": "n8n-io/n8n",
       "name": "n8n",
-      "stars": 207360,
+      "stars": 207358,
       "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
       "url": "https://github.com/n8n-io/n8n",
       "badges": []
@@ -1376,7 +1376,7 @@
     {
       "repo": "vectorize-io/hindsight",
       "name": "Hindsight",
-      "stars": 49589,
+      "stars": 49590,
       "description": "Hindsight: Agent Memory That Learns",
       "url": "https://github.com/vectorize-io/hindsight",
       "badges": []
@@ -1406,6 +1406,6 @@
       "badges": []
     }
   ],
-  "updated_at": "2026-10-15T00:20:40+08:00",
-  "signature": "902316c0adf8cf0d0f68dc087f0e8682c05715a4e6982df423a5a3ca70e920a3"
+  "updated_at": "2026-10-15T00:29:10+08:00",
+  "signature": "454e340f627439d2c89830efbeaf405fad93ea57cd3e56775f887ec3f5a31738"
 }
