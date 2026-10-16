@@ -152,6 +152,60 @@ with patch.object(panel, "api", return_value={"incomplete_results": True, "total
     except RuntimeError:
         pass
 
+# Overflow requires recursive splitting, even when all results share one day.
+search_items = []
+for hour, count in [(0, 1000), (1, 1000), (2, 201)]:
+    stamp = f"2026-10-16T0{hour}:00:00Z"
+    search_items.extend({"id": f"{hour}-{i}", "created_at": stamp,
+                         "commit": {"committer": {"date": stamp}}} for i in range(count))
+
+
+def paged_search_api(path, **params):
+    assert params["sort"] == ("committer-date" if path.endswith("commits") else "created")
+    items = search_items
+    if " " in params["q"]:
+        period = params["q"].split(" ", 1)[1].split(":", 1)[1]
+        if ".." in period:
+            start, end = period.split("..")
+        elif period.startswith(">="):
+            start, end = period[2:], "9999"
+        else:
+            assert period.startswith("<=")
+            start, end = "", period[2:]
+        items = [item for item in items if start <= item["created_at"] <= end]
+    items = sorted(items, key=lambda item: item["created_at"], reverse=params["order"] == "desc")
+    offset = (params.get("page", 1) - 1) * params["per_page"]
+    return {"total_count": len(items), "incomplete_results": False,
+            "items": items[offset:offset + params["per_page"]]}
+
+
+for kind in ("commits", "issues"):
+    with patch.object(panel, "api", side_effect=paged_search_api):
+        found = panel.search(kind, "anything")
+    assert len(found) == len({item["id"] for item in found}) == 2201
+    assert {item["id"] for item in found} == {item["id"] for item in search_items}
+
+with patch.object(panel, "api", side_effect=lambda path, **params:
+                  {"total_count": 201, "incomplete_results": True, "items": []}
+                  if "committer-date:>=" in params["q"] else paged_search_api(path, **params)), \
+        patch.object(panel.time, "sleep"):
+    try:
+        panel.search("commits", "anything")
+        raise AssertionError("An incomplete partition must not replace the published snapshot")
+    except RuntimeError:
+        pass
+
+search_items = search_items[:1000]
+with patch.object(panel, "api", side_effect=paged_search_api):
+    assert len(panel.search("commits", "anything")) == 1000
+search_items.append(dict(search_items[0], id="overflow"))
+with patch.object(panel, "api", side_effect=paged_search_api):
+    try:
+        panel.search("commits", "anything")
+        raise AssertionError("An unsplittable search must not silently truncate contributions")
+    except RuntimeError:
+        pass
+
 readme = '''<a href="https://trendshift.io/repositories/14318?utm_source=repository-badge&amp;utm_medium=badge"><img src="https://trendshift.io/api/badge/repositories/14318"></a>
 [HelloGitHub](https://hellogithub.com/repository/abc) <img src="https://api.hellogithub.com/v1/widgets/recommend.svg?rid=abc&amp;theme=light">
 <a href="https://www.producthunt.com/posts/cherry-studio?embed=true&amp;utm_source=badge"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=496640&amp;theme=light"></a>
@@ -175,4 +229,4 @@ other["prs"][0]["merge_commit_fingerprint"] = {"cached": "evidence"}
 assert signature == panel.content_signature(other)
 other["commits"] = branch_commits
 assert signature != panel.content_signature(other)
-print("Passed: co-author discovery, main-branch ancestry, PR/commit deduplication, pinned/history retention, complete search, badge whitelist, stable signatures")
+print("Passed: co-author discovery, main-branch ancestry, PR/commit deduplication, pinned/history retention, complete partitioned search, badge whitelist, stable signatures")

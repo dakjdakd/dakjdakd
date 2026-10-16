@@ -47,17 +47,40 @@ def api(path, **params):
         time.sleep(20)
 
 
-def search(kind, query):
+def search(kind, query, start=None, end=None):
+    date_field = "committer-date" if kind == "commits" else "created"
+    search_query = query
+    if start or end:
+        period = f"{start}..{end}" if start and end else f">={start}" if start else f"<={end}"
+        search_query += f" {date_field}:{period}"
     results = []
     for page in range(1, 11):
         for attempt in range(3):
-            response = api(f"search/{kind}", q=query, per_page=100, page=page)
+            response = api(f"search/{kind}", q=search_query, per_page=100, page=page,
+                           sort=date_field, order="asc")
             if not response.get("incomplete_results"):
                 break
             if attempt < 2:
                 time.sleep(2)
-        if response.get("incomplete_results") or response["total_count"] > 1000:
+        if response.get("incomplete_results"):
             raise RuntimeError(f"GitHub {kind} search is incomplete; keeping the previous panel")
+        if response["total_count"] > 1000:
+            # GitHub caps each search at 1,000 results. Split into disjoint UTC
+            # intervals, including within a day, until each query can paginate.
+            latest = api(f"search/{kind}", q=search_query, per_page=1,
+                         sort=date_field, order="desc")
+            if latest.get("incomplete_results") or not response["items"] or not latest["items"]:
+                raise RuntimeError(f"GitHub {kind} search is incomplete; keeping the previous panel")
+            dates = [item["commit"]["committer"]["date"] if kind == "commits" else item["created_at"]
+                     for item in (response["items"][0], latest["items"][0])]
+            first, last = [datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(timezone.utc)
+                           for value in dates]
+            if last - first < timedelta(seconds=1):
+                raise RuntimeError(f"GitHub {kind} search exceeds 1,000 results in one second; keeping the previous panel")
+            middle = (first + (last - first) / 2).replace(microsecond=0)
+            before = middle.isoformat(timespec="seconds").replace("+00:00", "Z")
+            after = (middle + timedelta(seconds=1)).isoformat(timespec="seconds").replace("+00:00", "Z")
+            return search(kind, query, start, before) + search(kind, query, after, end)
         results.extend(response["items"])
         if page * 100 >= response["total_count"]:
             break
