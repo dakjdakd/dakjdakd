@@ -42,6 +42,11 @@ def api(path, **params):
             return json.loads(result.stdout)
         status = re.search(r"HTTP (\d+)", result.stderr)
         code = int(status[1]) if status else 0
+        # GitHub's secondary limit is request-shape based and retrying the same
+        # search immediately only extends the lockout. Let the collector keep
+        # the last verified snapshot and try again on the next schedule tick.
+        if code == 403 and "secondary rate limit" in result.stderr.lower():
+            raise HTTPError(path, code, result.stderr.strip(), {}, None)
         if code not in (403, 429, 502, 503) or attempt == 2:
             raise HTTPError(path, code, result.stderr.strip(), {}, None)
         time.sleep(20)
@@ -109,11 +114,31 @@ def credited(message, emails):
         r"^Co-authored-by:\s*[^\n<>]+<([^\s<>]+)>\s*$", message, re.I | re.M))
 
 
+def rate_limited(error):
+    return error.code in (403, 429) and (
+        error.code == 429 or "secondary rate limit" in str(error.reason).lower())
+
+
 def merged_prs(previous, config, previous_commits=()):
     # Keep verified history even when GitHub Search temporarily misses a result.
     prs = {p["html_url"]: p for p in previous if external(p["repo"], config)}
+    search_available = True
+
+    def optional_search(kind, query):
+        nonlocal search_available
+        if not search_available:
+            return None
+        try:
+            return search(kind, query)
+        except HTTPError as error:
+            if not rate_limited(error):
+                raise
+            search_available = False
+            print("GitHub Search is rate limited; keeping the previous verified snapshot", flush=True)
+            return None
+
     print("Collecting authored and pinned merged PRs...", flush=True)
-    for item in search("issues", f"is:pr is:merged author:{USER}"):
+    for item in optional_search("issues", f"is:pr is:merged author:{USER}") or []:
         pr = normalize(item, config=config)
         if pr:
             prs[pr["html_url"]] = {**prs.get(pr["html_url"], {}), **pr}
@@ -129,7 +154,7 @@ def merged_prs(previous, config, previous_commits=()):
     emails = {f"{USER}@users.noreply.github.com", f"{user['id']}+{USER}@users.noreply.github.com"}
     if user.get("email"):
         emails.add(user["email"].lower())
-    authored_commits = search("commits", f"author:{USER} -user:{USER}")
+    authored_commits = optional_search("commits", f"author:{USER} -user:{USER}") or []
     commits = {}
     for commit in authored_commits:
         if (commit.get("author") or {}).get("login", "").lower() == USER.lower():
@@ -142,7 +167,7 @@ def merged_prs(previous, config, previous_commits=()):
     queries = [f'"Co-authored-by: {USER}" -user:{USER}'] + [
         f'"Co-authored-by" "{email}" -user:{USER}' for email in sorted(emails)]
     for query in queries:
-        for commit in search("commits", query):
+        for commit in optional_search("commits", query) or []:
             repo = commit["repository"]["full_name"]
             if external(repo, config) and not commit["repository"].get("private") and not commit["repository"].get("fork"):
                 if credited(commit["commit"]["message"], emails):

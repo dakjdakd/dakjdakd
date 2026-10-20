@@ -1,6 +1,7 @@
 """Regression checks for contribution attribution and stable scheduled updates."""
 from copy import deepcopy
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 import update_open_source as panel
 
@@ -79,6 +80,13 @@ assert owned_prs == [archived] and owned_commits == []
 assert not panel.external("IBRAHIMKOMBA/SKILL-SIMMER", ownership_config)
 assert not panel.external("DAFYY321-PIXEL/NEW-PERSONAL-PROJECT", ownership_config)
 assert panel.external("another-team/skill-simmer", ownership_config)
+
+# A GitHub secondary limit must keep the published snapshot usable instead of
+# failing the scheduled job before Pages can be refreshed.
+limited_error = HTTPError("search/commits", 403, "secondary rate limit", {}, None)
+with patch.object(panel, "search", side_effect=limited_error), patch.object(panel, "api", side_effect=fake_api):
+    limited_prs, limited_commits = panel.merged_prs([archived], {"included_prs": []}, [])
+assert limited_prs == [archived] and limited_commits == []
 
 # Default-branch ancestry, PR/commit deduplication and later PR discovery.
 candidate_shas = ["main", "feature", "diverged", "squash", "in-pr", "later-covered", "discovery"]
