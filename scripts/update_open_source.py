@@ -37,7 +37,14 @@ def api(path, **params):
     for key, value in params.items():
         command.extend(["-f", f"{key}={value}"])
     for attempt in range(3):
-        result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", timeout=90)
+        try:
+            result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", timeout=90)
+        except subprocess.TimeoutExpired:
+            if attempt == 2:
+                raise
+            print(f"GitHub API request timed out; retrying ({attempt + 1}/2)", flush=True)
+            time.sleep(20)
+            continue
         if result.returncode == 0:
             return json.loads(result.stdout)
         status = re.search(r"HTTP (\d+)", result.stderr)
@@ -47,8 +54,9 @@ def api(path, **params):
         # the last verified snapshot and try again on the next schedule tick.
         if code == 403 and "secondary rate limit" in result.stderr.lower():
             raise HTTPError(path, code, result.stderr.strip(), {}, None)
-        if code not in (403, 429, 502, 503) or attempt == 2:
+        if code not in (403, 429, 500, 502, 503, 504) or attempt == 2:
             raise HTTPError(path, code, result.stderr.strip(), {}, None)
+        print(f"GitHub API returned HTTP {code}; retrying ({attempt + 1}/2)", flush=True)
         time.sleep(20)
 
 
@@ -355,6 +363,29 @@ def build_site(data):
 
 
 def collect():
+    try:
+        collect_snapshot()
+    except (HTTPError, subprocess.TimeoutExpired) as error:
+        # An upstream outage must not replace a valid panel with partial data.
+        # Permanent errors (e.g. missing permissions) still fail visibly.
+        transient = isinstance(error, subprocess.TimeoutExpired) or (
+            rate_limited(error) or error.code in (500, 502, 503, 504))
+        if not transient or not all(path.is_file() for path in (DATA_FILE, OUT, SITE / "index.html")):
+            raise
+        reason = "request timed out" if isinstance(error, subprocess.TimeoutExpired) else f"HTTP {error.code}"
+        print(f"::warning::Contribution refresh deferred: GitHub API {reason} after retries. "
+              "The previous published panel is unchanged; the next run will retry.", flush=True)
+        if output := os.environ.get("GITHUB_OUTPUT"):
+            with open(output, "a", encoding="utf-8") as stream:
+                stream.write("changed=false\ndeferred=true\n")
+        if summary := os.environ.get("GITHUB_STEP_SUMMARY"):
+            with open(summary, "a", encoding="utf-8") as stream:
+                stream.write(f"### Contribution refresh deferred\n\nGitHub API: {reason}. "
+                             "The last published data, GIF and sync time were preserved. "
+                             "No new data was published; the next run will retry.\n")
+
+
+def collect_snapshot():
     old = json.loads(DATA_FILE.read_text(encoding="utf-8")) if DATA_FILE.exists() else {"prs": [], "projects": []}
     config = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
     prs, commits = merged_prs(old["prs"], config, old.get("commits", []))

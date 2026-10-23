@@ -1,9 +1,71 @@
 """Regression checks for contribution attribution and stable scheduled updates."""
 from copy import deepcopy
+from tempfile import TemporaryDirectory
 from unittest.mock import patch
 from urllib.error import HTTPError
 
 import update_open_source as panel
+
+
+# Server errors and request timeouts get bounded retries in the shared client,
+# including the compare endpoint that failed in workflow #155.
+success = panel.subprocess.CompletedProcess([], 0, '{"status":"ahead"}', "")
+for code in (500, 502, 503, 504):
+    failure = panel.subprocess.CompletedProcess([], 1, "", f"gh: Server Error (HTTP {code})")
+    with patch.object(panel.subprocess, "run", side_effect=[failure, success]) as run, \
+            patch.object(panel.time, "sleep"):
+        assert panel.api("repos/team/library/compare/sha...main")["status"] == "ahead"
+        assert run.call_count == 2
+
+timeout = panel.subprocess.TimeoutExpired(["gh", "api"], 90)
+with patch.object(panel.subprocess, "run", side_effect=[timeout, success]) as run, \
+        patch.object(panel.time, "sleep"):
+    assert panel.api("repos/team/library")["status"] == "ahead"
+    assert run.call_count == 2
+
+failure = panel.subprocess.CompletedProcess([], 1, "", "gh: heavy server load (HTTP 500)")
+with patch.object(panel.subprocess, "run", return_value=failure) as run, patch.object(panel.time, "sleep"):
+    try:
+        panel.api("repos/team/library/compare/sha...main")
+        raise AssertionError("Repeated server errors must exhaust retries")
+    except HTTPError as error:
+        assert error.code == 500 and run.call_count == 3
+
+# Retry exhaustion defers a run without rewriting the published data or GIF.
+# Errors from discovery, comparison and project metadata share this protection.
+with TemporaryDirectory() as directory:
+    root = panel.Path(directory)
+    data_file, gif_file = root / "open-source-data.json", root / "panel.gif"
+    page_file = root / "index.html"
+    for path in (data_file, gif_file, page_file):
+        path.write_bytes(b"previous published content")
+    output, summary = root / "output", root / "summary"
+    with patch.object(panel, "DATA_FILE", data_file), patch.object(panel, "OUT", gif_file), \
+            patch.object(panel, "SITE", root), patch.dict(panel.os.environ, {
+                "GITHUB_OUTPUT": str(output), "GITHUB_STEP_SUMMARY": str(summary)}):
+        for error in (HTTPError("search/commits", 500, "heavy server load", {}, None),
+                      HTTPError("repos/team/library/compare/sha...main", 500, "heavy server load", {}, None),
+                      HTTPError("repos/team/library/readme", 503, "unavailable", {}, None), timeout):
+            with patch.object(panel, "collect_snapshot", side_effect=error), patch("builtins.print") as log:
+                panel.collect()
+                assert "::warning::Contribution refresh deferred" in log.call_args.args[0]
+            assert output.read_text().endswith("changed=false\ndeferred=true\n")
+            assert "No new data was published" in summary.read_text()
+            assert all(path.read_bytes() == b"previous published content" for path in (data_file, gif_file, page_file))
+        for code in (403, 404):
+            with patch.object(panel, "collect_snapshot", side_effect=HTTPError("repos/team/library", code, "denied", {}, None)):
+                try:
+                    panel.collect()
+                    raise AssertionError("Permanent errors must still fail")
+                except HTTPError as error:
+                    assert error.code == code
+        data_file.unlink()
+        with patch.object(panel, "collect_snapshot", side_effect=HTTPError("search/commits", 500, "unavailable", {}, None)):
+            try:
+                panel.collect()
+                raise AssertionError("An outage without a published snapshot must fail")
+            except HTTPError:
+                pass
 
 
 def pr(repo, number, merged="2026-10-11T00:00:00Z"):
