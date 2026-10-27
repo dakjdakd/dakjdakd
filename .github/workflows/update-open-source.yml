@@ -50,6 +50,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Update open source contributions panel"
+          git pull --rebase origin main
           git push
       - if: steps.collect.outputs.changed == 'true' || github.event_name != 'schedule'
         uses: actions/configure-pages@v5
