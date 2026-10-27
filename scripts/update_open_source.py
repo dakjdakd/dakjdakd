@@ -30,6 +30,10 @@ TEMPLATE = ROOT / "scripts" / "open_source_template.html"
 TZ = timezone(timedelta(hours=8))
 
 
+class IncompleteSearchError(RuntimeError):
+    """GitHub returned a partial search response, even after retrying."""
+
+
 def api(path, **params):
     # gh is available locally and on GitHub's Ubuntu runners. Argument arrays
     # preserve search phrases without shell quoting or exposing the token.
@@ -74,16 +78,16 @@ def search(kind, query, start=None, end=None):
             if not response.get("incomplete_results"):
                 break
             if attempt < 2:
-                time.sleep(2)
+                time.sleep(5 * (attempt + 1))
         if response.get("incomplete_results"):
-            raise RuntimeError(f"GitHub {kind} search is incomplete; keeping the previous panel")
+            raise IncompleteSearchError(f"GitHub {kind} search is incomplete; keeping the previous panel")
         if response["total_count"] > 1000:
             # GitHub caps each search at 1,000 results. Split into disjoint UTC
             # intervals, including within a day, until each query can paginate.
             latest = api(f"search/{kind}", q=search_query, per_page=1,
                          sort=date_field, order="desc")
             if latest.get("incomplete_results") or not response["items"] or not latest["items"]:
-                raise RuntimeError(f"GitHub {kind} search is incomplete; keeping the previous panel")
+                raise IncompleteSearchError(f"GitHub {kind} search is incomplete; keeping the previous panel")
             dates = [item["commit"]["committer"]["date"] if kind == "commits" else item["created_at"]
                      for item in (response["items"][0], latest["items"][0])]
             first, last = [datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(timezone.utc)
@@ -138,11 +142,18 @@ def merged_prs(previous, config, previous_commits=()):
             return None
         try:
             return search(kind, query)
-        except HTTPError as error:
-            if not rate_limited(error):
+        except (HTTPError, IncompleteSearchError) as error:
+            if isinstance(error, HTTPError) and not rate_limited(error):
                 raise
             search_available = False
-            print("GitHub Search is rate limited; keeping the previous verified snapshot", flush=True)
+            reason = "returned incomplete results after retries" if isinstance(error, IncompleteSearchError) else "is rate limited"
+            print(f"::warning::GitHub Search {reason}; search discovery is deferred. "
+                  "Keeping verified history and continuing other updates.", flush=True)
+            if summary := os.environ.get("GITHUB_STEP_SUMMARY"):
+                with open(summary, "a", encoding="utf-8") as stream:
+                    stream.write(f"### Contribution search deferred\n\nGitHub {kind} search {reason}. "
+                                 "Verified history is retained. Other verified updates may still be published; "
+                                 "this run does not claim complete search results. The next run will retry.\n")
             return None
 
     print("Collecting authored and pinned merged PRs...", flush=True)

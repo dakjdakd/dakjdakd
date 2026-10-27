@@ -146,9 +146,24 @@ assert panel.external("another-team/skill-simmer", ownership_config)
 # A GitHub secondary limit must keep the published snapshot usable instead of
 # failing the scheduled job before Pages can be refreshed.
 limited_error = HTTPError("search/commits", 403, "secondary rate limit", {}, None)
-with patch.object(panel, "search", side_effect=limited_error), patch.object(panel, "api", side_effect=fake_api):
+with patch.object(panel, "search", side_effect=limited_error), patch.object(panel, "api", side_effect=fake_api), \
+        patch("builtins.print"):
     limited_prs, limited_commits = panel.merged_prs([archived], {"included_prs": []}, [])
 assert limited_prs == [archived] and limited_commits == []
+
+# HTTP 200 with incomplete_results is temporary too. Discard that search's
+# partial results, retain history, and keep independently verified new PRs.
+with TemporaryDirectory() as directory:
+    summary = panel.Path(directory) / "summary"
+    with patch.object(panel, "search", side_effect=[
+            [pr("team/library", 7)], panel.IncompleteSearchError("search incomplete")]) as discover, \
+            patch.object(panel, "api", side_effect=fake_api), patch("builtins.print") as log, \
+            patch.dict(panel.os.environ, {"GITHUB_STEP_SUMMARY": str(summary)}):
+        kept_prs, kept_commits = panel.merged_prs([archived], {"included_prs": []})
+    assert {p["html_url"] for p in kept_prs} == {archived["html_url"], "https://github.com/team/library/pull/7"}
+    assert kept_commits == [] and discover.call_count == 2
+    assert "does not claim complete search results" in summary.read_text()
+    assert any("::warning::GitHub Search returned incomplete results" in str(call) for call in log.call_args_list)
 
 # Default-branch ancestry, PR/commit deduplication and later PR discovery.
 candidate_shas = ["main", "feature", "diverged", "squash", "in-pr", "later-covered", "discovery"]
@@ -191,6 +206,13 @@ assert {p["number"] for p in branch_prs} == {1, 2}
 assert {c["sha"] for c in branch_commits} == {"main", "archived"}
 assert all(c["branch"] == "release/main" for c in branch_commits)
 
+# Search omissions must not erase previously verified main-branch commits.
+with patch.object(panel, "search", side_effect=panel.IncompleteSearchError("partition incomplete")) as discover, \
+        patch.object(panel, "api", side_effect=branch_api), patch("builtins.print"):
+    kept_prs, kept_commits = panel.merged_prs(deepcopy(branch_prs), {"included_prs": []}, history)
+assert {p["number"] for p in kept_prs} == {1, 2}
+assert {c["sha"] for c in kept_commits} == {"archived"} and discover.call_count == 1
+
 def copied_api(path, **params):
     if path.startswith("repos/copy/library"):
         return branch_api(path.replace("copy/library", "team/library"), **params)
@@ -219,8 +241,16 @@ with patch.object(panel, "api", return_value={"incomplete_results": True, "total
     try:
         panel.search("issues", "anything")
         raise AssertionError("Incomplete search must not replace the published snapshot")
-    except RuntimeError:
+    except panel.IncompleteSearchError:
         pass
+
+# A temporary incomplete response is retried before deferring discovery.
+with patch.object(panel, "api", side_effect=[
+        {"incomplete_results": True, "total_count": 1, "items": []},
+        {"incomplete_results": False, "total_count": 1, "items": [{"id": "complete"}]}]) as request, \
+        patch.object(panel.time, "sleep") as pause:
+    assert panel.search("commits", "anything") == [{"id": "complete"}]
+    assert request.call_count == 2 and pause.call_args.args == (5,)
 
 # Overflow requires recursive splitting, even when all results share one day.
 search_items = []
