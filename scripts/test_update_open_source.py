@@ -6,6 +6,9 @@ from urllib.error import HTTPError
 
 import update_open_source as panel
 
+# Simulated outages must not write to the real GitHub Actions run summary.
+panel.os.environ.pop("GITHUB_STEP_SUMMARY", None)
+
 
 # Server errors and request timeouts get bounded retries in the shared client,
 # including the compare endpoint that failed in workflow #155.
