@@ -13,6 +13,17 @@ panel.os.environ.pop("GITHUB_STEP_SUMMARY", None)
 # Server errors and request timeouts get bounded retries in the shared client,
 # including the compare endpoint that failed in workflow #155.
 success = panel.subprocess.CompletedProcess([], 0, '{"status":"ahead"}', "")
+# Every search page/query shares a budget, including retries. Core requests
+# must not be delayed by the search-specific throttle.
+with patch.object(panel, "_last_search_request", None), \
+        patch.object(panel.subprocess, "run", return_value=success), \
+        patch.object(panel.time, "monotonic", side_effect=[100, 100, 102, 107]), \
+        patch.object(panel.time, "sleep") as pause:
+    panel.api("search/issues")
+    panel.api("search/commits")
+    panel.api("users/dakjdakd")
+    pause.assert_called_once_with(5)
+
 for code in (500, 502, 503, 504):
     failure = panel.subprocess.CompletedProcess([], 1, "", f"gh: Server Error (HTTP {code})")
     with patch.object(panel.subprocess, "run", side_effect=[failure, success]) as run, \

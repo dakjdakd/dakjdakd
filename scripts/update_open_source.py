@@ -28,6 +28,7 @@ OUT = ROOT / "assets" / "open-source-terminal.gif"
 CONFIG_FILE = ROOT / "scripts" / "open_source_config.json"
 TEMPLATE = ROOT / "scripts" / "open_source_template.html"
 TZ = timezone(timedelta(hours=8))
+_last_search_request = None
 
 
 class IncompleteSearchError(RuntimeError):
@@ -35,12 +36,20 @@ class IncompleteSearchError(RuntimeError):
 
 
 def api(path, **params):
+    global _last_search_request
     # gh is available locally and on GitHub's Ubuntu runners. Argument arrays
     # preserve search phrases without shell quoting or exposing the token.
     command = ["gh", "api", path, "-X", "GET", "-H", "Accept: application/vnd.github+json"]
     for key, value in params.items():
         command.extend(["-f", f"{key}={value}"])
     for attempt in range(3):
+        if path.startswith("search/"):
+            # Search has a much smaller budget than the core API. Share pacing
+            # across pages, recursive partitions, queries and retries (<10/min).
+            now = time.monotonic()
+            if _last_search_request is not None:
+                time.sleep(max(0, 7 - (now - _last_search_request)))
+            _last_search_request = time.monotonic()
         try:
             result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", timeout=90)
         except subprocess.TimeoutExpired:
@@ -71,6 +80,7 @@ def search(kind, query, start=None, end=None):
         period = f"{start}..{end}" if start and end else f">={start}" if start else f"<={end}"
         search_query += f" {date_field}:{period}"
     results = []
+    print(f"Searching {kind}: {search_query}", flush=True)
     for page in range(1, 11):
         for attempt in range(3):
             response = api(f"search/{kind}", q=search_query, per_page=100, page=page,
