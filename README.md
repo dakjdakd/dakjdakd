@@ -26,6 +26,10 @@
   LLM applications &nbsp;·&nbsp; Agent workflow &nbsp;·&nbsp; RAG &nbsp;·&nbsp; Context engineering &nbsp;·&nbsp; AI-native products
 </p>
 
+<p align="center">
+  Contact &nbsp;·&nbsp; <a href="mailto:1428823446@qq.com">1428823446@qq.com</a>
+</p>
+
 <h2 align="center">⌁ Open Source Contributions</h2>
 
 <p align="center">
