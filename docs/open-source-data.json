@@ -293,7 +293,15 @@
         "17404c9737dd1b6aec61de75a58c03bede92083f",
         "c61a24b8c5a2c58f969628b7d3bec62ffed7f0ae",
         "fcf1de1c71a49f9dbab103ab498e9833ddc9df65"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(browser): bound CDP handshakes and command responses (#3555)\n\n* fix(browser): bound CDP handshakes and command responses\n\n* test(browser): expire stalled deadlines after fixture readiness\n\n* docs(browser): explain handshake deadline ownership",
+        "author": {
+          "name": "Lucien",
+          "email": "164857476+dakjdakd@users.noreply.github.com",
+          "date": "2026-10-15T06:55:29Z"
+        }
+      }
     },
     {
       "repo": "bytedance/deer-flow",
@@ -396,7 +404,15 @@
         "c97c8af7d75702242272596c18317b07deaf7302",
         "cc82d2c8d7d4404dcf75c6c5f17699f686c874e8",
         "fa5e15588c629ea12fdcfc898e4eb9001d3fcb07"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "chore(main): release rea-agents 6.5.0 (#1693)\n\n* chore(main): release rea-agents 6.5.0\n\n* docs(release): finalize contributor-aware 6.5.0 notes\n\n* docs(release): retain verifier maintenance only in provenance\n\n* style(release): format the contribution inventory\n\n* docs(release): credit Windows fixes\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n* docs(release): credit selected-null and client setup changes\n\n* fix(release): refresh 6.5.0 notes and align installation examples\n\n* docs(release): clarify 6.5.0 migrations and recent fixes\n\n* docs(release): cover omitted capabilities and refresh 6.5.0 provenance\n\n* docs(release): pin final CI corrections in 6.5.0 inventory\n\n* docs(release): include mutation scheduling in 6.5.0 provenance\n\n* docs(release): include cache policy correction in 6.5.0 provenance\n\n---------\n\nCo-authored-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Codex <codex@users.noreply.github.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>",
+        "author": {
+          "name": "github-actions[bot]",
+          "email": "41898282+github-actions[bot]@users.noreply.github.com",
+          "date": "2026-10-14T12:31:45Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -431,7 +447,15 @@
         "e1fb40460d2bf8223cd5fdfd7417dc6635a8396b",
         "e8361b77157f5ad31627f9e45ed05c013e60e109",
         "f83904677603d36e63bcf2b87a1be4f146ce808b"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(capture): end special-scheme URL authorities at a backslash (#2767)\n\n* fix(capture): end special-scheme URL authorities at a backslash\n\nThe native mitmproxy adapter removed transport userinfo with\n`^(...//)[^/?#]*@`, so the authority ran to the last \"@\" before \"/\", \"?\"\nor \"#\". For `https://example.test\\part@tail` it treated\n`example.test\\part` as userinfo, reported `https://tail` as the\nLocation, and withdrew the original bytes as a transport credential.\nWHATWG URL parsing, used by the shared TypeScript owner\n(recordedTransportUrl.ts) and by HAR captures, ends a special-scheme or\nscheme-relative authority at a backslash, so that \"@\" is ordinary path\ntext.\n\nLocate the authority with the same boundary rule before removing\nuserinfo. Bytes are handled as Latin-1 text so unrelated bytes stay\nidentical. Userinfo before the backslash is still removed and redacted.\nAdd source unit tests for the adapter projection to test:python.\n\nFixes #2671\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* fix(capture): skip special-scheme leading slashes before userinfo\n\nEnding the authority at a backslash exposed a credential: for\n`https://\\user:pass@host/path`, WHATWG parsing skips every leading \"/\"\nor \"\\\" after a special scheme (and in scheme-relative references), so\n`user:pass` is userinfo, but the new boundary stopped at the first\nbackslash and found no \"@\". The same applied to `https:\\\\user:pass@host`\nand `https:user:pass@host`.\n\nStart the authority after that whole slash run for non-file special\nschemes and scheme-relative references. File URLs keep their \"//\"\nboundary because they carry no userinfo. Load the adapter in tests with\nfresh mitmproxy stand-ins scoped to its import instead of leaving them\nin sys.modules.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* fix(capture): parse URL controls and mixed network authorities\n\n* fix(capture): distinguish native paths and URL base authorities\n\n* fix(capture): preserve file-relative path evidence after separators\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n\n* fix(android): make DEX descriptor pattern portable\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n* fix(capture): remove empty URL userinfo markers\n\n* test(capture): cover empty URL userinfo markers\n\n* test(ci): isolate Hopper process inventory fixtures\n\n* fix(ci): declare process inventory callback\n\n* test(ci): isolate alternate launcher process fixture\n\n* fix(capture): keep URLs that WHATWG rejects instead of redacting userinfo\n\nFile URLs cannot carry userinfo (an \"@\" in a file host fails the parse),\nand a special authority whose host or port WHATWG rejects fails the whole\nURL. Neither has credentials, so the bridge now keeps their source text\nand byte sidecar. Checked against Node's URL over 30,000 spellings: no\nunder-redaction, over-redaction 20,540 -> 5,865 (remaining: empty\nuserinfo, IPv4 range, IDNA, non-special and baseless references).\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* fix(capture): strip trailing URL whitespace and validate IP hosts and ports\n\nThe previous host check counted trailing C0 controls and spaces, which\nWHATWG strips, so `https://user:pw@host ` kept its password. Trailing\nC0/space is now removed from the parse view (raw offsets are unchanged).\n\nSpecial hosts now also follow the WHATWG IPv4 parser (ends-in-a-number,\nhex/octal parts, range) and IPv6 literal syntax (zone IDs rejected), and\nports are bounded lexically before int(), which raised ValueError past\n4300 digits on Python 3.11+ and failed the whole capture.\n\nNode URL differential over 126,000 spellings: under-redaction 8,084 -> 0,\nValueError 2,550 -> 0; remaining special-scheme over-redaction is IDNA\nand the pinned empty-userinfo case. Cost: +0.6 us per URL.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* fix(capture): redact userinfo before hosts that need Unicode mapping\n\nA non-ASCII special host may map under UTS #46 to an accepted host\n(fullwidth digits, ideographic full stops, ignored code points), so\ntreat it as accepted instead of running the ASCII IPv4 check on it.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>",
+        "author": {
+          "name": "Kaoru0822",
+          "email": "208281322+kaoru0822-kitauji@users.noreply.github.com",
+          "date": "2026-10-14T04:46:15Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -452,7 +476,15 @@
         "cf953681bdbaf3e6eae521ba2a86e96fdb8b2314",
         "ff56f785946c609b09c1c60232b28d7c34ac89a9",
         "ffd98662fc5f86bb12fc667828e748c6eebf1523"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(uninstall): remove the REA-owned ZCode fallback registration (#2783)\n\n* fix(uninstall): remove the REA-owned ZCode fallback registration\n\nZCode loads the user-scope `~/.agents/mcp.json` `mcpServers` fallback\nwhenever its native `mcp.servers` table is empty. Uninstall removed REA\nonly from the native table, so a REA-owned fallback entry became eligible\nto load again once the last native server was gone, while uninstall\nreported ZCode as removed and complete.\n\nAlso visit the ZCode fallback as a standard `mcpServers` JSON\nconfiguration in the uninstall host. It goes through the same\nownership check, `.rea.backup`, readback and restore path as every other\nclient configuration, so other fallback servers and settings, and a\nforeign `rea` entry, are preserved. Its result merges into the ZCode item.\n\nFixes #2664\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* fix(uninstall): preserve the strict ZCode fallback dialect\n\nAddress review findings at their producing boundaries and preserve directly affected consumers. Source inspection and git diff --check completed. Tests and automated checks were not run at the user’s explicit request.\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n* fix(android): make DEX descriptor pattern portable\n\n* fix: repair the static-check failures on the default branch (#2895)\n\n* fix: repair the static-check failures on the default branch\n\nThe default branch fails its own required `Static checks` job three ways, so\nevery pull request reports that job as failed regardless of its own change.\n\n- `npm run format:check` reports `src/domain/functionComparison.test.ts` and\n  `src/ida/IdaOperationRunner.ts`.\n- `npm run lint` reports a duplicate `import { join } from \"node:path\"` in\n  `tests/boundary/mcp/ghidraInventoryMcp.test.ts` (lines 4 and 17).\n- `npm run typecheck` reports `format: \"devin\"` missing from the client format\n  union in `src/application/SupportedClients.ts`, and an unchecked index in\n  `tests/boundary/cli/clientProfileLifecycle.test.ts`, whose pair array is\n  inferred as `string[][]`.\n\nApply the pinned formatter, drop the duplicate import, list the `\"devin\"` format\nthat its own definition already uses, and mark the pair array `as const`.\n\nValidation: `npm run check:fast` and `npm run format:check` pass.\n\n* fix(setup): keep Devin on the JSON configuration dialect\n\n---------\n\nCo-authored-by: 吴佳浩 <wujiahao@supremind.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>\nCo-authored-by: 吴佳浩Alben <35291372+XiaoBinGan@users.noreply.github.com>\nCo-authored-by: 吴佳浩 <wujiahao@supremind.com>",
+        "author": {
+          "name": "Kaoru0822",
+          "email": "208281322+kaoru0822-kitauji@users.noreply.github.com",
+          "date": "2026-10-14T00:33:26Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -483,7 +515,15 @@
         "d17eb899176385208668d312f9966c9b20bb602d",
         "e1579ec31b15883d739aed5bcd910e60f70561d8",
         "ea1fbd292ab4ea4de5eb2de2daa2eea1991a491b"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(electron): reject non-executable paths and contain launch rejections (#2705)\n\n* fix(electron): reject non-executable paths and contain launch rejections\n\nAn executable_path that runs but never prints the inspector line made\nPlaywright's electron.launch() leave three waits unawaited. They rejected\nunhandled and Node ended the CLI or the MCP server (#2269).\n\nCheck the resolved executable_path is a regular file, and on non-Windows\nhosts that it passes X_OK, before any launch. Wrap only the launch call\nin a scoped unhandledRejection listener that absorbs rejections whose\nstack is in playwright-core/lib and re-throws anything else.\n\nTested on Linux with Node 22.23.1, 24.18.0 and 26.11.1.\n\nRefs #2269\n\n🤖 Generated with Claude Code (Sonnet 5.5, verified by Opus 5.5) 🦊\n\n* fix(electron): absorb only this launch's orphaned rejections\n\nThe listener around the launch dropped every rejection with a\nplaywright-core stack, so an unrelated Playwright failure during the\nlaunch window would vanish. Hold those rejections instead. When the\nlaunch settles, drop only the ones whose message is part of the launch's\nown error (the orphans of a failed launch). Raise every other one again\nthrough the unhandledRejection path, so the process still fails. A launch\nthat succeeds raises all of them. Rejections without a Playwright stack\nstill fail at once.\n\nOne setImmediate turn before the decision lets rejections queued by the\nsettling tick arrive first. It is a single turn, not a timer. A shared\nset of absorbed errors stops overlapping launches from raising each\nother's orphans. The listener is removed on every path.\n\nAdd child-process tests that drive the built provider through its launch\nseam, since Vitest's worker has its own unhandledRejection listener.\n\n🤖 Generated with Claude Code (Sonnet 5.5, verified by Opus 5.5) 🦊\n\n* test(electron): distinguish launch success from capture ownership\n\n* test(electron): assert cleanup ownership failures around overlapping launches\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n\n* fix(android): make DEX descriptor pattern portable\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n* fix(browser): avoid replaying observed launch rejections\n\n* style: format comparison and IDA sources\n\n* test(electron): allow cold macOS ownership setup\n\n* test(electron): allow cold macOS setup in the early-exit path test\n\nThe test that runs an executable which exits at once builds the Swift\nownership helper twice on macOS: in the CLI process, and again in the\nMCP server process on its first tool call that prepares. A cold Swift\ncache can spend up to 120 seconds on a build. The test had only the\n30 second default.\n\nGive the test 180 seconds, as e1579ec31 did for\nelectronLaunchRejections.test.ts and 65a809a0d did for\nwebSourceLocationCli.test.ts. cli.run has no deadline of its own, so\nit needs no timeoutMs.\n\n🤖 Generated with Claude Code (Sonnet 5.5, verified by Opus 5.5) 🦊\n\n* test(ci): isolate report fixtures and declare PowerPC Java bounds\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <opus@fox.invalid>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>",
+        "author": {
+          "name": "Cassie_Fox",
+          "email": "249835913+CassieFox23@users.noreply.github.com",
+          "date": "2026-10-13T23:30:14Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -512,7 +552,15 @@
         "d4bb0f08270017aa5430ae76cac68fe81ca1a9cb",
         "e5bad8b51be87f7b0bb0f4c708dd8bc2bfffa617",
         "e929eda9ced35d4dae0b67cc88655e43edb483ef"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(javascript): preserve Electron runtime entrypoint paths (#2742)\n\n* fix(javascript): preserve Electron runtime entrypoint paths\n\n* fix(javascript): resolve runtime entrypoints before modules\n\n* fix(javascript): preserve Electron runtime path semantics\n\n* fix(javascript): resolve Electron renderers exactly\n\n* fix(javascript): retain runtime package aliases\n\n* fix(javascript): retain missing renderer URL paths\n\n* fix(javascript): resolve Electron URL and utility entries correctly\n\n* fix(javascript): reject suffix-only worker URLs\n\n* fix(javascript): respect Electron URL and utility path semantics\n\n* fix(javascript): separate Node runtime entrypoints from source imports\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n(cherry picked from commit 688defca0f4a3de04eb199f7754f323c68896c3c)\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n(cherry picked from commit 8cac51e12184d56a9ba80a4427b3e6082ddac1ec)\n\n* fix(android): make DEX descriptor pattern portable\n\n(cherry picked from commit 1335bcddc569a1cfb34b6efedcb6f2e3aaaa3357)\n\n* fix: repair the static-check failures on the default branch (#2895)\n\n* fix: repair the static-check failures on the default branch\n\nThe default branch fails its own required `Static checks` job three ways, so\nevery pull request reports that job as failed regardless of its own change.\n\n- `npm run format:check` reports `src/domain/functionComparison.test.ts` and\n  `src/ida/IdaOperationRunner.ts`.\n- `npm run lint` reports a duplicate `import { join } from \"node:path\"` in\n  `tests/boundary/mcp/ghidraInventoryMcp.test.ts` (lines 4 and 17).\n- `npm run typecheck` reports `format: \"devin\"` missing from the client format\n  union in `src/application/SupportedClients.ts`, and an unchecked index in\n  `tests/boundary/cli/clientProfileLifecycle.test.ts`, whose pair array is\n  inferred as `string[][]`.\n\nApply the pinned formatter, drop the duplicate import, list the `\"devin\"` format\nthat its own definition already uses, and mark the pair array `as const`.\n\nValidation: `npm run check:fast` and `npm run format:check` pass.\n\n* fix(setup): keep Devin on the JSON configuration dialect\n\n---------\n\nCo-authored-by: 吴佳浩 <wujiahao@supremind.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n(cherry picked from commit df3d96da801976fdbe37a726c2f4f84af8ffbf90)\n\n---------\n\nCo-authored-by: morluto <morluto@users.noreply.github.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>\nCo-authored-by: 吴佳浩Alben <35291372+XiaoBinGan@users.noreply.github.com>\nCo-authored-by: 吴佳浩 <wujiahao@supremind.com>",
+        "author": {
+          "name": "Avocado",
+          "email": "headmastereggy@gmail.com",
+          "date": "2026-10-13T22:39:17Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -531,7 +579,15 @@
         "c94818bdf9867619b2b749434d0e13750c870df0",
         "f2af17a3b3ecda72b4307fd88f48bf3445d0a362",
         "f7a159a39dc015aeaa49de2e66493776766f922b"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(artifacts): preserve Mach-O load-command string identity (#2110)\n\n* fix(artifacts): preserve Mach-O load-command string identity\n\n* fix(process): report no remaining time after a provider deadline fires\n\nNode timers can fire while performance.now() is still a fraction of a\nmillisecond short of the monotonic deadline. ProviderStartupDeadline then\nreported interruption \"timeout\" and an aborted signal while remainingMs()\nreturned ceil(0.x) = 1, so polling loops guarded by remainingMs() > 0\n(Hopper and Ghidra startup) could run past an elapsed deadline, and the\nreal-timer test \"aborts a bounded wait when its real monotonic deadline\nexpires\" failed intermittently in CI (expected 1 to be 0).\n\nOnce the deadline's own timer has classified a timeout, report zero\nremaining time. A deterministic regression test fires the timer with the\nmonotonic clock 0.4 ms short of the deadline.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n(cherry picked from commit dfdaa0ca74cc84a45dcb186422a0f51aa61bc427)\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n\n* style: format identity comparison and IDA runner\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Kaoru0822 <208281322+kaoru0822-kitauji@users.noreply.github.com>\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>",
+        "author": {
+          "name": "xin zhuang",
+          "email": "65798732+1052326311@users.noreply.github.com",
+          "date": "2026-10-13T22:38:32Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -558,7 +614,15 @@
         "d2044b97b94df62454c89f6635a9623e96a4bbfa",
         "d95d95ccec5bafe81bfcc12702582a4c927ddeea",
         "ddea3d85954d11b6da19ed6d2884481455be994f"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "test(signals): verify native decoder discovery coverage (#2818)\n\n* test(signals): verify native decoder discovery coverage\n\nCompare catalog and help pages against independent native sigrok output,\nincluding full coverage counts, empty matches and boundary offsets.\n\nCo-authored-by: Kaoru0822 <208281322+kaoru0822-kitauji@users.noreply.github.com>\n\n* style(test): format the JVM class fixture\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n---------\n\nCo-authored-by: Kaoru0822 <208281322+kaoru0822-kitauji@users.noreply.github.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>",
+        "author": {
+          "name": "Ysopwnable",
+          "email": "161784452+N0zoM1z0@users.noreply.github.com",
+          "date": "2026-10-13T19:54:14Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -581,7 +645,15 @@
         "e3a31a6e449d23674cadb172ae15f7092b0da9e6",
         "e7f47e5ac08f52a67c3676d2cc74ada1fb4bc651",
         "f2e035f7e586af2ab100b3134832abbc66a963aa"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(wasm): preserve original glue source locations (#2114)\n\n* fix(wasm): preserve original glue source locations\n\n* fix(wasm): retain BOM-prefixed hashbang glue references\n\n* test(wasm): parse the artifact contract before reading glue evidence\n\n* test(wasm): give glue fixtures and assertions a single owner\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n(cherry picked from commit 688defca0f4a3de04eb199f7754f323c68896c3c)\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n(cherry picked from commit 8cac51e12184d56a9ba80a4427b3e6082ddac1ec)\n\n* fix(android): make DEX descriptor pattern portable\n\n(cherry picked from commit 1335bcddc569a1cfb34b6efedcb6f2e3aaaa3357)\n\n* fix: repair the static-check failures on the default branch (#2895)\n\n* fix: repair the static-check failures on the default branch\n\nThe default branch fails its own required `Static checks` job three ways, so\nevery pull request reports that job as failed regardless of its own change.\n\n- `npm run format:check` reports `src/domain/functionComparison.test.ts` and\n  `src/ida/IdaOperationRunner.ts`.\n- `npm run lint` reports a duplicate `import { join } from \"node:path\"` in\n  `tests/boundary/mcp/ghidraInventoryMcp.test.ts` (lines 4 and 17).\n- `npm run typecheck` reports `format: \"devin\"` missing from the client format\n  union in `src/application/SupportedClients.ts`, and an unchecked index in\n  `tests/boundary/cli/clientProfileLifecycle.test.ts`, whose pair array is\n  inferred as `string[][]`.\n\nApply the pinned formatter, drop the duplicate import, list the `\"devin\"` format\nthat its own definition already uses, and mark the pair array `as const`.\n\nValidation: `npm run check:fast` and `npm run format:check` pass.\n\n* fix(setup): keep Devin on the JSON configuration dialect\n\n---------\n\nCo-authored-by: 吴佳浩 <wujiahao@supremind.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n(cherry picked from commit df3d96da801976fdbe37a726c2f4f84af8ffbf90)\n\n---------\n\nCo-authored-by: morluto <morluto@users.noreply.github.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>\nCo-authored-by: 吴佳浩Alben <35291372+XiaoBinGan@users.noreply.github.com>\nCo-authored-by: 吴佳浩 <wujiahao@supremind.com>",
+        "author": {
+          "name": "xin zhuang",
+          "email": "65798732+1052326311@users.noreply.github.com",
+          "date": "2026-10-13T19:20:48Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -597,7 +669,15 @@
         "7702282d5658d1a4bb9972811e0e6c81f6546b48",
         "9b9a5825fa4e367640aab3897989327bb999268a",
         "bc764d2d617db37abcbc637bc7385c59341dd200"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(qlog): list a hidden stream's records without spreading call arguments (#2860)\n\n* fix(qlog): list a hidden stream's records without spreading call arguments\n\nWhen an explicit declaration matched a stream's derived total, the\ndecoder pushed every contribution ordinal with a spread call. A stream\nwith more than ~125k STREAM frames exceeded the engine's argument limit,\nso a valid capture within the input budget failed with RangeError\ninstead of listing the records as incomplete. Push the ordinals in a\nloop.\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n* fix(android): make DEX descriptor pattern portable\n\n---------\n\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>",
+        "author": {
+          "name": "Dragolone",
+          "email": "160818051+Dragolone@users.noreply.github.com",
+          "date": "2026-10-13T19:05:34Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -615,7 +695,15 @@
         "c743ec25036bc73d90856e5bfd12c2e1dd0e91b2",
         "d4ea41191d38c296fdd0727ef2c17838284a6e25",
         "e4186af31be855a127804a8543def43cd77404be"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(process): expose Darwin swiftc compile deadline via env (#2240)\n\n* fix(process): expose Darwin swiftc compile deadline via env\n\nBusy hosts can exceed the hard-coded 60s ownership-helper compile\ntimeout. Honor REA_SWIFTC_COMPILE_TIMEOUT_MS like the other provider\nstartup deadlines, keeping 60000 as the default.\n\nFixes #2184\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\n\n* fix(process): keep the Swift compile deadline with its runtime owner\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n(cherry picked from commit 688defca0f4a3de04eb199f7754f323c68896c3c)\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n(cherry picked from commit 8cac51e12184d56a9ba80a4427b3e6082ddac1ec)\n\n* fix(android): make DEX descriptor pattern portable\n\n(cherry picked from commit 1335bcddc569a1cfb34b6efedcb6f2e3aaaa3357)\n\n* fix: repair the static-check failures on the default branch (#2895)\n\n* fix: repair the static-check failures on the default branch\n\nThe default branch fails its own required `Static checks` job three ways, so\nevery pull request reports that job as failed regardless of its own change.\n\n- `npm run format:check` reports `src/domain/functionComparison.test.ts` and\n  `src/ida/IdaOperationRunner.ts`.\n- `npm run lint` reports a duplicate `import { join } from \"node:path\"` in\n  `tests/boundary/mcp/ghidraInventoryMcp.test.ts` (lines 4 and 17).\n- `npm run typecheck` reports `format: \"devin\"` missing from the client format\n  union in `src/application/SupportedClients.ts`, and an unchecked index in\n  `tests/boundary/cli/clientProfileLifecycle.test.ts`, whose pair array is\n  inferred as `string[][]`.\n\nApply the pinned formatter, drop the duplicate import, list the `\"devin\"` format\nthat its own definition already uses, and mark the pair array `as const`.\n\nValidation: `npm run check:fast` and `npm run format:check` pass.\n\n* fix(setup): keep Devin on the JSON configuration dialect\n\n---------\n\nCo-authored-by: 吴佳浩 <wujiahao@supremind.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n(cherry picked from commit df3d96da801976fdbe37a726c2f4f84af8ffbf90)\n\n---------\n\nCo-authored-by: Cursor <cursoragent@cursor.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: morluto <17176810+morluto@users.noreply.github.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>\nCo-authored-by: 吴佳浩Alben <35291372+XiaoBinGan@users.noreply.github.com>\nCo-authored-by: 吴佳浩 <wujiahao@supremind.com>",
+        "author": {
+          "name": "BeqaKs",
+          "email": "91750923+BeqaKs@users.noreply.github.com",
+          "date": "2026-10-13T18:59:54Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -637,7 +725,15 @@
         "b83432f4c91af0a88f1f79e87b28d1fb774d8910",
         "dec377e8c86076d537c858b2face73339b91a5ea",
         "eaf8919811fd9b4c6dfd3cc0d58c17782fcd9570"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(ghidra): report unapplied PE CodeView PDB limitation (#2283)\n\n* fix(ghidra): report unapplied PE CodeView PDB limitation (#2259)\n\nWhen Ghidra analyzes a PE target that references companion debug symbols\nin its CodeView (IMAGE_DEBUG_TYPE_CODEVIEW / RSDS or NB10) debug directory,\nGhidra's headless analyzer cannot automatically locate or apply the companion\nPDB from isolated runtime directories without companion admission. Procedure\nnames remain analysis-generated (FUN_<address>).\n\nParse CodeView debug metadata (RSDS GUID/age and NB10 age) during PE target\nresolution, and report an Evidence limitation informing callers and agents\nthat referenced debug symbols were not applied and procedure names are\nanalysis-generated.\n\nFixes #2259\n\n* test(pe): group CodeView header coverage separately\n\n* fix(ghidra): avoid contradictory PDB limitations\n\n* fix(android): make DEX descriptor pattern portable\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n\n* style: format identity comparison and IDA runner\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>",
+        "author": {
+          "name": "Tufail Akram",
+          "email": "72789060+akram1089@users.noreply.github.com",
+          "date": "2026-10-13T18:56:26Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -671,7 +767,15 @@
         "d41542d218a4ce5ca1a816235d009df677086eca",
         "e4394384a97c5d7cd0d560b546786965a9c283b5",
         "f01062f295e7f24c0ab585b770e9ba21ff3a6f43"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(frida): drain admitted operations and honor queued cancellation (#2305)\n\n* fix(frida): drain admitted operations and honor queued cancellation\n\n* fix(frida): settle cancelled loads before queued resume\n\n* test(frida): share lifecycle fixtures without duplicating assertions\n\n* fix(frida): preserve operation admission before session close\n\n* test(apple): bound cold archive fixture compilation\n\n* fix(frida): retain cancelled script creation evidence\n\n* test(release): scope preflight schema to selected jobs\n\n* fix(process): report no remaining time after a provider deadline fires\n\nNode timers can fire while performance.now() is still a fraction of a\nmillisecond short of the monotonic deadline. ProviderStartupDeadline then\nreported interruption \"timeout\" and an aborted signal while remainingMs()\nreturned ceil(0.x) = 1, so polling loops guarded by remainingMs() > 0\n(Hopper and Ghidra startup) could run past an elapsed deadline, and the\nreal-timer test \"aborts a bounded wait when its real monotonic deadline\nexpires\" failed intermittently in CI (expected 1 to be 0).\n\nOnce the deadline's own timer has classified a timeout, report zero\nremaining time. A deterministic regression test fires the timer with the\nmonotonic clock 0.4 ms short of the deadline.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n(cherry picked from commit 688defca0f4a3de04eb199f7754f323c68896c3c)\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n(cherry picked from commit 8cac51e12184d56a9ba80a4427b3e6082ddac1ec)\n\n* fix(android): make DEX descriptor pattern portable\n\n(cherry picked from commit 1335bcddc569a1cfb34b6efedcb6f2e3aaaa3357)\n\n* fix: repair the static-check failures on the default branch (#2895)\n\n* fix: repair the static-check failures on the default branch\n\nThe default branch fails its own required `Static checks` job three ways, so\nevery pull request reports that job as failed regardless of its own change.\n\n- `npm run format:check` reports `src/domain/functionComparison.test.ts` and\n  `src/ida/IdaOperationRunner.ts`.\n- `npm run lint` reports a duplicate `import { join } from \"node:path\"` in\n  `tests/boundary/mcp/ghidraInventoryMcp.test.ts` (lines 4 and 17).\n- `npm run typecheck` reports `format: \"devin\"` missing from the client format\n  union in `src/application/SupportedClients.ts`, and an unchecked index in\n  `tests/boundary/cli/clientProfileLifecycle.test.ts`, whose pair array is\n  inferred as `string[][]`.\n\nApply the pinned formatter, drop the duplicate import, list the `\"devin\"` format\nthat its own definition already uses, and mark the pair array `as const`.\n\nValidation: `npm run check:fast` and `npm run format:check` pass.\n\n* fix(setup): keep Devin on the JSON configuration dialect\n\n---------\n\nCo-authored-by: 吴佳浩 <wujiahao@supremind.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n(cherry picked from commit df3d96da801976fdbe37a726c2f4f84af8ffbf90)\n\n---------\n\nCo-authored-by: morluto <morluto@users.noreply.github.com>\nCo-authored-by: Kaoru0822 <208281322+kaoru0822-kitauji@users.noreply.github.com>\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>\nCo-authored-by: 吴佳浩Alben <35291372+XiaoBinGan@users.noreply.github.com>\nCo-authored-by: 吴佳浩 <wujiahao@supremind.com>\nCo-authored-by: OpenAI Codex <codex@openai.com>",
+        "author": {
+          "name": "Rohit Ghumare",
+          "email": "48523873+rohitg00@users.noreply.github.com",
+          "date": "2026-10-13T18:56:00Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -694,7 +798,15 @@
         "e758846b131281dc89a89159fa578ed46b428506",
         "ebaaa79ca02bde4a73013a2a9a781d0b07a57ee4",
         "f4231739d1995882a323567ee34cbcb3fa377dba"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "test(http3): add real MITM capture verification lab (#1997)\n\n* test(http3): add real MITM capture verification lab\n\n* test(http3): register the optional verification command\n\n* fix(http3): preserve the latest verification attempt owner\n\n* test(cli): admit the dyld slice fixture on x64 hosts\n\n* test(http3): verify exact producer TLS connection facts\n\n* test(http3): verify readable capture fields against observed bytes\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n\n* fix(android): make DEX descriptor pattern portable\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n* fix(http3): retain MCP startup diagnostics\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>",
+        "author": {
+          "name": "Luis",
+          "email": "86675342+LuisTaffelli@users.noreply.github.com",
+          "date": "2026-10-13T17:09:19Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -708,7 +820,15 @@
         "bcfa3abccc1c76b130c06a39cd16cace062dc7ce",
         "c1276cd6525ef780476ca6a531ee0b2321610f32",
         "f2c956e2b34f133537969250746a1df3f2854d97"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>",
+        "author": {
+          "name": "Lucien",
+          "email": "164857476+dakjdakd@users.noreply.github.com",
+          "date": "2026-10-13T15:30:31Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -722,7 +842,15 @@
         "3c39a3f536b2b2dfdbab1109e1da949b59661a7e",
         "aed680810aaacbf55d7a75d1959437b347302d0a",
         "eb4db059b0259ff9f050efe0470741d43d5d6153"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "test(adb): isolate cross-platform activity launch regressions (#2226)\n\n* fix(adb): reject timed-out activity launches and retain observations\n\n* test(adb): isolate cross-platform activity launch regressions\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>",
+        "author": {
+          "name": "Lucien",
+          "email": "164857476+dakjdakd@users.noreply.github.com",
+          "date": "2026-10-13T15:30:18Z"
+        }
+      }
     },
     {
       "repo": "cline/cline",
@@ -837,7 +965,15 @@
         "8f2e633dff2ee8eec672d4d7dc1491c2b8e6bc5e",
         "b7fe8b938dce0230343b9ddb81ed136ce06ce2dd",
         "d80b55e11bc47c6f999dac7dcb8382219d65739a"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(adb): preserve existing bugreport archives (#2221)\n\n* fix(adb): preserve existing bugreport archives\n\n* fix(adb): retain bugreports after publication failure\n\nRecord acquired archive facts before publishing, preserve the staging archive when the exclusive copy fails, and keep retained evidence out of automatic cleanup. Reuse the same observation through publication and digest failures.\n\nAdd a real-filesystem ENOSPC regression covering error projection, existing evidence, subsequent collection and provider shutdown. Verified 96 focused tests, static checks and docs on macOS with simulated ADB; no real-device verification.\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>",
+        "author": {
+          "name": "Lucien",
+          "email": "164857476+dakjdakd@users.noreply.github.com",
+          "date": "2026-10-12T16:25:17Z"
+        }
+      }
     },
     {
       "repo": "bytedance/deer-flow",
@@ -1403,6 +1539,38 @@
       "committed_at": "2026-10-11T10:17:53.000+08:00"
     },
     {
+      "repo": "innotelinc/jesus",
+      "sha": "733c0b8c762a11f42245554a81576d4217dc94a7",
+      "branch": "main",
+      "html_url": "https://github.com/innotelinc/jesus/commit/733c0b8c762a11f42245554a81576d4217dc94a7",
+      "title": "fix(browser): seed storage by browser partition",
+      "committed_at": "2026-10-11T10:17:53.000+08:00"
+    },
+    {
+      "repo": "innotelinc/jesus",
+      "sha": "ad75c58dc9dcfa64a99996211fe86b6f87b6ba4e",
+      "branch": "main",
+      "html_url": "https://github.com/innotelinc/jesus/commit/ad75c58dc9dcfa64a99996211fe86b6f87b6ba4e",
+      "title": "fix(javascript): retain runtime scope in bundled module relationships",
+      "committed_at": "2026-10-11T01:36:12.000+08:00"
+    },
+    {
+      "repo": "innotelinc/jesus",
+      "sha": "baf01293db13283c85a174926507dc529b5a6fa8",
+      "branch": "main",
+      "html_url": "https://github.com/innotelinc/jesus/commit/baf01293db13283c85a174926507dc529b5a6fa8",
+      "title": "test(artifacts): verify extraction races with real filesystem changes",
+      "committed_at": "2026-10-10T02:38:33.000+08:00"
+    },
+    {
+      "repo": "innotelinc/jesus",
+      "sha": "612fe497d8961ea62213e1e589da32702ea055b8",
+      "branch": "main",
+      "html_url": "https://github.com/innotelinc/jesus/commit/612fe497d8961ea62213e1e589da32702ea055b8",
+      "title": "fix(browser): release attached viewport overrides without resizing the external page",
+      "committed_at": "2026-10-10T02:33:56.000+08:00"
+    },
+    {
       "repo": "morluto/rea",
       "sha": "a0523b375eb3147f1d2d1e7eb10a2f4546f5d0fc",
       "branch": "main",
@@ -1415,6 +1583,22 @@
       "sha": "5e8fb531e255a4a04fc053c54096f66d5c84cde3",
       "branch": "main",
       "html_url": "https://github.com/morluto/rea/commit/5e8fb531e255a4a04fc053c54096f66d5c84cde3",
+      "title": "fix(artifacts): reject incomplete inventoried extraction",
+      "committed_at": "2026-10-10T01:45:00.000+08:00"
+    },
+    {
+      "repo": "innotelinc/jesus",
+      "sha": "56a1d7b14ac7ec8902f78e457ca588c19d152143",
+      "branch": "main",
+      "html_url": "https://github.com/innotelinc/jesus/commit/56a1d7b14ac7ec8902f78e457ca588c19d152143",
+      "title": "fix(browser): retain attached scenario emulation until cleanup",
+      "committed_at": "2026-10-10T01:45:00.000+08:00"
+    },
+    {
+      "repo": "innotelinc/jesus",
+      "sha": "0df1a09949ade26c77a9ba13e832dee4b673b0b6",
+      "branch": "main",
+      "html_url": "https://github.com/innotelinc/jesus/commit/0df1a09949ade26c77a9ba13e832dee4b673b0b6",
       "title": "fix(artifacts): reject incomplete inventoried extraction",
       "committed_at": "2026-10-10T01:45:00.000+08:00"
     },
@@ -1455,7 +1639,7 @@
     {
       "repo": "Tencent/WeKnora",
       "name": "WeKnora",
-      "stars": 35775,
+      "stars": 35777,
       "description": "Open-source LLM knowledge platform: turn raw documents into a queryable RAG, an autonomous reasoning agent, and a self-maintaining Wiki.",
       "url": "https://github.com/Tencent/WeKnora",
       "badges": [
@@ -1472,7 +1656,7 @@
     {
       "repo": "n8n-io/n8n",
       "name": "n8n",
-      "stars": 208900,
+      "stars": 208914,
       "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
       "url": "https://github.com/n8n-io/n8n",
       "badges": []
@@ -1496,7 +1680,7 @@
     {
       "repo": "bytedance/deer-flow",
       "name": "deer-flow",
-      "stars": 84580,
+      "stars": 84583,
       "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
       "url": "https://github.com/bytedance/deer-flow",
       "badges": [
@@ -1513,7 +1697,7 @@
     {
       "repo": "morluto/rea",
       "name": "Rea",
-      "stars": 402118,
+      "stars": 402370,
       "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
       "url": "https://github.com/morluto/rea",
       "badges": [
@@ -1530,7 +1714,7 @@
     {
       "repo": "volcengine/OpenViking",
       "name": "OpenViking",
-      "stars": 41058,
+      "stars": 41061,
       "description": "Self-evolving Context Database for AI Agents. Unify Agent Memory, Knowledge RAG and Skills.",
       "url": "https://github.com/volcengine/OpenViking",
       "badges": [
@@ -1547,7 +1731,7 @@
     {
       "repo": "cline/cline",
       "name": "cline",
-      "stars": 70991,
+      "stars": 70992,
       "description": "Autonomous coding agent as an SDK, IDE extension, or CLI assistant.",
       "url": "https://github.com/cline/cline",
       "badges": []
@@ -1606,7 +1790,7 @@
     {
       "repo": "infiniflow/ragflow",
       "name": "ragflow",
-      "stars": 93024,
+      "stars": 93026,
       "description": "RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) engine that fuses cutting-edge RAG with Agent capabilities to create a superior context layer for LLMs",
       "url": "https://github.com/infiniflow/ragflow",
       "badges": [
@@ -1623,7 +1807,7 @@
     {
       "repo": "Mintplex-Labs/anything-llm",
       "name": "AnythingLLM",
-      "stars": 67682,
+      "stars": 67683,
       "description": "Stop renting your intelligence. Own it with AnythingLLM. Everything you need for a powerful local-first agent experience ",
       "url": "https://github.com/Mintplex-Labs/anything-llm",
       "badges": [
@@ -1636,6 +1820,14 @@
           "source": "https://github.com/Mintplex-Labs/anything-llm/blob/master/README.md"
         }
       ]
+    },
+    {
+      "repo": "innotelinc/jesus",
+      "name": "jesus",
+      "stars": 0,
+      "description": "The Innotel estate in one tree: 13 products, each directory carrying its own commit history.",
+      "url": "https://github.com/innotelinc/jesus",
+      "badges": []
     },
     {
       "repo": "TanStack/ai",
@@ -1657,7 +1849,7 @@
     {
       "repo": "CherryHQ/cherry-studio",
       "name": "Cherry Studio",
-      "stars": 53051,
+      "stars": 53052,
       "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "badges": [
@@ -1698,7 +1890,7 @@
     {
       "repo": "langgenius/dify",
       "name": "Dify",
-      "stars": 159836,
+      "stars": 159846,
       "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
       "url": "https://github.com/langgenius/dify",
       "badges": []
@@ -1714,7 +1906,7 @@
     {
       "repo": "aaif-goose/goose",
       "name": "Goose",
-      "stars": 55869,
+      "stars": 55871,
       "description": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
       "url": "https://github.com/aaif-goose/goose",
       "badges": [
@@ -1739,7 +1931,7 @@
     {
       "repo": "langchain-ai/deepagents",
       "name": "Deep Agents",
-      "stars": 30687,
+      "stars": 30690,
       "description": "The batteries-included agent harness.",
       "url": "https://github.com/langchain-ai/deepagents",
       "badges": []
@@ -1755,7 +1947,7 @@
     {
       "repo": "open-jarvis/OpenJarvis",
       "name": "OpenJarvis",
-      "stars": 12355,
+      "stars": 12361,
       "description": "Personal AI, On Personal Devices",
       "url": "https://github.com/open-jarvis/OpenJarvis",
       "badges": []
@@ -1763,7 +1955,7 @@
     {
       "repo": "vectorize-io/hindsight",
       "name": "Hindsight",
-      "stars": 55485,
+      "stars": 55500,
       "description": "Hindsight: Agent Memory That Learns",
       "url": "https://github.com/vectorize-io/hindsight",
       "badges": []
@@ -1771,7 +1963,7 @@
     {
       "repo": "NandhaKishorM/laya",
       "name": "Laya",
-      "stars": 34556,
+      "stars": 34561,
       "description": "Non-autoregressive System 1 decision engine. Typed choice, score and yes/no decisions over any text in a single forward pass, in 100+ languages, with a router that picks the right checkpoint per request.",
       "url": "https://github.com/NandhaKishorM/laya",
       "badges": []
@@ -1787,7 +1979,7 @@
     {
       "repo": "deepset-ai/haystack",
       "name": "Haystack",
-      "stars": 26871,
+      "stars": 26872,
       "description": "Open-source AI orchestration framework for building context-engineered, production-ready LLM applications. Design modular pipelines and agent workflows with explicit control over retrieval, routing, memory, and generation. Built for scalable agents, RAG, multimodal applications, semantic search, and conversational systems.",
       "url": "https://github.com/deepset-ai/haystack",
       "badges": []
@@ -1795,12 +1987,12 @@
     {
       "repo": "vercel/ai",
       "name": "AI SDK",
-      "stars": 27574,
+      "stars": 27575,
       "description": "The AI Toolkit for TypeScript. From the creators of Next.js, the AI SDK is a free open-source library for building AI-powered applications and agents ",
       "url": "https://github.com/vercel/ai",
       "badges": []
     }
   ],
-  "updated_at": "2026-10-29T05:46:33+08:00",
-  "signature": "e85796011267206f7f29e10bf3504c1443743d770e765b3333cd9fcc70d2e3c6"
+  "updated_at": "2026-10-29T07:35:17+08:00",
+  "signature": "3ac44ce935f6607ea73fa5277d540ce9d588ffdc0910023eb4c949f9723142af"
 }
