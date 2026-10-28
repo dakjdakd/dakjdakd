@@ -141,7 +141,7 @@ def rate_limited(error):
         error.code == 429 or "secondary rate limit" in str(error.reason).lower())
 
 
-def merged_prs(previous, config, previous_commits=()):
+def merged_prs(previous, config, previous_commits=(), commit_since=None):
     # Keep verified history even when GitHub Search temporarily misses a result.
     prs = {p["html_url"]: p for p in previous if external(p["repo"], config)}
     search_available = True
@@ -151,6 +151,8 @@ def merged_prs(previous, config, previous_commits=()):
         if not search_available:
             return None
         try:
+            if kind == "commits" and commit_since:
+                query += f" committer-date:>={commit_since}"
             return search(kind, query)
         except (HTTPError, IncompleteSearchError) as error:
             if isinstance(error, HTTPError) and not rate_limited(error):
@@ -193,8 +195,11 @@ def merged_prs(previous, config, previous_commits=()):
                 commits[(repo, commit["sha"])] = commit
 
     print("Discovering verified co-author commit credits...", flush=True)
-    queries = [f'"Co-authored-by: {USER}" -user:{USER}'] + [
-        f'"Co-authored-by" "{email}" -user:{USER}' for email in sorted(emails)]
+    # One username term covers both GitHub noreply email formats and author
+    # names. Verify exact email trailers below; search matches alone never count.
+    queries = [f'"Co-authored-by" "{USER}" -user:{USER}'] + [
+        f'"Co-authored-by" "{email}" -user:{USER}' for email in sorted(emails)
+        if USER.lower() not in email.lower()]
     for query in queries:
         for commit in optional_search("commits", query) or []:
             repo = commit["repository"]["full_name"]
@@ -409,7 +414,15 @@ def collect():
 def collect_snapshot():
     old = json.loads(DATA_FILE.read_text(encoding="utf-8")) if DATA_FILE.exists() else {"prs": [], "projects": []}
     config = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
-    prs, commits = merged_prs(old["prs"], config, old.get("commits", []))
+    commit_since = None
+    if old.get("updated_at") and os.environ.get("FULL_HISTORY", "").lower() != "true":
+        now = datetime.now(TZ)
+        previous_update = datetime.fromisoformat(old.get("updated_at", now.isoformat()))
+        # Overlap recent runs for indexing delay; cover a longer outage too.
+        # Daily full scans also discover old commits in PRs merged much later.
+        commit_since = min(now - timedelta(days=7), previous_update - timedelta(days=1))
+        commit_since = commit_since.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    prs, commits = merged_prs(old["prs"], config, old.get("commits", []), commit_since)
     activity = sorted(prs + commits, key=lambda p: p.get("merged_at") or p["committed_at"], reverse=True)
     repos = list(dict.fromkeys(p["repo"] for p in activity))
     existing = {p["repo"]: p for p in old["projects"]}

@@ -133,6 +133,18 @@ assert {p["html_url"] for p in prs} == {
 }
 assert not panel.credited(f"mentions {email} without an author trailer", {email})
 
+# Frequent runs bound commit discovery, keep the full merged-PR query and
+# archived history, and search the two noreply formats together only once.
+with patch.object(panel, "search", return_value=[]) as discover, \
+        patch.object(panel, "api", side_effect=fake_api):
+    recent_prs, recent_commits = panel.merged_prs([archived], {"included_prs": []},
+                                              commit_since="2026-10-22T00:00:00Z")
+assert recent_prs == [archived] and recent_commits == []
+queries = [(call.args[0], call.args[1]) for call in discover.call_args_list]
+assert len(queries) == 3
+assert "committer-date:" not in queries[0][1]
+assert all("committer-date:>=2026-10-22T00:00:00Z" in query for kind, query in queries if kind == "commits")
+
 # Personal accounts and known personal-project copies must be removed from
 # archived history as well as fresh PR, author and co-author search results.
 ownership_config = {"excluded_owners": ["dafyy321-pixel"],
