@@ -1472,7 +1472,7 @@
     {
       "repo": "n8n-io/n8n",
       "name": "n8n",
-      "stars": 208886,
+      "stars": 208887,
       "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
       "url": "https://github.com/n8n-io/n8n",
       "badges": []
@@ -1513,7 +1513,7 @@
     {
       "repo": "morluto/rea",
       "name": "Rea",
-      "stars": 401384,
+      "stars": 401396,
       "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
       "url": "https://github.com/morluto/rea",
       "badges": [
@@ -1763,7 +1763,7 @@
     {
       "repo": "vectorize-io/hindsight",
       "name": "Hindsight",
-      "stars": 55290,
+      "stars": 55305,
       "description": "Hindsight: Agent Memory That Learns",
       "url": "https://github.com/vectorize-io/hindsight",
       "badges": []
@@ -1801,6 +1801,6 @@
       "badges": []
     }
   ],
-  "updated_at": "2026-10-29T01:25:19+08:00",
-  "signature": "03a39e693fbe5a4732db5d51d94bb98797f1a5b81e5a46ef307669405815c62e"
+  "updated_at": "2026-10-29T01:29:22+08:00",
+  "signature": "b1c09aa337ea9462bf9f4ba4f0620e8b3bf9f53270854890b165984577716715"
 }
