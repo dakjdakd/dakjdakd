@@ -183,6 +183,7 @@ def merged_prs(previous, config, previous_commits=(), commit_since=None):
 
     user = api(f"users/{USER}")
     emails = {f"{USER}@users.noreply.github.com", f"{user['id']}+{USER}@users.noreply.github.com"}
+    emails.update(email.lower() for email in config.get("verified_emails", []))
     if user.get("email"):
         emails.add(user["email"].lower())
     authored_commits = optional_search("commits", f"author:{USER} -user:{USER}") or []

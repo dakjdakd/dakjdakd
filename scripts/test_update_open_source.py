@@ -145,6 +145,16 @@ assert len(queries) == 3
 assert "committer-date:" not in queries[0][1]
 assert all("committer-date:>=2026-10-22T00:00:00Z" in query for kind, query in queries if kind == "commits")
 
+# A verified email learned from historical authored commits must still count
+# when the recent window contains only a co-authored commit using that email.
+with patch.object(panel, "search", side_effect=lambda kind, query: [
+        commit("team/library", "verified", "fix\n\nCo-authored-by: Lucien <verified@example.com>")
+        ] if "verified@example.com" in query else []) as discover, \
+        patch.object(panel, "api", side_effect=fake_api):
+    email_prs, _ = panel.merged_prs([], {"included_prs": [], "verified_emails": ["verified@example.com"]},
+                                  commit_since="2026-10-22T00:00:00Z")
+assert [p["html_url"] for p in email_prs] == ["https://github.com/team/library/pull/9"]
+
 # Personal accounts and known personal-project copies must be removed from
 # archived history as well as fresh PR, author and co-author search results.
 ownership_config = {"excluded_owners": ["dafyy321-pixel"],

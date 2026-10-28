@@ -1,4 +1,5 @@
 {
+  "verified_emails": ["1428823446@qq.com"],
   "excluded_owners": ["dafyy321-pixel"],
   "excluded_repositories": ["IbrahimKomba/skill-simmer"],
   "included_prs": [
