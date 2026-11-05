@@ -1717,7 +1717,7 @@
     {
       "repo": "langfuse/langfuse",
       "name": "langfuse",
-      "stars": 37017,
+      "stars": 37023,
       "description": "🪢 Open source agent evals & observability: Trace, evaluate, and improve LLM applications with one open platform.",
       "url": "https://github.com/langfuse/langfuse",
       "badges": []
@@ -1725,7 +1725,7 @@
     {
       "repo": "bytedance/deer-flow",
       "name": "deer-flow",
-      "stars": 84989,
+      "stars": 85001,
       "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
       "url": "https://github.com/bytedance/deer-flow",
       "badges": [
@@ -1742,7 +1742,7 @@
     {
       "repo": "infiniflow/ragflow",
       "name": "ragflow",
-      "stars": 93504,
+      "stars": 93516,
       "description": "RAGFlow is an agent-native database: a Retrieval-Augmented Generation (RAG) engine that grew into context infrastructure.",
       "url": "https://github.com/infiniflow/ragflow",
       "badges": [
@@ -1759,7 +1759,7 @@
     {
       "repo": "web-infra-dev/midscene",
       "name": "midscene",
-      "stars": 15501,
+      "stars": 15503,
       "description": "See interfaces like a human. E2E testing in natural language.",
       "url": "https://github.com/web-infra-dev/midscene",
       "badges": []
@@ -1767,7 +1767,7 @@
     {
       "repo": "Tencent/WeKnora",
       "name": "WeKnora",
-      "stars": 36486,
+      "stars": 36500,
       "description": "Open-source LLM knowledge platform: turn raw documents into a queryable RAG, an autonomous reasoning agent, and a self-maintaining Wiki.",
       "url": "https://github.com/Tencent/WeKnora",
       "badges": [
@@ -1784,7 +1784,7 @@
     {
       "repo": "n8n-io/n8n",
       "name": "n8n",
-      "stars": 209575,
+      "stars": 209577,
       "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
       "url": "https://github.com/n8n-io/n8n",
       "badges": []
@@ -1800,7 +1800,7 @@
     {
       "repo": "morluto/rea",
       "name": "Rea",
-      "stars": 430864,
+      "stars": 431249,
       "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
       "url": "https://github.com/morluto/rea",
       "badges": [
@@ -1817,7 +1817,7 @@
     {
       "repo": "volcengine/OpenViking",
       "name": "OpenViking",
-      "stars": 41542,
+      "stars": 41555,
       "description": "Self-evolving Context Database for AI Agents. Unify Agent Memory, Knowledge RAG and Skills.",
       "url": "https://github.com/volcengine/OpenViking",
       "badges": [
@@ -1834,7 +1834,7 @@
     {
       "repo": "cline/cline",
       "name": "cline",
-      "stars": 71314,
+      "stars": 71320,
       "description": "Autonomous coding agent as an SDK, IDE extension, or CLI assistant.",
       "url": "https://github.com/cline/cline",
       "badges": []
@@ -1859,7 +1859,7 @@
     {
       "repo": "QwenLM/qwen-code",
       "name": "qwen-code",
-      "stars": 29012,
+      "stars": 29014,
       "description": "An open-source AI coding agent that lives in your terminal.",
       "url": "https://github.com/QwenLM/qwen-code",
       "badges": [
@@ -1876,7 +1876,7 @@
     {
       "repo": "milvus-io/milvus",
       "name": "milvus",
-      "stars": 46595,
+      "stars": 46598,
       "description": "Milvus is a high-performance, cloud-native vector database built for scalable vector ANN search",
       "url": "https://github.com/milvus-io/milvus",
       "badges": [
@@ -1893,7 +1893,7 @@
     {
       "repo": "Mintplex-Labs/anything-llm",
       "name": "AnythingLLM",
-      "stars": 67944,
+      "stars": 67953,
       "description": "Stop renting your intelligence. Own it with AnythingLLM. Everything you need for a powerful local-first agent experience ",
       "url": "https://github.com/Mintplex-Labs/anything-llm",
       "badges": [
@@ -1918,7 +1918,7 @@
     {
       "repo": "TanStack/ai",
       "name": "TanStack AI",
-      "stars": 3334,
+      "stars": 3335,
       "description": "🤖 Type-safe, provider-agnostic TypeScript AI SDK for streaming chat, tool calling, agents, and multimodal apps across OpenAI, Anthropic, Gemini, React, Vue, Svelte, and Solid.",
       "url": "https://github.com/TanStack/ai",
       "badges": [
@@ -1935,7 +1935,7 @@
     {
       "repo": "CherryHQ/cherry-studio",
       "name": "Cherry Studio",
-      "stars": 53258,
+      "stars": 53264,
       "description": "Your AI workspace for models, agents, and productivity.",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "badges": [
@@ -1968,7 +1968,7 @@
     {
       "repo": "mcp-use/mcp-use",
       "name": "mcp-use",
-      "stars": 10846,
+      "stars": 10847,
       "description": "The fullstack MCP framework to develop MCP Apps for ChatGPT / Claude & MCP Servers for AI Agents.",
       "url": "https://github.com/mcp-use/mcp-use",
       "badges": []
@@ -1976,7 +1976,7 @@
     {
       "repo": "langgenius/dify",
       "name": "Dify",
-      "stars": 160415,
+      "stars": 160424,
       "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
       "url": "https://github.com/langgenius/dify",
       "badges": []
@@ -1992,7 +1992,7 @@
     {
       "repo": "aaif-goose/goose",
       "name": "Goose",
-      "stars": 56229,
+      "stars": 56232,
       "description": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
       "url": "https://github.com/aaif-goose/goose",
       "badges": [
@@ -2009,7 +2009,7 @@
     {
       "repo": "microsoft/agent-framework",
       "name": "Microsoft Agent Framework",
-      "stars": 14535,
+      "stars": 14538,
       "description": "A framework for building, orchestrating and deploying AI agents and multi-agent workflows with support for Python and .NET.",
       "url": "https://github.com/microsoft/agent-framework",
       "badges": []
@@ -2017,7 +2017,7 @@
     {
       "repo": "langchain-ai/deepagents",
       "name": "Deep Agents",
-      "stars": 30985,
+      "stars": 30987,
       "description": "The batteries-included agent harness.",
       "url": "https://github.com/langchain-ai/deepagents",
       "badges": []
@@ -2033,7 +2033,7 @@
     {
       "repo": "open-jarvis/OpenJarvis",
       "name": "OpenJarvis",
-      "stars": 13184,
+      "stars": 13209,
       "description": "Personal AI, On Personal Devices",
       "url": "https://github.com/open-jarvis/OpenJarvis",
       "badges": []
@@ -2041,7 +2041,7 @@
     {
       "repo": "vectorize-io/hindsight",
       "name": "Hindsight",
-      "stars": 58838,
+      "stars": 58862,
       "description": "Hindsight: Agent Memory That Learns",
       "url": "https://github.com/vectorize-io/hindsight",
       "badges": []
@@ -2049,7 +2049,7 @@
     {
       "repo": "NandhaKishorM/laya",
       "name": "Laya",
-      "stars": 35015,
+      "stars": 35017,
       "description": "Non-autoregressive System 1 decision engine. Typed choice, score and yes/no decisions over any text in a single forward pass, in 100+ languages, with a router that picks the right checkpoint per request.",
       "url": "https://github.com/NandhaKishorM/laya",
       "badges": []
@@ -2065,7 +2065,7 @@
     {
       "repo": "deepset-ai/haystack",
       "name": "Haystack",
-      "stars": 26926,
+      "stars": 26927,
       "description": "Open-source AI orchestration framework for building context-engineered, production-ready LLM applications. Design modular pipelines and agent workflows with explicit control over retrieval, routing, memory, and generation. Built for scalable agents, RAG, multimodal applications, semantic search, and conversational systems.",
       "url": "https://github.com/deepset-ai/haystack",
       "badges": []
@@ -2073,12 +2073,12 @@
     {
       "repo": "vercel/ai",
       "name": "AI SDK",
-      "stars": 27743,
+      "stars": 27747,
       "description": "The AI Toolkit for TypeScript. From the creators of Next.js, the AI SDK is a free open-source library for building AI-powered applications and agents ",
       "url": "https://github.com/vercel/ai",
       "badges": []
     }
   ],
-  "updated_at": "2026-11-05T08:43:41+08:00",
-  "signature": "1e996096b84b9a972e9c270d55551173693b216717a58f8a8c3da0c65522954a"
+  "updated_at": "2026-11-05T10:55:57+08:00",
+  "signature": "ee9c366a3286daaf8d3cbe29f0231d7e3e3e50b1a7bceaf03b23841c06c668ca"
 }
