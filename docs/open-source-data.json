@@ -69,7 +69,15 @@
         "e69f27fba08b730e9f6d6df1b108a0a15dbc9877",
         "e6fa5bbe84e535de5bb93ed8d55010e2892e57ec",
         "f069727642cd0974cf74a7e75aee88791149f473"
-      ]
+      ],
+      "merge_commit_fingerprint": {
+        "message": "fix(web-capture): bound the mitmproxy headline facet index (#2876)\n\n* fix(web-capture): keep mitmproxy request targets and status codes in previews\n\nCapture previews selected HAR/SAZ headline names (url, status) only, so a\nnative mitmproxy record lost its request target (scheme, host, port,\nauthority, path) and its status_code while keeping the reason phrase, and\nthe matching numeric sidecars were filtered out. Select those mitmproxy\nheadline fields too; headers and payloads stay omitted.\n\n* fix(comparison): recheck historical calls-only changes (#2223)\n\n* fix(comparison): preserve incomplete function call evidence\n\nKeep missing, unknown, partial and unresolved call relationships unknown in function comparisons and reconstruction claims. Aggregate IDA caller and callee coverage without overwriting uncertainty.\n\nValidate with 144 focused tests, typecheck/lint, docs checks and test discovery. Real providers were not verified; the full headless IDA session suite requires unavailable Windows native controls.\n\n* fix(comparison): recheck historical calls-only changes\n\n---------\n\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\n\n* fix(ci): isolate Linux Hopper process fixture inventory\n\n* fix(android): make DEX descriptor pattern portable\n\n* style: format comparison and IDA sources\n\n* fix(web-capture): preview mitmproxy targets only as safe scalars\n\nSelect the mitmproxy target and status fields only for mitmproxy\nrecords, only when they are scalars, and the path only in origin form.\nAn absolute, network-path or otherwise ambiguous path spelling can carry\nuserinfo that the native bridge's redaction does not recognise, and a\nnested value could copy an arbitrary record subtree into the preview;\nboth stay in complete record pages. Other formats keep their existing\nheadline fields.\n\n* fix(web-capture): keep the asterisk-form OPTIONS target in mitmproxy previews\n\n* fix(web-capture): exclude ambiguous and oversized mitmproxy targets from previews\n\nOrigin-form checks alone accepted slash-backslash and slash-control\nspellings such as /\\user:password@host/a, which WHATWG resolves as an\nauthority with credentials and the recorded transport-URL interpretation\nalready treats as ambiguous credentials. Preview a mitmproxy path only\nwhen parseRecordedTransportUrl finds no credentials, and omit mitmproxy\nheadline strings longer than 8 KiB so one record cannot exceed the reply\nbudget; both stay in complete record pages.\n\n* fix(web-capture): keep userinfo-bearing mitmproxy target fields out of previews\n\nNative redaction covers only request path and authority, so a malformed\nstate such as host \"user:password@example.test\" passed through the\npreview. Omit every non-path mitmproxy headline string that contains a\nuserinfo marker (@); valid schemes, hosts and ports never do, and the\nvalue stays in complete record pages.\n\n* fix(web-capture): admit mitmproxy headline values only in their well-formed shapes\n\nA per-string length cap still let a malformed capture fill every target\nslot with escape-heavy text, so one default preview page could expand to\nabout 18 MiB of JSON. Preview each mitmproxy field only in its own shape:\na short scheme token, host/authority without controls, whitespace or\nuserinfo markers, integer port and status code, and a path of at most\n2 KiB without control characters. That bounds every record's headline to\nabout 4 KiB serialized, even for an escape-heavy path.\n\n* fix(web-capture): bind mitmproxy headlines to their message side and integer type\n\nSelect mitmproxy target fields only from the request and status_code\nonly from the response, so an unknown scalar extension such as\nresponse.path or request.status_code is not promoted to a headline.\nAdmit port and status_code only when the record's numeric sidecar\nreports the producer's integer type; a native float such as 443.0 is\notherwise indistinguishable from 443 after JSON parsing.\n\n* fix(web-capture): require one canonical integer sidecar for mitmproxy numeric headlines\n\nAn inline parent could pair request.port 443 with an integer sidecar\nwhose literal is unbounded or does not represent the value, or with\nduplicate sidecars, and the selected-pointer filter would copy them into\nthe preview. Admit port and status_code only with exactly one integer\nsidecar whose literal is the value's canonical decimal, which also\nbounds the copied literal to a few characters.\n\n* fix(web-capture): add mitmproxy headlines only for HTTP flows\n\nThe mitmproxy container format does not make every retained flow HTTP; the bridge keeps non-HTTP and unknown flow states with their extensions. Add the mitmproxy target and status candidates only when the record's own type is \"http\".\n\n* fix(web-capture): require consistent numeric sidecars for every mitmproxy headline\n\nSelecting a field also selects its numeric sidecars, so a string target such as request.path with an unrelated multi-megabyte sidecar copied that literal into the preview. Admit integer slots only with exactly one canonical integer sidecar and string slots only with no sidecar.\n\n* fix(web-capture): fail closed on any userinfo marker in previewed mitmproxy paths\n\nURL parsing can fail before recognising userinfo: /\\user:password@example.test:65536/a has an invalid port, so the parser reported no credentials and the path was previewed with them. Every userinfo needs \"@\", so preview a path only when it contains none and does not start with // or /\\; such paths stay on complete pages. The parser check is no longer needed.\n\n* fix(web-capture): never promote a redacted pointer to a mitmproxy headline\n\nInline or imported Evidence can carry a value at a pointer that its own redactions mark as sensitive. Skip any mitmproxy headline whose pointer has a redaction entry, so a preview never re-emits a value the record says was redacted.\n\n* fix(web-capture): check integer headline types before comparing sidecar literals\n\nThe sidecar comparison called String(value) before the numeric shape check, so an inline object such as {\"toString\": null} at request.port threw a TypeError out of the view instead of being omitted. Require a number before canonicalizing it.\n\n* fix(web-capture): honor ancestor value redactions before selecting mitmproxy headlines\n\nA value redaction at /request or the record root excludes its whole subtree, but only exact-pointer matches were honored, so contradictory inline Evidence could still preview /request/host or /request/path. Treat a value redaction as covering every descendant pointer; a property-name redaction still only identifies the parent of an omitted key and hides no sibling values.\n\n* fix(web-capture): treat redacted byte descriptors as exclusions for mitmproxy headlines\n\nProducers mark excluded bytes with a redacted binary descriptor as well as a redaction entry, and the record schema accepts either facet alone. Skip a mitmproxy headline when a redacted descriptor covers its pointer, so contradictory Evidence that keeps the value cannot preview it.\n\n* fix(web-capture): refuse a redacted flow type as the mitmproxy HTTP discriminator\n\nContradictory Evidence can keep type \"http\" while marking /type redacted. Apply the same redaction check to /type before treating the flow as HTTP, so no mitmproxy headline is added when the flow kind is unavailable.\n\n* fix(web-capture): refuse mitmproxy headlines under contradictory numeric sidecars\n\nA numeric sidecar records that the producer held a number at that pointer. Treat the flow as HTTP only when /type has no sidecar of its own, and promote a mitmproxy headline only when no ancestor (the record root, /request or /response) carries one.\n\n* fix(web-capture): require a textual flow type before adding mitmproxy headlines\n\nmitmproxy's flow state carries type as a string. When the native value was bytes, the bridge shows the UTF-8 display text \"http\" next to a retained binary descriptor, so the producer did not supply the discriminator mitmproxy defines. Treat the flow as HTTP only when /type has no numeric sidecar and no binary descriptor at or above it.\n\n* fix(web-capture): refuse mitmproxy headlines under byte-valued ancestors\n\nThe mitmproxy bridge emits either a byte descriptor for a value or children for a dictionary, never both. Treat a byte descriptor on an ancestor like a numeric sidecar, and refuse a byte descriptor on an integer headline, while keeping the exact descriptor of byte-backed string fields such as the request path.\n\n* fix(web-capture): check child facets and byte provenance of mitmproxy headlines\n\nA facet beneath a scalar coordinate says the producer held a container there, so refuse the flow type or a headline field with a numeric sidecar, byte descriptor or redaction below it. A string headline may carry at most one byte descriptor, and only retained mitmproxy producer bytes whose content is the value's UTF-8; HAR content bytes or mismatched content keep it out.\n\n* fix(web-capture): verify the byte count and digest of byte-backed headlines\n\nThe record schema checks a descriptor's length and digest shapes, not their relation to its content. Require a byte-backed string headline's descriptor to match the value's UTF-8 in content, byte count and SHA-256 before promoting it.\n\n* fix(web-capture): reject byte-backed headlines without a UTF-8 form\n\nBuffer.from replaces an unpaired surrogate with U+FFFD bytes, so a descriptor for those bytes matched a string no producer could have decoded. Require the value to round-trip through UTF-8 before comparing it with its descriptor, as CaptureRedaction already does.\n\n* fix(web-capture): index mitmproxy facets once and refuse non-UTF-8 targets\n\nReject host, authority and path text containing an unpaired surrogate whether or not a byte descriptor backs it, since no producer could have reported such text. Build a per-record index of facet pointers (sidecars and descriptors by pointer, scalar pointers, container ancestors, withheld values and omitted names) once, only for mitmproxy HTTP records, so each headline check is a few set lookups instead of several passes over every facet array.\n\n* fix(web-capture): bound the mitmproxy facet index to headline coordinates\n\nFacet pointers have no length or depth bound, and recording every ancestor kept one set entry per prefix (a million for a 1 MB pointer). Record only the fixed headline coordinates (/type and the request/response target and status fields) that have a facet beneath them, examining prefixes no longer than those coordinates.\n\n* fix(web-capture): index only facets at headline coordinates and their ancestors\n\nGrouping every numeric sidecar and byte descriptor allocated an entry per facet even though only /type, the request/response headline fields and their ancestors are queried. Keep facets only at those pointers (at most two per pointer, which already decides every check), and let other facets merely mark the headline coordinates they lie beneath, using prefix comparisons that derive no strings.\n\n* test(web-capture): pin headline omissions and controls beside many unrelated facets\n\nThe bounded facet index must not change what a mitmproxy preview withholds or keeps. Beside 20,000 unrelated sidecars, a redacted host and a path with a facet beneath it stay withheld while the scheme, port and status remain, with only their own sidecars retained. The test passes against both the current main projection and this change.\n\n* test(web-capture): count long set additions in the million-character pointer tests\n\nThe two million-character pointer tests had no time or size bound, so on\nNode 22 and 24 they passed against the old ancestor index too, and only\nNode 26 caught a regression by running out of memory. Count the strings\nlonger than 1,000 characters the preview adds to sets instead: only the\npointer and strings cut from it are that long, the old index added\n999,000 and 499,507 of them, and the new index adds none.\n\n---------\n\nCo-authored-by: Lucien <164857476+dakjdakd@users.noreply.github.com>\nCo-authored-by: morluto <76467478+morluto@users.noreply.github.com>\nCo-authored-by: Kaoru0822 <208281322+kaoru0822-kitauji@users.noreply.github.com>\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+        "author": {
+          "name": "Dragolone",
+          "email": "160818051+Dragolone@users.noreply.github.com",
+          "date": "2026-11-06T06:53:14Z"
+        }
+      }
     },
     {
       "repo": "morluto/rea",
@@ -1691,6 +1699,14 @@
   ],
   "commits": [
     {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "84e409c9637e05d33134b153a47fdba0d0001adb",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/84e409c9637e05d33134b153a47fdba0d0001adb",
+      "title": "fix(web-capture): bound the mitmproxy headline facet index (#2876)",
+      "committed_at": "2026-11-06T14:53:14.000+08:00"
+    },
+    {
       "repo": "morluto/rea",
       "sha": "8b4c3de3b3a3b580adec266f94f29ccedf1da228",
       "branch": "main",
@@ -1799,7 +1815,7 @@
     {
       "repo": "QwenLM/qwen-code",
       "name": "qwen-code",
-      "stars": 29110,
+      "stars": 29123,
       "description": "An open-source AI coding agent that lives in your terminal.",
       "url": "https://github.com/QwenLM/qwen-code",
       "badges": [
@@ -1814,9 +1830,26 @@
       ]
     },
     {
+      "repo": "potentialgenie/rea_tool",
+      "name": "rea_tool",
+      "stars": 0,
+      "description": "",
+      "url": "https://github.com/potentialgenie/rea_tool",
+      "badges": [
+        {
+          "kind": "ts",
+          "name": "GitHub Trending",
+          "label": "TRENDING RECORD",
+          "url": "https://trendshift.io/repositories/82054?utm_source=repository-badge&utm_medium=badge&utm_campaign=badge-repository-82054",
+          "image": "https://trendshift.io/api/badge/repositories/82054",
+          "source": "https://github.com/potentialgenie/rea_tool/blob/main/README.md"
+        }
+      ]
+    },
+    {
       "repo": "morluto/rea",
       "name": "Rea",
-      "stars": 444114,
+      "stars": 445333,
       "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
       "url": "https://github.com/morluto/rea",
       "badges": [
@@ -1833,7 +1866,7 @@
     {
       "repo": "langfuse/langfuse",
       "name": "langfuse",
-      "stars": 37167,
+      "stars": 37183,
       "description": "🪢 Open source agent evals & observability: Trace, evaluate, and improve LLM applications with one open platform.",
       "url": "https://github.com/langfuse/langfuse",
       "badges": []
@@ -1841,7 +1874,7 @@
     {
       "repo": "bytedance/deer-flow",
       "name": "deer-flow",
-      "stars": 85154,
+      "stars": 85171,
       "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
       "url": "https://github.com/bytedance/deer-flow",
       "badges": [
@@ -1858,7 +1891,7 @@
     {
       "repo": "infiniflow/ragflow",
       "name": "ragflow",
-      "stars": 93791,
+      "stars": 93833,
       "description": "RAGFlow is an agent-native database: a Retrieval-Augmented Generation (RAG) engine that grew into context infrastructure.",
       "url": "https://github.com/infiniflow/ragflow",
       "badges": [
@@ -1875,7 +1908,7 @@
     {
       "repo": "web-infra-dev/midscene",
       "name": "midscene",
-      "stars": 15546,
+      "stars": 15553,
       "description": "See interfaces like a human. E2E testing in natural language.",
       "url": "https://github.com/web-infra-dev/midscene",
       "badges": []
@@ -1883,7 +1916,7 @@
     {
       "repo": "Tencent/WeKnora",
       "name": "WeKnora",
-      "stars": 36869,
+      "stars": 36959,
       "description": "Open-source LLM knowledge platform: turn raw documents into a queryable RAG, an autonomous reasoning agent, and a self-maintaining Wiki.",
       "url": "https://github.com/Tencent/WeKnora",
       "badges": [
@@ -1900,7 +1933,7 @@
     {
       "repo": "n8n-io/n8n",
       "name": "n8n",
-      "stars": 209863,
+      "stars": 209894,
       "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
       "url": "https://github.com/n8n-io/n8n",
       "badges": []
@@ -1908,7 +1941,7 @@
     {
       "repo": "strands-agents/harness-sdk",
       "name": "Harness SDK",
-      "stars": 9080,
+      "stars": 9084,
       "description": "Build an agent harness and control it end-to-end. Open-source SDK for production AI agents in Python & TypeScript - any model, any cloud.",
       "url": "https://github.com/strands-agents/harness-sdk",
       "badges": []
@@ -1916,7 +1949,7 @@
     {
       "repo": "volcengine/OpenViking",
       "name": "OpenViking",
-      "stars": 41824,
+      "stars": 41849,
       "description": "Self-evolving Context Database for AI Agents. Unify Agent Memory, Knowledge RAG and Skills.",
       "url": "https://github.com/volcengine/OpenViking",
       "badges": [
@@ -1933,7 +1966,7 @@
     {
       "repo": "cline/cline",
       "name": "cline",
-      "stars": 71474,
+      "stars": 71487,
       "description": "Autonomous coding agent as an SDK, IDE extension, or CLI assistant.",
       "url": "https://github.com/cline/cline",
       "badges": []
@@ -1941,7 +1974,7 @@
     {
       "repo": "dream-num/univer",
       "name": "Univer",
-      "stars": 22925,
+      "stars": 22936,
       "description": "Build your own AI office with Univer Office SDK. Bring editing, calculation, collaboration, and file processing into your product for people and AI agents. Built on an extensible open-source core.",
       "url": "https://github.com/dream-num/univer",
       "badges": [
@@ -1958,7 +1991,7 @@
     {
       "repo": "milvus-io/milvus",
       "name": "milvus",
-      "stars": 46612,
+      "stars": 46614,
       "description": "Milvus is a high-performance, cloud-native vector database built for scalable vector ANN search",
       "url": "https://github.com/milvus-io/milvus",
       "badges": [
@@ -1975,7 +2008,7 @@
     {
       "repo": "Mintplex-Labs/anything-llm",
       "name": "AnythingLLM",
-      "stars": 68079,
+      "stars": 68098,
       "description": "Stop renting your intelligence. Own it with AnythingLLM. Everything you need for a powerful local-first agent experience ",
       "url": "https://github.com/Mintplex-Labs/anything-llm",
       "badges": [
@@ -2000,7 +2033,7 @@
     {
       "repo": "TanStack/ai",
       "name": "TanStack AI",
-      "stars": 3341,
+      "stars": 3342,
       "description": "🤖 Type-safe, provider-agnostic TypeScript AI SDK for streaming chat, tool calling, agents, and multimodal apps across OpenAI, Anthropic, Gemini, React, Vue, Svelte, and Solid.",
       "url": "https://github.com/TanStack/ai",
       "badges": [
@@ -2017,7 +2050,7 @@
     {
       "repo": "CherryHQ/cherry-studio",
       "name": "Cherry Studio",
-      "stars": 53350,
+      "stars": 53367,
       "description": "Your AI workspace for models, agents, and productivity.",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "badges": [
@@ -2058,7 +2091,7 @@
     {
       "repo": "langgenius/dify",
       "name": "Dify",
-      "stars": 160699,
+      "stars": 160742,
       "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
       "url": "https://github.com/langgenius/dify",
       "badges": []
@@ -2066,7 +2099,7 @@
     {
       "repo": "aoci-spec/aoci-code",
       "name": "aoci-code",
-      "stars": 1880,
+      "stars": 1885,
       "description": "A persistent, Git-versioned map of your whole codebase and database schema that coding agents read before they touch anything. Local-first MCP server + CLI in Go: a governed repository index of code knowledge that gives Claude Code, Codex, Cursor, and opencode long-term context, memory, and code intelligence.",
       "url": "https://github.com/aoci-spec/aoci-code",
       "badges": []
@@ -2074,7 +2107,7 @@
     {
       "repo": "aaif-goose/goose",
       "name": "Goose",
-      "stars": 56377,
+      "stars": 56389,
       "description": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
       "url": "https://github.com/aaif-goose/goose",
       "badges": [
@@ -2091,7 +2124,7 @@
     {
       "repo": "microsoft/agent-framework",
       "name": "Microsoft Agent Framework",
-      "stars": 14594,
+      "stars": 14602,
       "description": "A framework for building, orchestrating and deploying AI agents and multi-agent workflows with support for Python and .NET.",
       "url": "https://github.com/microsoft/agent-framework",
       "badges": []
@@ -2099,7 +2132,7 @@
     {
       "repo": "langchain-ai/deepagents",
       "name": "Deep Agents",
-      "stars": 31117,
+      "stars": 31137,
       "description": "The batteries-included agent harness.",
       "url": "https://github.com/langchain-ai/deepagents",
       "badges": []
@@ -2115,7 +2148,7 @@
     {
       "repo": "open-jarvis/OpenJarvis",
       "name": "OpenJarvis",
-      "stars": 13980,
+      "stars": 14028,
       "description": "Personal AI, On Personal Devices",
       "url": "https://github.com/open-jarvis/OpenJarvis",
       "badges": []
@@ -2123,7 +2156,7 @@
     {
       "repo": "vectorize-io/hindsight",
       "name": "Hindsight",
-      "stars": 59933,
+      "stars": 60008,
       "description": "Hindsight: Agent Memory That Learns",
       "url": "https://github.com/vectorize-io/hindsight",
       "badges": []
@@ -2131,7 +2164,7 @@
     {
       "repo": "NandhaKishorM/laya",
       "name": "Laya",
-      "stars": 35245,
+      "stars": 35266,
       "description": "Non-autoregressive System 1 decision engine. Typed choice, score and yes/no decisions over any text in a single forward pass, in 100+ languages, with a router that picks the right checkpoint per request.",
       "url": "https://github.com/NandhaKishorM/laya",
       "badges": []
@@ -2147,7 +2180,7 @@
     {
       "repo": "deepset-ai/haystack",
       "name": "Haystack",
-      "stars": 26944,
+      "stars": 26946,
       "description": "Open-source AI orchestration framework for building context-engineered, production-ready LLM applications. Design modular pipelines and agent workflows with explicit control over retrieval, routing, memory, and generation. Built for scalable agents, RAG, multimodal applications, semantic search, and conversational systems.",
       "url": "https://github.com/deepset-ai/haystack",
       "badges": []
@@ -2155,12 +2188,12 @@
     {
       "repo": "vercel/ai",
       "name": "AI SDK",
-      "stars": 27819,
+      "stars": 27827,
       "description": "The AI Toolkit for TypeScript. From the creators of Next.js, the AI SDK is a free open-source library for building AI-powered applications and agents ",
       "url": "https://github.com/vercel/ai",
       "badges": []
     }
   ],
-  "updated_at": "2026-11-09T11:04:53+08:00",
-  "signature": "9512bcb2faf8c5b6bfe20dffdf8fdf5ff96073c459572c95d257abc1e42f7b65"
+  "updated_at": "2026-11-09T19:20:53+08:00",
+  "signature": "87b8c19f7328293a15ef419743adbc49376259b5504d5f48bf6456faa5cdfce9"
 }
