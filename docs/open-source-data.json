@@ -1707,6 +1707,126 @@
       "committed_at": "2026-11-06T14:53:14.000+08:00"
     },
     {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "1a3ff9e634749e110639c6448a3ab1631044ad1c",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/1a3ff9e634749e110639c6448a3ab1631044ad1c",
+      "title": "docs(go): clarify cumulative build-info search budget (#2731)",
+      "committed_at": "2026-10-22T03:18:31.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "33616cd206da8f7dc91b63e977594f1a9cd13818",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/33616cd206da8f7dc91b63e977594f1a9cd13818",
+      "title": "chore(main): release rea-agents 6.5.0 (#1693)",
+      "committed_at": "2026-10-14T20:31:45.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "3da3175dca659eb07078d78d5396da60bd443920",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/3da3175dca659eb07078d78d5396da60bd443920",
+      "title": "fix(electron): reject non-executable paths and contain launch rejections (#2705)",
+      "committed_at": "2026-10-14T07:30:14.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "95ce2066e96b8ab1aab8ad055d597a7fa030708f",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/95ce2066e96b8ab1aab8ad055d597a7fa030708f",
+      "title": "fix(javascript): preserve Electron runtime entrypoint paths (#2742)",
+      "committed_at": "2026-10-14T06:39:17.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "d074f7515f6d8cb0c930f51efe45c5893be1af82",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/d074f7515f6d8cb0c930f51efe45c5893be1af82",
+      "title": "fix(artifacts): preserve Mach-O load-command string identity (#2110)",
+      "committed_at": "2026-10-14T06:38:32.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "7465f9d3898eeca69bb524f5ad1d1e466af7e439",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/7465f9d3898eeca69bb524f5ad1d1e466af7e439",
+      "title": "test(signals): verify native decoder discovery coverage (#2818)",
+      "committed_at": "2026-10-14T03:54:14.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "219d9302be74473bff631ff98bbc3bff0827a22d",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/219d9302be74473bff631ff98bbc3bff0827a22d",
+      "title": "fix(wasm): preserve original glue source locations (#2114)",
+      "committed_at": "2026-10-14T03:20:48.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "2c3ee3c032e34d73ea5ad70d2ba1b1ccb6cfea67",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/2c3ee3c032e34d73ea5ad70d2ba1b1ccb6cfea67",
+      "title": "fix(qlog): list a hidden stream's records without spreading call arguments (#2860)",
+      "committed_at": "2026-10-14T03:05:34.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "3e6c9d086d97629af0895e733eb3cb2a243ec8b6",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/3e6c9d086d97629af0895e733eb3cb2a243ec8b6",
+      "title": "fix(process): expose Darwin swiftc compile deadline via env (#2240)",
+      "committed_at": "2026-10-14T02:59:54.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "700c7c99e7641592dd02c3169ddd0888d2e27f20",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/700c7c99e7641592dd02c3169ddd0888d2e27f20",
+      "title": "fix(ghidra): report unapplied PE CodeView PDB limitation (#2283)",
+      "committed_at": "2026-10-14T02:56:26.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "05e51b3fdbf0df81f0fa69c3b511666b54e510d2",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/05e51b3fdbf0df81f0fa69c3b511666b54e510d2",
+      "title": "fix(frida): drain admitted operations and honor queued cancellation (#2305)",
+      "committed_at": "2026-10-14T02:56:00.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "6cf2ac797d39c7011b9d4f121e10498283ba36ed",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/6cf2ac797d39c7011b9d4f121e10498283ba36ed",
+      "title": "test(http3): add real MITM capture verification lab (#1997)",
+      "committed_at": "2026-10-14T01:09:19.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "b03628f4b37d96913b0293887562535227157ff5",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/b03628f4b37d96913b0293887562535227157ff5",
+      "title": "fix(capture): end special-scheme URL authorities at a backslash (#2767)",
+      "committed_at": "2026-10-13T21:46:15.000-07:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "794949f38a50fa6117c739f138f2b4ce3e8cb7d2",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/794949f38a50fa6117c739f138f2b4ce3e8cb7d2",
+      "title": "fix(uninstall): remove the REA-owned ZCode fallback registration (#2783)",
+      "committed_at": "2026-10-13T17:33:26.000-07:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "d05d2b59af0cd70ff8e2638eded8a4c95cf24db6",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/d05d2b59af0cd70ff8e2638eded8a4c95cf24db6",
+      "title": "fix(browser): seed storage by browser partition",
+      "committed_at": "2026-10-11T10:17:53.000+08:00"
+    },
+    {
       "repo": "morluto/rea",
       "sha": "8b4c3de3b3a3b580adec266f94f29ccedf1da228",
       "branch": "main",
@@ -1731,12 +1851,28 @@
       "committed_at": "2026-10-11T01:36:12.000+08:00"
     },
     {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "05bffe230b5750b396c652236045dea4ca81d038",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/05bffe230b5750b396c652236045dea4ca81d038",
+      "title": "test(artifacts): verify extraction races with real filesystem changes",
+      "committed_at": "2026-10-10T02:38:33.000+08:00"
+    },
+    {
       "repo": "innotelinc/jesus",
       "sha": "baf01293db13283c85a174926507dc529b5a6fa8",
       "branch": "main",
       "html_url": "https://github.com/innotelinc/jesus/commit/baf01293db13283c85a174926507dc529b5a6fa8",
       "title": "test(artifacts): verify extraction races with real filesystem changes",
       "committed_at": "2026-10-10T02:38:33.000+08:00"
+    },
+    {
+      "repo": "potentialgenie/rea_tool",
+      "sha": "d4e82d99749855502f1a75b6a8b84b7cb5a66929",
+      "branch": "main",
+      "html_url": "https://github.com/potentialgenie/rea_tool/commit/d4e82d99749855502f1a75b6a8b84b7cb5a66929",
+      "title": "fix(browser): release attached viewport overrides without resizing the external page",
+      "committed_at": "2026-10-10T02:33:56.000+08:00"
     },
     {
       "repo": "innotelinc/jesus",
@@ -1815,7 +1951,7 @@
     {
       "repo": "QwenLM/qwen-code",
       "name": "qwen-code",
-      "stars": 29137,
+      "stars": 29143,
       "description": "An open-source AI coding agent that lives in your terminal.",
       "url": "https://github.com/QwenLM/qwen-code",
       "badges": [
@@ -1849,7 +1985,7 @@
     {
       "repo": "morluto/rea",
       "name": "Rea",
-      "stars": 446650,
+      "stars": 447198,
       "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
       "url": "https://github.com/morluto/rea",
       "badges": [
@@ -1866,7 +2002,7 @@
     {
       "repo": "langfuse/langfuse",
       "name": "langfuse",
-      "stars": 37204,
+      "stars": 37218,
       "description": "🪢 Open source agent evals & observability: Trace, evaluate, and improve LLM applications with one open platform.",
       "url": "https://github.com/langfuse/langfuse",
       "badges": []
@@ -1874,7 +2010,7 @@
     {
       "repo": "bytedance/deer-flow",
       "name": "deer-flow",
-      "stars": 85193,
+      "stars": 85195,
       "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
       "url": "https://github.com/bytedance/deer-flow",
       "badges": [
@@ -1891,7 +2027,7 @@
     {
       "repo": "infiniflow/ragflow",
       "name": "ragflow",
-      "stars": 93887,
+      "stars": 93910,
       "description": "RAGFlow is an agent-native database: a Retrieval-Augmented Generation (RAG) engine that grew into context infrastructure.",
       "url": "https://github.com/infiniflow/ragflow",
       "badges": [
@@ -1908,7 +2044,7 @@
     {
       "repo": "web-infra-dev/midscene",
       "name": "midscene",
-      "stars": 15559,
+      "stars": 15560,
       "description": "See interfaces like a human. E2E testing in natural language.",
       "url": "https://github.com/web-infra-dev/midscene",
       "badges": []
@@ -1916,7 +2052,7 @@
     {
       "repo": "Tencent/WeKnora",
       "name": "WeKnora",
-      "stars": 36997,
+      "stars": 37019,
       "description": "Open-source LLM knowledge platform: turn raw documents into a queryable RAG, an autonomous reasoning agent, and a self-maintaining Wiki.",
       "url": "https://github.com/Tencent/WeKnora",
       "badges": [
@@ -1933,7 +2069,7 @@
     {
       "repo": "n8n-io/n8n",
       "name": "n8n",
-      "stars": 209927,
+      "stars": 209943,
       "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
       "url": "https://github.com/n8n-io/n8n",
       "badges": []
@@ -1941,7 +2077,7 @@
     {
       "repo": "strands-agents/harness-sdk",
       "name": "Harness SDK",
-      "stars": 9091,
+      "stars": 9092,
       "description": "Build an agent harness and control it end-to-end. Open-source SDK for production AI agents in Python & TypeScript - any model, any cloud.",
       "url": "https://github.com/strands-agents/harness-sdk",
       "badges": []
@@ -1949,7 +2085,7 @@
     {
       "repo": "volcengine/OpenViking",
       "name": "OpenViking",
-      "stars": 41873,
+      "stars": 41881,
       "description": "Self-evolving Context Database for AI Agents. Unify Agent Memory, Knowledge RAG and Skills.",
       "url": "https://github.com/volcengine/OpenViking",
       "badges": [
@@ -1966,7 +2102,7 @@
     {
       "repo": "cline/cline",
       "name": "cline",
-      "stars": 71464,
+      "stars": 71468,
       "description": "Autonomous coding agent as an SDK, IDE extension, or CLI assistant.",
       "url": "https://github.com/cline/cline",
       "badges": []
@@ -1974,7 +2110,7 @@
     {
       "repo": "dream-num/univer",
       "name": "Univer",
-      "stars": 22942,
+      "stars": 23025,
       "description": "Build your own AI office with Univer Office SDK. Bring editing, calculation, collaboration, and file processing into your product for people and AI agents. Built on an extensible open-source core.",
       "url": "https://github.com/dream-num/univer",
       "badges": [
@@ -1991,7 +2127,7 @@
     {
       "repo": "milvus-io/milvus",
       "name": "milvus",
-      "stars": 46618,
+      "stars": 46621,
       "description": "Milvus is a high-performance, cloud-native vector database built for scalable vector ANN search",
       "url": "https://github.com/milvus-io/milvus",
       "badges": [
@@ -2008,7 +2144,7 @@
     {
       "repo": "Mintplex-Labs/anything-llm",
       "name": "AnythingLLM",
-      "stars": 68114,
+      "stars": 68117,
       "description": "Stop renting your intelligence. Own it with AnythingLLM. Everything you need for a powerful local-first agent experience ",
       "url": "https://github.com/Mintplex-Labs/anything-llm",
       "badges": [
@@ -2050,7 +2186,7 @@
     {
       "repo": "CherryHQ/cherry-studio",
       "name": "Cherry Studio",
-      "stars": 53380,
+      "stars": 53382,
       "description": "Your AI workspace for models, agents, and productivity.",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "badges": [
@@ -2083,7 +2219,7 @@
     {
       "repo": "mcp-use/mcp-use",
       "name": "mcp-use",
-      "stars": 10862,
+      "stars": 10863,
       "description": "The fullstack MCP framework to develop MCP Apps for ChatGPT / Claude & MCP Servers for AI Agents.",
       "url": "https://github.com/mcp-use/mcp-use",
       "badges": []
@@ -2091,7 +2227,7 @@
     {
       "repo": "langgenius/dify",
       "name": "Dify",
-      "stars": 160774,
+      "stars": 160783,
       "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
       "url": "https://github.com/langgenius/dify",
       "badges": []
@@ -2099,7 +2235,7 @@
     {
       "repo": "aoci-spec/aoci-code",
       "name": "aoci-code",
-      "stars": 1885,
+      "stars": 1886,
       "description": "A persistent, Git-versioned map of your whole codebase and database schema that coding agents read before they touch anything. Local-first MCP server + CLI in Go: a governed repository index of code knowledge that gives Claude Code, Codex, Cursor, and opencode long-term context, memory, and code intelligence.",
       "url": "https://github.com/aoci-spec/aoci-code",
       "badges": []
@@ -2107,7 +2243,7 @@
     {
       "repo": "aaif-goose/goose",
       "name": "Goose",
-      "stars": 56406,
+      "stars": 56411,
       "description": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
       "url": "https://github.com/aaif-goose/goose",
       "badges": [
@@ -2124,7 +2260,7 @@
     {
       "repo": "microsoft/agent-framework",
       "name": "Microsoft Agent Framework",
-      "stars": 14607,
+      "stars": 14610,
       "description": "A framework for building, orchestrating and deploying AI agents and multi-agent workflows with support for Python and .NET.",
       "url": "https://github.com/microsoft/agent-framework",
       "badges": []
@@ -2132,7 +2268,7 @@
     {
       "repo": "langchain-ai/deepagents",
       "name": "Deep Agents",
-      "stars": 31148,
+      "stars": 31154,
       "description": "The batteries-included agent harness.",
       "url": "https://github.com/langchain-ai/deepagents",
       "badges": []
@@ -2148,7 +2284,7 @@
     {
       "repo": "open-jarvis/OpenJarvis",
       "name": "OpenJarvis",
-      "stars": 14115,
+      "stars": 14147,
       "description": "Personal AI, On Personal Devices",
       "url": "https://github.com/open-jarvis/OpenJarvis",
       "badges": []
@@ -2156,7 +2292,7 @@
     {
       "repo": "vectorize-io/hindsight",
       "name": "Hindsight",
-      "stars": 60092,
+      "stars": 60136,
       "description": "Hindsight: Agent Memory That Learns",
       "url": "https://github.com/vectorize-io/hindsight",
       "badges": []
@@ -2164,7 +2300,7 @@
     {
       "repo": "NandhaKishorM/laya",
       "name": "Laya",
-      "stars": 35287,
+      "stars": 35305,
       "description": "Non-autoregressive System 1 decision engine. Typed choice, score and yes/no decisions over any text in a single forward pass, in 100+ languages, with a router that picks the right checkpoint per request.",
       "url": "https://github.com/NandhaKishorM/laya",
       "badges": []
@@ -2180,7 +2316,7 @@
     {
       "repo": "deepset-ai/haystack",
       "name": "Haystack",
-      "stars": 26964,
+      "stars": 26968,
       "description": "Open-source AI orchestration framework for building context-engineered, production-ready LLM applications. Design modular pipelines and agent workflows with explicit control over retrieval, routing, memory, and generation. Built for scalable agents, RAG, multimodal applications, semantic search, and conversational systems.",
       "url": "https://github.com/deepset-ai/haystack",
       "badges": []
@@ -2188,12 +2324,12 @@
     {
       "repo": "vercel/ai",
       "name": "AI SDK",
-      "stars": 27838,
+      "stars": 27840,
       "description": "The AI Toolkit for TypeScript. From the creators of Next.js, the AI SDK is a free open-source library for building AI-powered applications and agents ",
       "url": "https://github.com/vercel/ai",
       "badges": []
     }
   ],
-  "updated_at": "2026-11-10T05:31:05+08:00",
-  "signature": "d4434cab1944494ec2e11dff007318fb36457aadbab1f69f98a2bf40d701139f"
+  "updated_at": "2026-11-10T10:34:30+08:00",
+  "signature": "ca23819f00f2253dacef0892e14030be984e389a7e2b8f87e709e553fb74cdf0"
 }
