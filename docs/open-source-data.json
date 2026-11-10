@@ -1699,188 +1699,12 @@
   ],
   "commits": [
     {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "84e409c9637e05d33134b153a47fdba0d0001adb",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/84e409c9637e05d33134b153a47fdba0d0001adb",
-      "title": "fix(web-capture): bound the mitmproxy headline facet index (#2876)",
-      "committed_at": "2026-11-06T14:53:14.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "1a3ff9e634749e110639c6448a3ab1631044ad1c",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/1a3ff9e634749e110639c6448a3ab1631044ad1c",
-      "title": "docs(go): clarify cumulative build-info search budget (#2731)",
-      "committed_at": "2026-10-22T03:18:31.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "33616cd206da8f7dc91b63e977594f1a9cd13818",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/33616cd206da8f7dc91b63e977594f1a9cd13818",
-      "title": "chore(main): release rea-agents 6.5.0 (#1693)",
-      "committed_at": "2026-10-14T20:31:45.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "3da3175dca659eb07078d78d5396da60bd443920",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/3da3175dca659eb07078d78d5396da60bd443920",
-      "title": "fix(electron): reject non-executable paths and contain launch rejections (#2705)",
-      "committed_at": "2026-10-14T07:30:14.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "95ce2066e96b8ab1aab8ad055d597a7fa030708f",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/95ce2066e96b8ab1aab8ad055d597a7fa030708f",
-      "title": "fix(javascript): preserve Electron runtime entrypoint paths (#2742)",
-      "committed_at": "2026-10-14T06:39:17.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "d074f7515f6d8cb0c930f51efe45c5893be1af82",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/d074f7515f6d8cb0c930f51efe45c5893be1af82",
-      "title": "fix(artifacts): preserve Mach-O load-command string identity (#2110)",
-      "committed_at": "2026-10-14T06:38:32.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "7465f9d3898eeca69bb524f5ad1d1e466af7e439",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/7465f9d3898eeca69bb524f5ad1d1e466af7e439",
-      "title": "test(signals): verify native decoder discovery coverage (#2818)",
-      "committed_at": "2026-10-14T03:54:14.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "219d9302be74473bff631ff98bbc3bff0827a22d",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/219d9302be74473bff631ff98bbc3bff0827a22d",
-      "title": "fix(wasm): preserve original glue source locations (#2114)",
-      "committed_at": "2026-10-14T03:20:48.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "2c3ee3c032e34d73ea5ad70d2ba1b1ccb6cfea67",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/2c3ee3c032e34d73ea5ad70d2ba1b1ccb6cfea67",
-      "title": "fix(qlog): list a hidden stream's records without spreading call arguments (#2860)",
-      "committed_at": "2026-10-14T03:05:34.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "3e6c9d086d97629af0895e733eb3cb2a243ec8b6",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/3e6c9d086d97629af0895e733eb3cb2a243ec8b6",
-      "title": "fix(process): expose Darwin swiftc compile deadline via env (#2240)",
-      "committed_at": "2026-10-14T02:59:54.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "700c7c99e7641592dd02c3169ddd0888d2e27f20",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/700c7c99e7641592dd02c3169ddd0888d2e27f20",
-      "title": "fix(ghidra): report unapplied PE CodeView PDB limitation (#2283)",
-      "committed_at": "2026-10-14T02:56:26.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "05e51b3fdbf0df81f0fa69c3b511666b54e510d2",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/05e51b3fdbf0df81f0fa69c3b511666b54e510d2",
-      "title": "fix(frida): drain admitted operations and honor queued cancellation (#2305)",
-      "committed_at": "2026-10-14T02:56:00.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "6cf2ac797d39c7011b9d4f121e10498283ba36ed",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/6cf2ac797d39c7011b9d4f121e10498283ba36ed",
-      "title": "test(http3): add real MITM capture verification lab (#1997)",
-      "committed_at": "2026-10-14T01:09:19.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "b03628f4b37d96913b0293887562535227157ff5",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/b03628f4b37d96913b0293887562535227157ff5",
-      "title": "fix(capture): end special-scheme URL authorities at a backslash (#2767)",
-      "committed_at": "2026-10-13T21:46:15.000-07:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "794949f38a50fa6117c739f138f2b4ce3e8cb7d2",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/794949f38a50fa6117c739f138f2b4ce3e8cb7d2",
-      "title": "fix(uninstall): remove the REA-owned ZCode fallback registration (#2783)",
-      "committed_at": "2026-10-13T17:33:26.000-07:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "d05d2b59af0cd70ff8e2638eded8a4c95cf24db6",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/d05d2b59af0cd70ff8e2638eded8a4c95cf24db6",
-      "title": "fix(browser): seed storage by browser partition",
-      "committed_at": "2026-10-11T10:17:53.000+08:00"
-    },
-    {
       "repo": "morluto/rea",
       "sha": "8b4c3de3b3a3b580adec266f94f29ccedf1da228",
       "branch": "main",
       "html_url": "https://github.com/morluto/rea/commit/8b4c3de3b3a3b580adec266f94f29ccedf1da228",
       "title": "fix(browser): seed storage by browser partition",
       "committed_at": "2026-10-11T10:17:53.000+08:00"
-    },
-    {
-      "repo": "innotelinc/jesus",
-      "sha": "733c0b8c762a11f42245554a81576d4217dc94a7",
-      "branch": "main",
-      "html_url": "https://github.com/innotelinc/jesus/commit/733c0b8c762a11f42245554a81576d4217dc94a7",
-      "title": "fix(browser): seed storage by browser partition",
-      "committed_at": "2026-10-11T10:17:53.000+08:00"
-    },
-    {
-      "repo": "innotelinc/jesus",
-      "sha": "ad75c58dc9dcfa64a99996211fe86b6f87b6ba4e",
-      "branch": "main",
-      "html_url": "https://github.com/innotelinc/jesus/commit/ad75c58dc9dcfa64a99996211fe86b6f87b6ba4e",
-      "title": "fix(javascript): retain runtime scope in bundled module relationships",
-      "committed_at": "2026-10-11T01:36:12.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "05bffe230b5750b396c652236045dea4ca81d038",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/05bffe230b5750b396c652236045dea4ca81d038",
-      "title": "test(artifacts): verify extraction races with real filesystem changes",
-      "committed_at": "2026-10-10T02:38:33.000+08:00"
-    },
-    {
-      "repo": "innotelinc/jesus",
-      "sha": "baf01293db13283c85a174926507dc529b5a6fa8",
-      "branch": "main",
-      "html_url": "https://github.com/innotelinc/jesus/commit/baf01293db13283c85a174926507dc529b5a6fa8",
-      "title": "test(artifacts): verify extraction races with real filesystem changes",
-      "committed_at": "2026-10-10T02:38:33.000+08:00"
-    },
-    {
-      "repo": "potentialgenie/rea_tool",
-      "sha": "d4e82d99749855502f1a75b6a8b84b7cb5a66929",
-      "branch": "main",
-      "html_url": "https://github.com/potentialgenie/rea_tool/commit/d4e82d99749855502f1a75b6a8b84b7cb5a66929",
-      "title": "fix(browser): release attached viewport overrides without resizing the external page",
-      "committed_at": "2026-10-10T02:33:56.000+08:00"
-    },
-    {
-      "repo": "innotelinc/jesus",
-      "sha": "612fe497d8961ea62213e1e589da32702ea055b8",
-      "branch": "main",
-      "html_url": "https://github.com/innotelinc/jesus/commit/612fe497d8961ea62213e1e589da32702ea055b8",
-      "title": "fix(browser): release attached viewport overrides without resizing the external page",
-      "committed_at": "2026-10-10T02:33:56.000+08:00"
     },
     {
       "repo": "morluto/rea",
@@ -1899,52 +1723,12 @@
       "committed_at": "2026-10-10T01:45:00.000+08:00"
     },
     {
-      "repo": "innotelinc/jesus",
-      "sha": "56a1d7b14ac7ec8902f78e457ca588c19d152143",
-      "branch": "main",
-      "html_url": "https://github.com/innotelinc/jesus/commit/56a1d7b14ac7ec8902f78e457ca588c19d152143",
-      "title": "fix(browser): retain attached scenario emulation until cleanup",
-      "committed_at": "2026-10-10T01:45:00.000+08:00"
-    },
-    {
-      "repo": "innotelinc/jesus",
-      "sha": "0df1a09949ade26c77a9ba13e832dee4b673b0b6",
-      "branch": "main",
-      "html_url": "https://github.com/innotelinc/jesus/commit/0df1a09949ade26c77a9ba13e832dee4b673b0b6",
-      "title": "fix(artifacts): reject incomplete inventoried extraction",
-      "committed_at": "2026-10-10T01:45:00.000+08:00"
-    },
-    {
       "repo": "aoci-spec/aoci-code",
       "sha": "d3716a809af7c01f12044170bda81b3fb3cdcd94",
       "branch": "main",
       "html_url": "https://github.com/aoci-spec/aoci-code/commit/d3716a809af7c01f12044170bda81b3fb3cdcd94",
       "title": "fix(cli): honor --json for config commands",
       "committed_at": "2026-10-05T18:15:35.000+08:00"
-    },
-    {
-      "repo": "qquante/typed-decision-layer",
-      "sha": "664867afeecf9eb83cf9851ce8ab6490dd256d13",
-      "branch": "main",
-      "html_url": "https://github.com/qquante/typed-decision-layer/commit/664867afeecf9eb83cf9851ce8ab6490dd256d13",
-      "title": "fix(structured): reject enum choice label collisions",
-      "committed_at": "2026-09-25T03:47:43.000+08:00"
-    },
-    {
-      "repo": "qquante/typed-decision-layer",
-      "sha": "4ee0d1cea8774a2d8cf2e0c08444d06ece703262",
-      "branch": "main",
-      "html_url": "https://github.com/qquante/typed-decision-layer/commit/4ee0d1cea8774a2d8cf2e0c08444d06ece703262",
-      "title": "fix(mcp): preserve supported question fields",
-      "committed_at": "2026-09-25T03:44:35.000+08:00"
-    },
-    {
-      "repo": "qquante/typed-decision-layer",
-      "sha": "2cc685d696447b99dfd02d010b87c5134f8c567f",
-      "branch": "main",
-      "html_url": "https://github.com/qquante/typed-decision-layer/commit/2cc685d696447b99dfd02d010b87c5134f8c567f",
-      "title": "fix(router): share concurrent TypeScript model loads",
-      "committed_at": "2026-09-25T03:41:20.000+08:00"
     }
   ],
   "projects": [
@@ -1966,26 +1750,9 @@
       ]
     },
     {
-      "repo": "potentialgenie/rea_tool",
-      "name": "rea_tool",
-      "stars": 0,
-      "description": "",
-      "url": "https://github.com/potentialgenie/rea_tool",
-      "badges": [
-        {
-          "kind": "ts",
-          "name": "GitHub Trending",
-          "label": "TRENDING RECORD",
-          "url": "https://trendshift.io/repositories/82054?utm_source=repository-badge&utm_medium=badge&utm_campaign=badge-repository-82054",
-          "image": "https://trendshift.io/api/badge/repositories/82054",
-          "source": "https://github.com/potentialgenie/rea_tool/blob/main/README.md"
-        }
-      ]
-    },
-    {
       "repo": "morluto/rea",
       "name": "Rea",
-      "stars": 447391,
+      "stars": 447401,
       "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
       "url": "https://github.com/morluto/rea",
       "badges": [
@@ -2052,7 +1819,7 @@
     {
       "repo": "Tencent/WeKnora",
       "name": "WeKnora",
-      "stars": 37028,
+      "stars": 37030,
       "description": "Open-source LLM knowledge platform: turn raw documents into a queryable RAG, an autonomous reasoning agent, and a self-maintaining Wiki.",
       "url": "https://github.com/Tencent/WeKnora",
       "badges": [
@@ -2077,7 +1844,7 @@
     {
       "repo": "strands-agents/harness-sdk",
       "name": "Harness SDK",
-      "stars": 9092,
+      "stars": 9093,
       "description": "Build an agent harness and control it end-to-end. Open-source SDK for production AI agents in Python & TypeScript - any model, any cloud.",
       "url": "https://github.com/strands-agents/harness-sdk",
       "badges": []
@@ -2102,7 +1869,7 @@
     {
       "repo": "cline/cline",
       "name": "cline",
-      "stars": 71470,
+      "stars": 71471,
       "description": "Autonomous coding agent as an SDK, IDE extension, or CLI assistant.",
       "url": "https://github.com/cline/cline",
       "badges": []
@@ -2159,14 +1926,6 @@
       ]
     },
     {
-      "repo": "innotelinc/jesus",
-      "name": "jesus",
-      "stars": 0,
-      "description": "The Innotel estate in one tree: 13 products, each directory carrying its own commit history.",
-      "url": "https://github.com/innotelinc/jesus",
-      "badges": []
-    },
-    {
       "repo": "TanStack/ai",
       "name": "TanStack AI",
       "stars": 3344,
@@ -2186,7 +1945,7 @@
     {
       "repo": "CherryHQ/cherry-studio",
       "name": "Cherry Studio",
-      "stars": 53386,
+      "stars": 53387,
       "description": "Your AI workspace for models, agents, and productivity.",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "badges": [
@@ -2284,7 +2043,7 @@
     {
       "repo": "open-jarvis/OpenJarvis",
       "name": "OpenJarvis",
-      "stars": 14153,
+      "stars": 14154,
       "description": "Personal AI, On Personal Devices",
       "url": "https://github.com/open-jarvis/OpenJarvis",
       "badges": []
@@ -2306,14 +2065,6 @@
       "badges": []
     },
     {
-      "repo": "qquante/typed-decision-layer",
-      "name": "typed-decision-layer",
-      "stars": 0,
-      "description": "A local decision integration layer with typed answers, versioned policies, evidence and persistent decision records.",
-      "url": "https://github.com/qquante/typed-decision-layer",
-      "badges": []
-    },
-    {
       "repo": "deepset-ai/haystack",
       "name": "Haystack",
       "stars": 26969,
@@ -2330,6 +2081,6 @@
       "badges": []
     }
   ],
-  "updated_at": "2026-11-10T11:47:14+08:00",
-  "signature": "eab997c73728c47a4f7e0f637ca2d963dfb55b66bab47d5ae4068ddca6308223"
+  "updated_at": "2026-11-10T11:52:20+08:00",
+  "signature": "fd4fa88c70f72b60fd685cd667d6f6b0cb19ffdbf3ec58f3732f663344097960"
 }
