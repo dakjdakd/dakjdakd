@@ -1,7 +1,12 @@
 {
   "verified_emails": ["1428823446@qq.com"],
   "excluded_owners": ["dafyy321-pixel"],
-  "excluded_repositories": ["IbrahimKomba/skill-simmer"],
+  "excluded_repositories": [
+    "IbrahimKomba/skill-simmer",
+    "potentialgenie/rea_tool",
+    "qquante/typed-decision-layer",
+    "innotelinc/jesus"
+  ],
   "included_prs": [
     {"repo": "vercel/ai", "number": 21228},
     {"repo": "vercel/ai", "number": 21229}

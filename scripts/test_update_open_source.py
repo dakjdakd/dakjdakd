@@ -268,6 +268,45 @@ with patch.object(panel, "search", side_effect=lambda kind, query:
     _, rewritten_commits = panel.merged_prs([original], {"included_prs": []})
 assert rewritten_commits == []
 
+# Imported individual commits lose the PR suffix and get new SHAs. Archived
+# rows also lack author evidence, so re-fetch it before reconciling them.
+upstream_commit = {"message": "fix: issue 1", "committer": {"date": "2026-10-01T00:00:00Z"}, "author": {
+    "name": "Lucien", "email": email, "date": "2026-10-01T00:00:00Z"}}
+source_pr = dict(panel.normalize(pr("team/library", 1)), commit_shas=["upstream"],
+                 merge_commit_fingerprint={"message": "fix: issue 1 (#1)", "author": upstream_commit["author"]})
+imported_history = [dict(history[0], repo="copy/library", sha="imported", title="fix: issue 1",
+                         html_url="https://github.com/copy/library/commit/imported")]
+
+def imported_api(path, **params):
+    if path == "repos/copy/library/commits/imported":
+        return {"commit": upstream_commit}
+    if path == "repos/team/library/pulls/1/commits":
+        return [{"sha": "upstream", "commit": upstream_commit}]
+    return copied_api(path, **params)
+
+with patch.object(panel, "search", return_value=[]), patch.object(panel, "api", side_effect=imported_api):
+    _, imported_commits = panel.merged_prs([deepcopy(source_pr)], {"included_prs": []}, imported_history)
+assert imported_commits == []
+
+# The same title alone is not evidence of copying: retain a distinct change,
+# even in a zero-star repository, when message/author metadata do not match.
+independent = dict(upstream_commit, message="fix: issue 1\n\nA different implementation.")
+with patch.object(panel, "search", return_value=[]), patch.object(panel, "api", side_effect=lambda path, **kw:
+                  {"commit": independent} if path == "repos/copy/library/commits/imported"
+                  else imported_api(path, **kw)):
+    _, independent_commits = panel.merged_prs([deepcopy(source_pr)], {"included_prs": []}, imported_history)
+assert [c["sha"] for c in independent_commits] == ["imported"]
+
+# Confirmed imported repositories are excluded from archived data and fresh
+# searches alike, even though GitHub reports fork=false for these mirrors.
+live_config = panel.json.loads(panel.CONFIG_FILE.read_text(encoding="utf-8"))
+mirrors = ["potentialgenie/rea_tool", "qquante/typed-decision-layer", "innotelinc/jesus"]
+with patch.object(panel, "search", return_value=[]), patch.object(panel, "api", side_effect=fake_api):
+    _, excluded_commits = panel.merged_prs([], live_config, [
+        dict(history[0], repo=repo) for repo in mirrors])
+assert excluded_commits == [] and all(not panel.external(repo, live_config) for repo in mirrors)
+assert panel.external("aoci-spec/aoci-code", live_config)
+
 # An archived standalone commit becomes a PR when GitHub adds its association.
 with patch.object(panel, "search", return_value=[]), patch.object(panel, "api", side_effect=lambda path, **kw:
                   [pr("team/library", 3)] if path.endswith("/pulls") else {"id": 164857476}):

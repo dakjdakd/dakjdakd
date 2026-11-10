@@ -136,6 +136,12 @@ def credited(message, emails):
         r"^Co-authored-by:\s*[^\n<>]+<([^\s<>]+)>\s*$", message, re.I | re.M))
 
 
+def commit_identity(commit):
+    author = commit["author"]
+    return (commit["message"], author["name"], author["email"].lower(),
+            datetime.fromisoformat(author["date"].replace("Z", "+00:00")))
+
+
 def rate_limited(error):
     return error.code in (403, 429) and (
         error.code == 429 or "secondary rate limit" in str(error.reason).lower())
@@ -219,6 +225,45 @@ def merged_prs(previous, config, previous_commits=(), commit_since=None):
         groups.setdefault(sha, []).append((repo, commit))
     known_repos = {p["repo"] for p in prs.values()} | {c["repo"] for c in standalone.values()}
     repo_info, covered = {}, {}
+    source_fingerprints = {}
+
+    def copied_from_project(repo, commit):
+        # Imported histories may rewrite SHAs and omit the PR number. A title
+        # only selects candidates; exact message + author + time proves a copy.
+        title = re.sub(r"\s*\(#\d+\)$", "", commit["commit"]["message"].splitlines()[0])
+        sources = [p for p in prs.values() if p["repo"] != repo
+                   and re.sub(r"\s*\(#\d+\)$", "", p["title"]) == title]
+        direct_repos = {p["repo"] for p in prs.values()}
+        sources += [c for c in standalone.values() if c["repo"] != repo
+                    and c["repo"] in direct_repos and c["title"] == title]
+        if not sources:
+            return False
+        if "author" not in commit["commit"]:
+            commit["commit"] = api(f"repos/{repo}/commits/{commit['sha']}")["commit"]
+        identity = commit_identity(commit["commit"])
+        for source in sources:
+            key = source["html_url"]
+            if key not in source_fingerprints:
+                upstream = source["repo"]
+                if "number" in source:
+                    if "merge_commit_fingerprint" not in source:
+                        info = api(f"repos/{upstream}/pulls/{source['number']}")
+                        merged = api(f"repos/{upstream}/commits/{info['merge_commit_sha']}")["commit"]
+                        source["merge_commit_fingerprint"] = {"message": merged["message"], "author": merged["author"]}
+                    evidence = [source["merge_commit_fingerprint"]]
+                    if identity == commit_identity(evidence[0]):
+                        return True
+                    for page in range(1, 4):
+                        items = api(f"repos/{upstream}/pulls/{source['number']}/commits", per_page=100, page=page)
+                        evidence.extend(item["commit"] for item in items)
+                        if len(items) < 100:
+                            break
+                else:
+                    evidence = [api(f"repos/{upstream}/commits/{source['sha']}")["commit"]]
+                source_fingerprints[key] = {commit_identity(item) for item in evidence}
+            if identity in source_fingerprints[key]:
+                return True
+        return False
 
     def pr_commit_shas(repo):
         if repo not in covered:
@@ -251,28 +296,8 @@ def merged_prs(previous, config, previous_commits=(), commit_since=None):
             if number and f"https://github.com/{repo}/pull/{number[1]}" in prs:
                 standalone.pop((repo, sha), None)
                 break
-            # Some copied repositories rewrite parent SHAs. Verify their squash
-            # commits against the original PR using message and author metadata.
-            copied_pr = False
-            if number and commit["commit"].get("author"):
-                for p in prs.values():
-                    if p["repo"] == repo or p["number"] != int(number[1]):
-                        continue
-                    if "merge_commit_fingerprint" not in p:
-                        info = api(f"repos/{p['repo']}/pulls/{p['number']}")
-                        merged = api(f"repos/{p['repo']}/commits/{info['merge_commit_sha']}")["commit"]
-                        p["merge_commit_fingerprint"] = {"message": merged["message"], "author": merged["author"]}
-                    fingerprint = p["merge_commit_fingerprint"]
-                    original_author, copy_author = fingerprint["author"], commit["commit"]["author"]
-                    if (fingerprint["message"] == commit["commit"]["message"]
-                            and original_author["name"] == copy_author["name"]
-                            and original_author["email"].lower() == copy_author["email"].lower()
-                            and datetime.fromisoformat(original_author["date"].replace("Z", "+00:00"))
-                            == datetime.fromisoformat(copy_author["date"].replace("Z", "+00:00"))):
-                        standalone.pop((repo, sha), None)
-                        copied_pr = True
-                        break
-            if copied_pr:
+            if copied_from_project(repo, commit):
+                standalone.pop((repo, sha), None)
                 break
             found = False
             for item in api(f"repos/{repo}/commits/{sha}/pulls", per_page=100):
